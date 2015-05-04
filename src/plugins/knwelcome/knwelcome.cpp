@@ -47,29 +47,36 @@ KNWelcome::KNWelcome(QWidget *parent) :
     //Generate the layout for the banner.
     QBoxLayout *bannerLayout=new QBoxLayout(QBoxLayout::LeftToRight,
                                             m_banner);
+    bannerLayout->setSpacing(15);
     m_banner->setLayout(bannerLayout);
     QLabel *appIcon=new QLabel(this);
-    appIcon->setPixmap(QPixmap(""));
+    appIcon->setFixedSize(85, 85);
+    appIcon->setScaledContents(true);
+    appIcon->setPixmap(QPixmap(":/image/resource/images/icon.png"));
     bannerLayout->addWidget(appIcon);
     QBoxLayout *captionLayout=new QBoxLayout(QBoxLayout::TopToBottom,
                                              bannerLayout->widget());
+    captionLayout->setSpacing(0);
     bannerLayout->addLayout(captionLayout, 1);
 
+    QFont captionFont=font();
     //Add caption label.
     captionLayout->addStretch();
-    QLabel *caption=new QLabel("Kreogist Dev Team");
+
+    QLabel *caption2=new QLabel("Cuties " + QString::number(MAJOR_VERSION));
+    caption2->setPalette(pal);
+    captionFont.setPixelSize(35);
+    captionFont.setWeight(50);
+    caption2->setFont(captionFont);
+    captionLayout->addWidget(caption2);
+
+    QLabel *caption=new QLabel("(C) Kreogist Dev Team. All rights reserved.");
     caption->setPalette(pal);
-    QFont captionFont=font();
-    captionFont.setPixelSize(15);
+    captionFont.setPixelSize(10);
     captionFont.setWeight(0);
     caption->setFont(captionFont);
     captionLayout->addWidget(caption);
-    caption=new QLabel("Cuties " + QString::number(MAJOR_VERSION));
-    caption->setPalette(pal);
-    captionFont.setPixelSize(30);
-    captionFont.setWeight(50);
-    caption->setFont(captionFont);
-    captionLayout->addWidget(caption);
+
     captionLayout->addStretch();
 
     //Initial the shadow for the side shadow.

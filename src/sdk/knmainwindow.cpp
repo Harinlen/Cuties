@@ -15,13 +15,17 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include <QPropertyAnimation>
+
 #include "knwelcomebase.h"
 
 #include "knmainwindow.h"
 
 KNMainWindow::KNMainWindow(QWidget *parent) :
     QMainWindow(parent),
-    m_welcome(nullptr)
+    m_welcome(nullptr),
+    m_welcomeIn(generateAnime()),
+    m_welcomeOut(generateAnime())
 {
     setObjectName("MainWindow");
     //Set properties.
@@ -44,6 +48,14 @@ void KNMainWindow::setWelcome(KNWelcomeBase *welcome)
     }
     //Configure the welcome widget.
     m_welcome->setParent(this);
+    //Set the welcome window target.
+    m_welcomeIn->setTargetObject(m_welcome);
+    m_welcomeOut->setTargetObject(m_welcome);
+    //Link the welcome window.
+    connect(m_welcomeOut, &QPropertyAnimation::finished,
+            [=]{m_welcome->hide();});
+    connect(m_welcome, &KNWelcomeBase::requireNewFile,
+            this, &KNMainWindow::onActionNewFile);
 }
 
 void KNMainWindow::resizeEvent(QResizeEvent *event)
@@ -56,4 +68,22 @@ void KNMainWindow::resizeEvent(QResizeEvent *event)
         m_welcome->move((width()-m_welcome->width())>>1,
                         (height()-m_welcome->height())>>1);
     }
+}
+
+void KNMainWindow::onActionNewFile(const QString &suffix)
+{
+    //Hide the welcome window.
+    m_welcomeOut->setStartValue(m_welcome->pos());
+    m_welcomeOut->setEndValue(QPoint(m_welcome->x(),
+                                     -5-m_welcome->height()));
+    m_welcomeOut->start();
+}
+
+inline QPropertyAnimation *KNMainWindow::generateAnime()
+{
+    QPropertyAnimation *anime=new QPropertyAnimation(this);
+    anime->setPropertyName("pos");
+    anime->setEasingCurve(QEasingCurve::OutCubic);
+    anime->setDuration(200);
+    return anime;
 }

@@ -21,6 +21,7 @@
 
 #include <QMainWindow>
 
+class QPropertyAnimation;
 class KNWelcomeBase;
 class KNMainWindow : public QMainWindow
 {
@@ -37,8 +38,13 @@ public slots:
 protected:
     void resizeEvent(QResizeEvent *event);
 
+private slots:
+    void onActionNewFile(const QString &suffix);
+
 private:
+    inline QPropertyAnimation *generateAnime();
     KNWelcomeBase *m_welcome;
+    QPropertyAnimation *m_welcomeIn, *m_welcomeOut;
 };
 
 #endif // KNMAINWINDOW_H

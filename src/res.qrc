@@ -4,5 +4,6 @@
     </qresource>
     <qresource prefix="/image">
         <file>resource/images/welcome_banner.png</file>
+        <file>resource/images/icon.png</file>
     </qresource>
 </RCC>

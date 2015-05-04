@@ -28,7 +28,7 @@ public:
     KNWelcomeBase(QWidget *parent = 0):QWidget(parent){}
 
 signals:
-    void requireNewFile();
+    void requireNewFile(const QString &suffix);
     void requireOpenFile(const QString &filePath);
 
 public slots:
