@@ -16,38 +16,39 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KNGLOBAL_H
-#define KNGLOBAL_H
+#ifndef KNTHEMEMANAGER_H
+#define KNTHEMEMANAGER_H
 
+#include <QHash>
+#include <QMap>
 #include <QPalette>
 
 #include <QObject>
 
-class KNConfigureManager;
-class KNThemeManager;
-class KNGlobal : public QObject
+class QJsonObject;
+class KNThemeManager : public QObject
 {
     Q_OBJECT
 public:
-    static KNGlobal *instance();
-    QString simplifiedPath(const QString &path);
-    QPalette getPalette(const QString &caption);
-    static QString ensurePathAvaliable(const QString &path);
+    static KNThemeManager *instance();
+    QPalette getPalette(const QString &name) const;
 
 signals:
 
 public slots:
+    void loadTheme(const QString &themeFilePath);
 
 private:
-    static KNGlobal *m_instance;
-    explicit KNGlobal(QObject *parent = 0);
+    inline void parsePalette(const QString &name,
+                             QJsonObject *data,
+                             QHash<QString, QPalette> &map);
+    inline QColor parseColor(const QString &data);
 
-    inline void initialDefaultPath();
+    static KNThemeManager *m_instance;
+    explicit KNThemeManager(QObject *parent = 0);
 
-    KNConfigureManager *m_configureManager;
-    KNThemeManager *m_themeManager;
-
-    QString m_userDataDir, m_resourceDir, m_configureDir;
+    QMap<QString, QPalette::ColorRole> m_colorRoleMap;
+    QHash<QString, QPalette> m_palMap;
 };
 
-#endif // KNGLOBAL_H
+#endif // KNTHEMEMANAGER_H

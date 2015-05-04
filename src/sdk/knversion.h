@@ -16,38 +16,26 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KNGLOBAL_H
-#define KNGLOBAL_H
+#ifndef KNVERSION
+#define KNVERSION
 
-#include <QPalette>
+//Change the version here.
+#define MAJOR_VERSION 0
+#define MINOR_VERSION 0
+#define PATCH_VERSION 2
 
-#include <QObject>
+//----DON'T TOUCH BELOW---
+//Generate string for version.
+//MAGIC, DON'T TOUCH
+// Stringify \a x.
+#define _TOSTR(x)   #x
+// Stringify \a x, perform macro expansion.
+#define TOSTR(x)  _TOSTR(x)
 
-class KNConfigureManager;
-class KNThemeManager;
-class KNGlobal : public QObject
-{
-    Q_OBJECT
-public:
-    static KNGlobal *instance();
-    QString simplifiedPath(const QString &path);
-    QPalette getPalette(const QString &caption);
-    static QString ensurePathAvaliable(const QString &path);
+/* the following are compile time version */
+/* C++11 requires a space between literal and identifier */
+#define APP_VERSION_STR \
+    TOSTR(MAJOR_VERSION) "." TOSTR(MINOR_VERSION) "." TOSTR(PATCH_VERSION)
+//----DON'T TOUCH ABOVE---
 
-signals:
-
-public slots:
-
-private:
-    static KNGlobal *m_instance;
-    explicit KNGlobal(QObject *parent = 0);
-
-    inline void initialDefaultPath();
-
-    KNConfigureManager *m_configureManager;
-    KNThemeManager *m_themeManager;
-
-    QString m_userDataDir, m_resourceDir, m_configureDir;
-};
-
-#endif // KNGLOBAL_H
+#endif // KNVERSION_H

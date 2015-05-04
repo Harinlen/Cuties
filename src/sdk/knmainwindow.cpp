@@ -21,4 +21,5 @@
 KNMainWindow::KNMainWindow(QWidget *parent) :
     QMainWindow(parent)
 {
+    setObjectName("MainWindow");
 }

@@ -16,38 +16,44 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KNGLOBAL_H
-#define KNGLOBAL_H
-
-#include <QPalette>
+#ifndef KNCONFIGUREMANAGER_H
+#define KNCONFIGUREMANAGER_H
 
 #include <QObject>
 
-class KNConfigureManager;
-class KNThemeManager;
-class KNGlobal : public QObject
+namespace KNConfigureManagerGlobal
+{
+enum ConfigureTypes
+{
+    Cache,
+    System,
+    User,
+    ConfigureTypeCount
+};
+}
+
+using namespace KNConfigureManagerGlobal;
+
+class KNConfigure;
+class KNConfigureManager : public QObject
 {
     Q_OBJECT
 public:
-    static KNGlobal *instance();
-    QString simplifiedPath(const QString &path);
-    QPalette getPalette(const QString &caption);
-    static QString ensurePathAvaliable(const QString &path);
+    static KNConfigureManager *instance();
+    void loadConfigure();
+    void saveConfigure();
 
 signals:
 
 public slots:
+    void setConfigureDir(const QString &dirPath);
 
 private:
-    static KNGlobal *m_instance;
-    explicit KNGlobal(QObject *parent = 0);
+    static KNConfigureManager *m_instance;
+    explicit KNConfigureManager(QObject *parent = 0);
 
-    inline void initialDefaultPath();
-
-    KNConfigureManager *m_configureManager;
-    KNThemeManager *m_themeManager;
-
-    QString m_userDataDir, m_resourceDir, m_configureDir;
+    QString m_configureFileName[ConfigureTypeCount];
+    KNConfigure *m_configure[ConfigureTypeCount];
 };
 
-#endif // KNGLOBAL_H
+#endif // KNCONFIGUREMANAGER_H

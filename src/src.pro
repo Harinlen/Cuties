@@ -37,9 +37,19 @@ SOURCES += \
     main.cpp \
     sdk/knglobal.cpp \
     sdk/knmainwindow.cpp \
-    sdk/knpluginmanager.cpp
+    sdk/knpluginmanager.cpp \
+    sdk/knthememanager.cpp \
+    sdk/knconfiguremanager.cpp \
+    sdk/knconfigure.cpp
 
 HEADERS += \
     sdk/knglobal.h \
     sdk/knmainwindow.h \
-    sdk/knpluginmanager.h
+    sdk/knpluginmanager.h \
+    sdk/knthememanager.h \
+    sdk/knconfiguremanager.h \
+    sdk/knconfigure.h \
+    sdk/knversion.h
+
+RESOURCES += \
+    res.qrc

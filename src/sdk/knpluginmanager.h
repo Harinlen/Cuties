@@ -21,6 +21,7 @@
 
 #include <QObject>
 
+class KNGlobal;
 class KNMainWindow;
 class KNPluginManager : public QObject
 {
@@ -42,6 +43,7 @@ private:
     explicit KNPluginManager(QObject *parent = 0);
 
     KNMainWindow *m_mainWindow;
+    KNGlobal *m_global;
 };
 
 #endif // KNPLUGINMANAGER_H

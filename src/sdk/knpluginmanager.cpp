@@ -15,7 +15,11 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include <QApplication>
+#include <QStyleFactory>
 
+#include "knversion.h"
+#include "knglobal.h"
 #include "knmainwindow.h"
 
 #include "knpluginmanager.h"
@@ -39,7 +43,11 @@ KNMainWindow *KNPluginManager::mainWindow() const
 
 void KNPluginManager::setMainWindow(KNMainWindow *mainWindow)
 {
+    //Save the main window pointer.
     m_mainWindow=mainWindow;
+    //Configure the main window.
+    m_mainWindow->setWindowTitle("Cuties");
+    m_mainWindow->setPalette(m_global->getPalette(m_mainWindow->objectName()));
 }
 
 void KNPluginManager::start()
@@ -55,6 +63,16 @@ void KNPluginManager::start()
 
 KNPluginManager::KNPluginManager(QObject *parent) :
     QObject(parent),
-    m_mainWindow(nullptr)
+    m_mainWindow(nullptr),
+    m_global(KNGlobal::instance())
 {
+    //Initial the application information.
+    QApplication::setApplicationName("Cuties");
+    QApplication::setApplicationVersion(APP_VERSION_STR);
+    QApplication::setApplicationDisplayName("Cuties");
+    QApplication::setOrganizationName("Kreogist Dev Team");
+    QApplication::setOrganizationDomain("http://kreogist.github.io/");
+
+    //Configure the global.
+    QApplication::setStyle(QStyleFactory::create("fusion"));
 }
