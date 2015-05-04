@@ -115,14 +115,14 @@ QColor KNThemeManager::parseColor(const QString &data)
     {
     case 3:
         //Format should be RGB.
-        return QColor(data.mid(0,1).toInt(nullptr, 16),
-                      data.mid(1,1).toInt(nullptr, 16),
-                      data.mid(2,1).toInt(nullptr, 16));
+        return QColor(data.mid(0,1).toInt(nullptr, 16)*16-1,
+                      data.mid(1,1).toInt(nullptr, 16)*16-1,
+                      data.mid(2,1).toInt(nullptr, 16)*16-1);
     case 4:
         //Format should be #RGB.
-        return QColor(data.mid(1,1).toInt(nullptr, 16),
-                      data.mid(2,1).toInt(nullptr, 16),
-                      data.mid(3,1).toInt(nullptr, 16));
+        return QColor(data.mid(1,1).toInt(nullptr, 16)*16-1,
+                      data.mid(2,1).toInt(nullptr, 16)*16-1,
+                      data.mid(3,1).toInt(nullptr, 16)*16-1);
     case 6:
         //Format should be RRGGBB.
         return QColor(data.mid(0,2).toInt(nullptr, 16),

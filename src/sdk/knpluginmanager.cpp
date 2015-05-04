@@ -18,9 +18,16 @@
 #include <QApplication>
 #include <QStyleFactory>
 
+//Dependences
 #include "knversion.h"
 #include "knglobal.h"
 #include "knmainwindow.h"
+
+//Ports
+#include "knwelcomebase.h"
+
+//Plugins
+#include "plugins/knwelcome/knwelcome.h"
 
 #include "knpluginmanager.h"
 
@@ -33,7 +40,7 @@ KNPluginManager *KNPluginManager::instance()
 
 void KNPluginManager::loadPlugins()
 {
-    ;
+    m_mainWindow->setWelcome(new KNWelcome);
 }
 
 KNMainWindow *KNPluginManager::mainWindow() const
@@ -46,6 +53,10 @@ void KNPluginManager::setMainWindow(KNMainWindow *mainWindow)
     //Save the main window pointer.
     m_mainWindow=mainWindow;
     //Configure the main window.
+    if(m_mainWindow==nullptr)
+    {
+        return;
+    }
     m_mainWindow->setWindowTitle("Cuties");
     m_mainWindow->setPalette(m_global->getPalette(m_mainWindow->objectName()));
 }

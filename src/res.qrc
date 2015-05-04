@@ -2,4 +2,7 @@
     <qresource prefix="/configure">
         <file>resource/theme/default.json</file>
     </qresource>
+    <qresource prefix="/image">
+        <file>resource/images/welcome_banner.png</file>
+    </qresource>
 </RCC>

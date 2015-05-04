@@ -5,5 +5,10 @@
     "MainWindow" : {
         "Parent" : "Application",
         "Window" : "#1F1F1F"
+    },
+    "Welcome" : {
+        "Parent" : "MainWindow",
+        "Window" : "#FFFFFF",
+        "WindowText" : "#999"
     }
 }

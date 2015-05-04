@@ -15,29 +15,24 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#ifndef KNWELCOME_H
+#define KNWELCOME_H
 
-#ifndef KNVERSION
-#define KNVERSION
+#include "knwelcomebase.h"
 
-//Change the version here.
-#define MAJOR_VERSION 2
-#define MINOR_VERSION 0
-#define PATCH_VERSION 2
+class QLabel;
+class KNWelcome : public KNWelcomeBase
+{
+    Q_OBJECT
+public:
+    explicit KNWelcome(QWidget *parent = 0);
 
-//----DON'T TOUCH BELOW---
-//Generate string for version.
-//MAGIC, DON'T TOUCH
-// Stringify \a x.
-#define _TOSTR(x)   #x
-// Stringify \a x, perform macro expansion.
-#define TOSTR(x)  _TOSTR(x)
+signals:
 
-/* the following are compile time version */
-/* C++11 requires a space between literal and identifier */
-#define APP_MAJOR_VERSION_STR \
-    TOSTR(MAJOR_VERSION)
-#define APP_VERSION_STR \
-    TOSTR(MAJOR_VERSION) "." TOSTR(MINOR_VERSION) "." TOSTR(PATCH_VERSION)
-//----DON'T TOUCH ABOVE---
+public slots:
 
-#endif // KNVERSION_H
+private:
+    QLabel *m_banner;
+};
+
+#endif // KNWELCOME_H

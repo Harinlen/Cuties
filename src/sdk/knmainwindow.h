@@ -21,16 +21,24 @@
 
 #include <QMainWindow>
 
+class KNWelcomeBase;
 class KNMainWindow : public QMainWindow
 {
     Q_OBJECT
 public:
     explicit KNMainWindow(QWidget *parent = 0);
+    KNWelcomeBase *welcome() const;
 
 signals:
 
 public slots:
+    void setWelcome(KNWelcomeBase *welcome);
 
+protected:
+    void resizeEvent(QResizeEvent *event);
+
+private:
+    KNWelcomeBase *m_welcome;
 };
 
 #endif // KNMAINWINDOW_H

@@ -16,28 +16,23 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KNVERSION
-#define KNVERSION
+#ifndef KNWELCOMEBASE_H
+#define KNWELCOMEBASE_H
 
-//Change the version here.
-#define MAJOR_VERSION 2
-#define MINOR_VERSION 0
-#define PATCH_VERSION 2
+#include <QWidget>
 
-//----DON'T TOUCH BELOW---
-//Generate string for version.
-//MAGIC, DON'T TOUCH
-// Stringify \a x.
-#define _TOSTR(x)   #x
-// Stringify \a x, perform macro expansion.
-#define TOSTR(x)  _TOSTR(x)
+class KNWelcomeBase : public QWidget
+{
+    Q_OBJECT
+public:
+    KNWelcomeBase(QWidget *parent = 0):QWidget(parent){}
 
-/* the following are compile time version */
-/* C++11 requires a space between literal and identifier */
-#define APP_MAJOR_VERSION_STR \
-    TOSTR(MAJOR_VERSION)
-#define APP_VERSION_STR \
-    TOSTR(MAJOR_VERSION) "." TOSTR(MINOR_VERSION) "." TOSTR(PATCH_VERSION)
-//----DON'T TOUCH ABOVE---
+signals:
+    void requireNewFile();
+    void requireOpenFile(const QString &filePath);
 
-#endif // KNVERSION_H
+public slots:
+
+};
+
+#endif // KNWELCOMEBASE_H

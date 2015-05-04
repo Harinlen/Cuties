@@ -40,7 +40,9 @@ SOURCES += \
     sdk/knpluginmanager.cpp \
     sdk/knthememanager.cpp \
     sdk/knconfiguremanager.cpp \
-    sdk/knconfigure.cpp
+    sdk/knconfigure.cpp \
+    plugins/knwelcome/knwelcome.cpp \
+    sdk/knsideshadowwidget.cpp
 
 HEADERS += \
     sdk/knglobal.h \
@@ -49,7 +51,10 @@ HEADERS += \
     sdk/knthememanager.h \
     sdk/knconfiguremanager.h \
     sdk/knconfigure.h \
-    sdk/knversion.h
+    sdk/knversion.h \
+    sdk/knwelcomebase.h \
+    plugins/knwelcome/knwelcome.h \
+    sdk/knsideshadowwidget.h
 
 RESOURCES += \
     res.qrc
