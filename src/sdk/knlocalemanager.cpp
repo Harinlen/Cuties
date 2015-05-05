@@ -15,36 +15,17 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KNWELCOME_H
-#define KNWELCOME_H
 
-#include <QLinkedList>
+#include "knlocalemanager.h"
 
-#include "knwelcomebase.h"
+KNLocaleManager *KNLocaleManager::m_instance=nullptr;
 
-class QBoxLayout;
-class QLabel;
-class QSignalMapper;
-class KNWelcomeNewButton;
-class KNWelcome : public KNWelcomeBase
+KNLocaleManager *KNLocaleManager::instance()
 {
-    Q_OBJECT
-public:
-    explicit KNWelcome(QWidget *parent = 0);
+    return m_instance==nullptr?m_instance=new KNLocaleManager:m_instance;
+}
 
-signals:
-
-public slots:
-
-private slots:
-    void retranslate();
-
-private:
-    inline void addNewButton(KNWelcomeNewButton *button);
-    QLabel *m_banner, *m_newCaption, *m_openCaption;
-    QBoxLayout *m_newLayout;
-    QLinkedList<KNWelcomeNewButton *> m_newButtonList;
-    QSignalMapper *m_newButtonMapper;
-};
-
-#endif // KNWELCOME_H
+KNLocaleManager::KNLocaleManager(QObject *parent) :
+    QObject(parent)
+{
+}

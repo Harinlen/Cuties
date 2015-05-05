@@ -17,9 +17,12 @@
  */
 #include <QLabel>
 #include <QBoxLayout>
+#include <QListView>
+#include <QSignalMapper>
 
 #include "knversion.h"
 #include "knglobal.h"
+#include "knwelcomenewbutton.h"
 #include "knsideshadowwidget.h"
 
 #include "knwelcome.h"
@@ -28,7 +31,10 @@
 
 KNWelcome::KNWelcome(QWidget *parent) :
     KNWelcomeBase(parent),
-    m_banner(new QLabel(this))
+    m_banner(new QLabel(this)),
+    m_newCaption(new QLabel(this)),
+    m_openCaption(new QLabel(this)),
+    m_newButtonMapper(new QSignalMapper(this))
 {
     setObjectName("Welcome");
     //Set properties.
@@ -41,8 +47,13 @@ KNWelcome::KNWelcome(QWidget *parent) :
     //Configure the label.
     QPixmap bannerImage(":/image/resource/images/welcome_banner.png");
     m_banner->setPixmap(bannerImage);
+    m_banner->setFixedSize(bannerImage.size());
     //Set the fixed size of the welcome window.
     setFixedSize(bannerImage.width(), 450);
+
+    //Link the button mapper to the signal.
+    connect(m_newButtonMapper, SIGNAL(mapped(QString)),
+            this, SIGNAL(requireNewFile(QString)));
 
     //Generate the layout for the banner.
     QBoxLayout *bannerLayout=new QBoxLayout(QBoxLayout::LeftToRight,
@@ -82,5 +93,86 @@ KNWelcome::KNWelcome(QWidget *parent) :
     //Initial the shadow for the side shadow.
     KNSideShadowWidget *topShadow=new KNSideShadowWidget(TopShadow, this);
     topShadow->move(0, bannerImage.height());
-    topShadow->resize(bannerImage.width(), 13);
+    topShadow->resize(bannerImage.width(), 10);
+
+    //Initial the body layout.
+    QBoxLayout *bodyLayout=new QBoxLayout(QBoxLayout::TopToBottom,
+                                          this);
+    bodyLayout->setContentsMargins(0,0,0,0);
+    setLayout(bodyLayout);
+    bodyLayout->addSpacing(bannerImage.height()+topShadow->height());
+
+    QBoxLayout *contentLayout=new QBoxLayout(QBoxLayout::LeftToRight,
+                                             bodyLayout->widget());
+    contentLayout->setContentsMargins(0,0,0,0);
+    bodyLayout->addLayout(contentLayout, 1);
+
+    QBoxLayout *createLayout=new QBoxLayout(QBoxLayout::TopToBottom,
+                                            bodyLayout->widget());
+    createLayout->setContentsMargins(0,0,0,0);
+    contentLayout->addLayout(createLayout);
+
+    QBoxLayout *openLayout=new QBoxLayout(QBoxLayout::TopToBottom,
+                                          bodyLayout->widget());
+    contentLayout->addLayout(openLayout);
+
+    //Add widgets to 'new' layout.
+    createLayout->addWidget(m_newCaption);
+    m_newLayout=new QBoxLayout(QBoxLayout::TopToBottom, createLayout->widget());
+    m_newLayout->setSpacing(0);
+    createLayout->addLayout(m_newLayout);
+    createLayout->addStretch();
+
+    //Add default new suffix.
+    KNWelcomeNewButton *createEmptySuffix=new KNWelcomeNewButton(this);
+    createEmptySuffix->setSuffix("");
+    createEmptySuffix->setItemIcon(QPixmap(":/icon/resource/icons/file/PlainText/PlainText_64x64.png"));
+    addNewButton(createEmptySuffix);
+
+    createEmptySuffix=new KNWelcomeNewButton(this);
+    createEmptySuffix->setSuffix("");
+    createEmptySuffix->setItemIcon(QPixmap(":/icon/resource/icons/file/PlainText/PlainText_64x64.png"));
+    addNewButton(createEmptySuffix);
+
+    createEmptySuffix=new KNWelcomeNewButton(this);
+    createEmptySuffix->setSuffix("");
+    createEmptySuffix->setItemIcon(QPixmap(":/icon/resource/icons/file/PlainText/PlainText_64x64.png"));
+    addNewButton(createEmptySuffix);
+
+    createEmptySuffix=new KNWelcomeNewButton(this);
+    createEmptySuffix->setSuffix("");
+    createEmptySuffix->setItemIcon(QPixmap(":/icon/resource/icons/file/PlainText/PlainText_64x64.png"));
+    addNewButton(createEmptySuffix);
+
+    //Add widgets to 'open' layout.
+    openLayout->addWidget(m_openCaption);
+    QListView *recentList=new QListView(this);
+    openLayout->addWidget(recentList);
+
+    //Link the retranslate request.
+    connect(KNGlobal::instance(), &KNGlobal::languageUpdate,
+            this, &KNWelcome::retranslate);
+    retranslate();
+}
+
+void KNWelcome::retranslate()
+{
+    //Update captions.
+    m_newCaption->setText(tr("New Source File"));
+    m_openCaption->setText(tr("Open Source File"));
+
+    //Update new buttons.
+    QLinkedList<KNWelcomeNewButton *>::iterator i=m_newButtonList.begin();
+    (*i)->setText(tr("New Plain Text"));
+}
+
+inline void KNWelcome::addNewButton(KNWelcomeNewButton *button)
+{
+    //Link the button to the button mapper.
+    connect(button, SIGNAL(clicked()), m_newButtonMapper, SLOT(map()));
+    m_newButtonMapper->setMapping(button, button->suffix());
+    //Add button to button list.
+    m_newButtonList.append(button);
+    //Add button to layout.
+    m_newLayout->addWidget(button);
 }

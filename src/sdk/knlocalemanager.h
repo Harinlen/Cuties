@@ -16,25 +16,16 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KNGLOBAL_H
-#define KNGLOBAL_H
-
-#include <QPalette>
+#ifndef KNLOCALEMANAGER_H
+#define KNLOCALEMANAGER_H
 
 #include <QObject>
 
-class KNLanguageManager;
-class KNConfigureManager;
-class KNLocaleManager;
-class KNThemeManager;
-class KNGlobal : public QObject
+class KNLocaleManager : public QObject
 {
     Q_OBJECT
 public:
-    static KNGlobal *instance();
-    QString simplifiedPath(const QString &path);
-    QPalette getPalette(const QString &caption);
-    static QString ensurePathAvaliable(const QString &path);
+    static KNLocaleManager *instance();
 
 signals:
     void languageUpdate();
@@ -42,17 +33,8 @@ signals:
 public slots:
 
 private:
-    static KNGlobal *m_instance;
-    explicit KNGlobal(QObject *parent = 0);
-
-    inline void initialDefaultPath();
-
-    KNConfigureManager *m_configureManager;
-    KNThemeManager *m_themeManager;
-    KNLocaleManager *m_localeManager;
-    KNLanguageManager *m_languageManager;
-
-    QString m_userDataDir, m_resourceDir, m_configureDir;
+    static KNLocaleManager *m_instance;
+    explicit KNLocaleManager(QObject *parent = 0);
 };
 
-#endif // KNGLOBAL_H
+#endif // KNLOCALEMANAGER_H

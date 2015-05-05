@@ -19,7 +19,9 @@
 #include <QFileInfo>
 #include <QDir>
 
+#include "knlanguagemanager.h"
 #include "knthememanager.h"
+#include "knlocalemanager.h"
 #include "knconfiguremanager.h"
 
 #include "knglobal.h"
@@ -67,7 +69,9 @@ QString KNGlobal::ensurePathAvaliable(const QString &path)
 KNGlobal::KNGlobal(QObject *parent) :
     QObject(parent),
     m_configureManager(KNConfigureManager::instance()),
-    m_themeManager(KNThemeManager::instance())
+    m_themeManager(KNThemeManager::instance()),
+    m_localeManager(KNLocaleManager::instance()),
+    m_languageManager(KNLanguageManager::instance())
 {
     //Configure the running environment.
     initialDefaultPath();
@@ -77,6 +81,10 @@ KNGlobal::KNGlobal(QObject *parent) :
 
     //Load the default theme.
     m_themeManager->loadTheme(":/configure/resource/theme/default.json");
+
+    //Load language and link the language update request.
+    connect(m_localeManager, &KNLocaleManager::languageUpdate,
+            this, &KNGlobal::languageUpdate);
 }
 
 inline void KNGlobal::initialDefaultPath()

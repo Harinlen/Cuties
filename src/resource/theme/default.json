@@ -10,5 +10,10 @@
         "Parent" : "MainWindow",
         "Window" : "#FFFFFF",
         "WindowText" : "#999"
+    },
+    "WelcomeNewButton" : {
+        "Parent" : "Welcome",
+        "Window" : "#f7cf3d",
+        "WindowText" : "#000000"
     }
 }

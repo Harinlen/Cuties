@@ -42,7 +42,10 @@ SOURCES += \
     sdk/knconfiguremanager.cpp \
     sdk/knconfigure.cpp \
     plugins/knwelcome/knwelcome.cpp \
-    sdk/knsideshadowwidget.cpp
+    sdk/knsideshadowwidget.cpp \
+    sdk/knlocalemanager.cpp \
+    sdk/knlanguagemanager.cpp \
+    plugins/knwelcome/knwelcomenewbutton.cpp
 
 HEADERS += \
     sdk/knglobal.h \
@@ -54,7 +57,10 @@ HEADERS += \
     sdk/knversion.h \
     sdk/knwelcomebase.h \
     plugins/knwelcome/knwelcome.h \
-    sdk/knsideshadowwidget.h
+    sdk/knsideshadowwidget.h \
+    sdk/knlocalemanager.h \
+    sdk/knlanguagemanager.h \
+    plugins/knwelcome/knwelcomenewbutton.h
 
 RESOURCES += \
     res.qrc

@@ -6,4 +6,7 @@
         <file>resource/images/welcome_banner.png</file>
         <file>resource/images/icon.png</file>
     </qresource>
+    <qresource prefix="/icon">
+        <file>resource/icons/file/PlainText/PlainText_64x64.png</file>
+    </qresource>
 </RCC>

@@ -16,43 +16,42 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KNGLOBAL_H
-#define KNGLOBAL_H
+#ifndef KNWELCOMENEWBUTTON_H
+#define KNWELCOMENEWBUTTON_H
 
-#include <QPalette>
+#include <QLabel>
 
-#include <QObject>
-
-class KNLanguageManager;
-class KNConfigureManager;
-class KNLocaleManager;
-class KNThemeManager;
-class KNGlobal : public QObject
+class QTimeLine;
+class KNWelcomeNewButton : public QLabel
 {
     Q_OBJECT
 public:
-    static KNGlobal *instance();
-    QString simplifiedPath(const QString &path);
-    QPalette getPalette(const QString &caption);
-    static QString ensurePathAvaliable(const QString &path);
+    explicit KNWelcomeNewButton(QWidget *parent = 0);
+    QString suffix() const;
 
 signals:
-    void languageUpdate();
+    void clicked();
 
 public slots:
+    void setSuffix(const QString &suffix);
+    void setItemIcon(const QPixmap &icon);
+
+protected:
+    void enterEvent(QEvent *event);
+    void leaveEvent(QEvent *event);
+    void mousePressEvent(QMouseEvent *event);
+    void mouseMoveEvent(QMouseEvent *event);
+    void mouseReleaseEvent(QMouseEvent *event);
+
+private slots:
+    void onActionInOutAnime(int frame);
 
 private:
-    static KNGlobal *m_instance;
-    explicit KNGlobal(QObject *parent = 0);
-
-    inline void initialDefaultPath();
-
-    KNConfigureManager *m_configureManager;
-    KNThemeManager *m_themeManager;
-    KNLocaleManager *m_localeManager;
-    KNLanguageManager *m_languageManager;
-
-    QString m_userDataDir, m_resourceDir, m_configureDir;
+    inline void startMouseInOutAnime(const int &targetFrame);
+    bool m_pressed;
+    QTimeLine *m_mouseInOutAnime;
+    QLabel *m_itemIcon;
+    QString m_suffix;
 };
 
-#endif // KNGLOBAL_H
+#endif // KNWELCOMENEWBUTTON_H
