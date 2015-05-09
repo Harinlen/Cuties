@@ -16,47 +16,8 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KNSIDESHADOWWIDGET_H
-#define KNSIDESHADOWWIDGET_H
+#include "kntextblockdata.h"
 
-#include <QWidget>
-
-namespace KNSideShadow
+KNTextBlockData::KNTextBlockData()
 {
-enum ShadowDirection
-{
-    TopShadow,
-    LeftShadow,
-    RightShadow,
-    BottomShadow
-};
 }
-
-using namespace KNSideShadow;
-
-class KNSideShadowWidget : public QWidget
-{
-    Q_OBJECT
-public:
-    explicit KNSideShadowWidget(QWidget *parent = 0);
-    explicit KNSideShadowWidget(int direction, QWidget *parent=0);
-
-    int direction() const;
-    void setDirection(int direction);
-
-signals:
-
-public slots:
-    void setBrightness(const int &brightness);
-
-protected:
-    void paintEvent(QPaintEvent *event);
-    void resizeEvent(QResizeEvent *event);
-
-private:
-    void updateGradient();
-    int m_direction;
-    QLinearGradient m_shadow;
-};
-
-#endif // KNSIDESHADOWWIDGET_H

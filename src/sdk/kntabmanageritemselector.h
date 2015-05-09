@@ -16,47 +16,32 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KNSIDESHADOWWIDGET_H
-#define KNSIDESHADOWWIDGET_H
+#ifndef KNTABMANAGERITEMSELECTOR_H
+#define KNTABMANAGERITEMSELECTOR_H
+
+#include <QPolygon>
 
 #include <QWidget>
 
-namespace KNSideShadow
-{
-enum ShadowDirection
-{
-    TopShadow,
-    LeftShadow,
-    RightShadow,
-    BottomShadow
-};
-}
-
-using namespace KNSideShadow;
-
-class KNSideShadowWidget : public QWidget
+class KNTabManagerItemSelector : public QWidget
 {
     Q_OBJECT
 public:
-    explicit KNSideShadowWidget(QWidget *parent = 0);
-    explicit KNSideShadowWidget(int direction, QWidget *parent=0);
-
-    int direction() const;
-    void setDirection(int direction);
+    explicit KNTabManagerItemSelector(QWidget *parent = 0);
 
 signals:
 
 public slots:
-    void setBrightness(const int &brightness);
 
 protected:
     void paintEvent(QPaintEvent *event);
-    void resizeEvent(QResizeEvent *event);
+
+private slots:
+    void updateBackground();
 
 private:
-    void updateGradient();
-    int m_direction;
-    QLinearGradient m_shadow;
+    QPolygon m_selectorBorder;
+    QColor m_backgroundColor;
 };
 
-#endif // KNSIDESHADOWWIDGET_H
+#endif // KNTABMANAGERITEMSELECTOR_H

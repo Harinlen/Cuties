@@ -15,48 +15,29 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include <QBoxLayout>
 
-#ifndef KNSIDESHADOWWIDGET_H
-#define KNSIDESHADOWWIDGET_H
+#include "knglobal.h"
+#include "kntextedit.h"
 
-#include <QWidget>
+#include "kncodeeditor.h"
 
-namespace KNSideShadow
+KNCodeEditor::KNCodeEditor(QWidget *parent) :
+    QWidget(parent),
+    m_editor(new KNTextEdit(this))
 {
-enum ShadowDirection
-{
-    TopShadow,
-    LeftShadow,
-    RightShadow,
-    BottomShadow
-};
+    setObjectName("CodeEditor");
+    //Set properties.
+    setAutoFillBackground(true);
+    setContentsMargins(0,0,0,0);
+
+    //Set palette.
+    setPalette(KNGlobal::instance()->getPalette(objectName()));
+    //Initial the layout.
+    QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::TopToBottom, this);
+    mainLayout->setContentsMargins(0,0,0,0);
+    mainLayout->setSpacing(0);
+    setLayout(mainLayout);
+
+    mainLayout->addWidget(m_editor, 1);
 }
-
-using namespace KNSideShadow;
-
-class KNSideShadowWidget : public QWidget
-{
-    Q_OBJECT
-public:
-    explicit KNSideShadowWidget(QWidget *parent = 0);
-    explicit KNSideShadowWidget(int direction, QWidget *parent=0);
-
-    int direction() const;
-    void setDirection(int direction);
-
-signals:
-
-public slots:
-    void setBrightness(const int &brightness);
-
-protected:
-    void paintEvent(QPaintEvent *event);
-    void resizeEvent(QResizeEvent *event);
-
-private:
-    void updateGradient();
-    int m_direction;
-    QLinearGradient m_shadow;
-};
-
-#endif // KNSIDESHADOWWIDGET_H

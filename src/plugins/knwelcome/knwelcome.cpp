@@ -129,21 +129,6 @@ KNWelcome::KNWelcome(QWidget *parent) :
     createEmptySuffix->setItemIcon(QPixmap(":/icon/resource/icons/file/PlainText/PlainText_64x64.png"));
     addNewButton(createEmptySuffix);
 
-    createEmptySuffix=new KNWelcomeNewButton(this);
-    createEmptySuffix->setSuffix("");
-    createEmptySuffix->setItemIcon(QPixmap(":/icon/resource/icons/file/PlainText/PlainText_64x64.png"));
-    addNewButton(createEmptySuffix);
-
-    createEmptySuffix=new KNWelcomeNewButton(this);
-    createEmptySuffix->setSuffix("");
-    createEmptySuffix->setItemIcon(QPixmap(":/icon/resource/icons/file/PlainText/PlainText_64x64.png"));
-    addNewButton(createEmptySuffix);
-
-    createEmptySuffix=new KNWelcomeNewButton(this);
-    createEmptySuffix->setSuffix("");
-    createEmptySuffix->setItemIcon(QPixmap(":/icon/resource/icons/file/PlainText/PlainText_64x64.png"));
-    addNewButton(createEmptySuffix);
-
     //Add widgets to 'open' layout.
     openLayout->addWidget(m_openCaption);
     QListView *recentList=new QListView(this);

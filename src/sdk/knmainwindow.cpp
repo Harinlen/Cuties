@@ -24,6 +24,7 @@
 KNMainWindow::KNMainWindow(QWidget *parent) :
     QMainWindow(parent),
     m_welcome(nullptr),
+    m_tabManager(nullptr),
     m_welcomeIn(generateAnime()),
     m_welcomeOut(generateAnime())
 {
@@ -56,6 +57,14 @@ void KNMainWindow::setWelcome(KNWelcomeBase *welcome)
             [=]{m_welcome->hide();});
     connect(m_welcome, &KNWelcomeBase::requireNewFile,
             this, &KNMainWindow::onActionNewFile);
+}
+
+void KNMainWindow::setTabManager(QDockWidget *widget)
+{
+    //Save the tab manager.
+    m_tabManager=widget;
+    //Add the tab manager to widget.
+    addDockWidget(Qt::LeftDockWidgetArea, m_tabManager);
 }
 
 void KNMainWindow::resizeEvent(QResizeEvent *event)

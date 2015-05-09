@@ -16,47 +16,41 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KNSIDESHADOWWIDGET_H
-#define KNSIDESHADOWWIDGET_H
+#ifndef KNTABMANAGER_H
+#define KNTABMANAGER_H
 
-#include <QWidget>
+#include <QList>
 
-namespace KNSideShadow
-{
-enum ShadowDirection
-{
-    TopShadow,
-    LeftShadow,
-    RightShadow,
-    BottomShadow
-};
-}
+#include <QDockWidget>
 
-using namespace KNSideShadow;
-
-class KNSideShadowWidget : public QWidget
+class QSignalMapper;
+class QBoxLayout;
+class KNTabManagerItem;
+class KNTabManagerItemSelector;
+class KNTabManager : public QDockWidget
 {
     Q_OBJECT
 public:
-    explicit KNSideShadowWidget(QWidget *parent = 0);
-    explicit KNSideShadowWidget(int direction, QWidget *parent=0);
-
-    int direction() const;
-    void setDirection(int direction);
+    explicit KNTabManager(QWidget *parent = 0);
 
 signals:
 
 public slots:
-    void setBrightness(const int &brightness);
+    void addTab(const QString &caption);
+    void setCurrentIndex(int index);
+    void setCurrentItem(KNTabManagerItem *item);
 
-protected:
-    void paintEvent(QPaintEvent *event);
-    void resizeEvent(QResizeEvent *event);
+private slots:
+    void onActionItemClicked();
 
 private:
-    void updateGradient();
-    int m_direction;
-    QLinearGradient m_shadow;
+    QBoxLayout *m_containerLayout;
+    QWidget *m_container;
+    QSignalMapper *m_itemMapper;
+    KNTabManagerItemSelector *m_selector;
+    QList<KNTabManagerItem *> m_itemList;
+
+    KNTabManagerItem *m_currentItem;
 };
 
-#endif // KNSIDESHADOWWIDGET_H
+#endif // KNTABMANAGER_H

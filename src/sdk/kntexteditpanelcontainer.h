@@ -16,47 +16,38 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KNSIDESHADOWWIDGET_H
-#define KNSIDESHADOWWIDGET_H
+#ifndef KNTEXTEDITPANELCONTAINER_H
+#define KNTEXTEDITPANELCONTAINER_H
+
+#include <QLinkedList>
 
 #include <QWidget>
 
-namespace KNSideShadow
-{
-enum ShadowDirection
-{
-    TopShadow,
-    LeftShadow,
-    RightShadow,
-    BottomShadow
-};
-}
-
-using namespace KNSideShadow;
-
-class KNSideShadowWidget : public QWidget
+class QBoxLayout;
+class KNTextEdit;
+class KNTextEditPanel;
+class KNTextEditPanelContainer : public QWidget
 {
     Q_OBJECT
 public:
-    explicit KNSideShadowWidget(QWidget *parent = 0);
-    explicit KNSideShadowWidget(int direction, QWidget *parent=0);
-
-    int direction() const;
-    void setDirection(int direction);
+    explicit KNTextEditPanelContainer(QWidget *parent = 0);
+    void addPanel(KNTextEditPanel *panel);
+    int panelWidth();
 
 signals:
+    void requireResizeMargin();
 
 public slots:
-    void setBrightness(const int &brightness);
+    void setEditor(KNTextEdit *editor);
+    void updatePanels();
 
 protected:
-    void paintEvent(QPaintEvent *event);
     void resizeEvent(QResizeEvent *event);
 
 private:
-    void updateGradient();
-    int m_direction;
-    QLinearGradient m_shadow;
+    QBoxLayout *m_panelLayout;
+    KNTextEdit *m_editor;
+    QLinkedList<KNTextEditPanel *> m_panelList;
 };
 
-#endif // KNSIDESHADOWWIDGET_H
+#endif // KNTEXTEDITPANELCONTAINER_H

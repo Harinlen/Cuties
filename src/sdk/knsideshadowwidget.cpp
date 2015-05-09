@@ -48,6 +48,14 @@ void KNSideShadowWidget::setDirection(int shadowDirections)
     updateGradient();
 }
 
+void KNSideShadowWidget::setBrightness(const int &brightness)
+{
+    //Update shadow.
+    m_shadow.setColorAt(0, QColor(0,0,0,brightness));
+    //Update the widget.
+    update();
+}
+
 void KNSideShadowWidget::paintEvent(QPaintEvent *event)
 {
     Q_UNUSED(event)

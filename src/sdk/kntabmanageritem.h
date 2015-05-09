@@ -16,47 +16,38 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KNSIDESHADOWWIDGET_H
-#define KNSIDESHADOWWIDGET_H
+#ifndef KNTABMANAGERITEM_H
+#define KNTABMANAGERITEM_H
 
-#include <QWidget>
+#include <QLabel>
 
-namespace KNSideShadow
-{
-enum ShadowDirection
-{
-    TopShadow,
-    LeftShadow,
-    RightShadow,
-    BottomShadow
-};
-}
-
-using namespace KNSideShadow;
-
-class KNSideShadowWidget : public QWidget
+class KNTabManagerItem : public QLabel
 {
     Q_OBJECT
 public:
-    explicit KNSideShadowWidget(QWidget *parent = 0);
-    explicit KNSideShadowWidget(int direction, QWidget *parent=0);
-
-    int direction() const;
-    void setDirection(int direction);
+    explicit KNTabManagerItem(const QString &caption = "", QWidget *parent = 0);
+    static int itemHeight();
 
 signals:
+    void clicked();
 
 public slots:
-    void setBrightness(const int &brightness);
+    void setCaption(const QString &text);
+    void setSelected(bool selected);
 
 protected:
-    void paintEvent(QPaintEvent *event);
-    void resizeEvent(QResizeEvent *event);
+    void mousePressEvent(QMouseEvent *event);
+    void mouseReleaseEvent(QMouseEvent *event);
+
+private slots:
+    void onActionPressed();
 
 private:
-    void updateGradient();
-    int m_direction;
-    QLinearGradient m_shadow;
+    inline void clearFileName();
+    inline QString generateCaption();
+    QString m_fileName, m_suffix;
+    QPalette m_palette;
+    bool m_selected;
 };
 
-#endif // KNSIDESHADOWWIDGET_H
+#endif // KNTABMANAGERITEM_H

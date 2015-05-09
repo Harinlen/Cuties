@@ -34,6 +34,7 @@ signals:
 
 public slots:
     void setWelcome(KNWelcomeBase *welcome);
+    void setTabManager(QDockWidget *widget);
 
 protected:
     void resizeEvent(QResizeEvent *event);
@@ -44,6 +45,7 @@ private slots:
 private:
     inline QPropertyAnimation *generateAnime();
     KNWelcomeBase *m_welcome;
+    QDockWidget *m_tabManager;
     QPropertyAnimation *m_welcomeIn, *m_welcomeOut;
 };
 

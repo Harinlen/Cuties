@@ -6,6 +6,34 @@
         "Parent" : "Application",
         "Window" : "#1F1F1F"
     },
+    "TabManager" : {
+        "Parent" : "MainWindow",
+        "Window" : "#414141"
+    },
+    "TabManagerItem" : {
+        "Parent" : "TabManager",
+        "Window" : "#00000000",
+        "WindowText" : "#FFFFFF",
+        "Highlight" : "#303030",
+        "HighlightedText" : "#f7cf3d"
+    },
+    "CodeEditor" : {
+        "Parent" : "MainWindow",
+        "Window" : "#1F1F1F"
+    },
+    "TextEditor" : {
+        "Parent" : "CodeEditor",
+        "Base" : "#00000000",
+        "Text" : "#FFFFFF"
+    },
+    "TextEditPanel" : {
+        "Parent" : "TextEditor",
+        "WindowText" : "#FFFFFF"
+    },
+    "TextEditNumberPanel" : {
+        "Parent" : "TextEditPanel",
+        "Highlight" : "#303030"
+    },
     "Welcome" : {
         "Parent" : "MainWindow",
         "Window" : "#FFFFFF",

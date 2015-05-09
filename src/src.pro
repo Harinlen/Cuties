@@ -45,7 +45,16 @@ SOURCES += \
     sdk/knsideshadowwidget.cpp \
     sdk/knlocalemanager.cpp \
     sdk/knlanguagemanager.cpp \
-    plugins/knwelcome/knwelcomenewbutton.cpp
+    plugins/knwelcome/knwelcomenewbutton.cpp \
+    sdk/kncodeeditor.cpp \
+    sdk/kntabmanager.cpp \
+    sdk/kntabmanageritem.cpp \
+    sdk/kntabmanageritemselector.cpp \
+    sdk/kntextedit.cpp \
+    sdk/kntexteditpanel.cpp \
+    sdk/kntexteditpanelcontainer.cpp \
+    plugins/kntexteditnumberpanel/kntexteditnumberpanel.cpp \
+    sdk/kntextblockdata.cpp
 
 HEADERS += \
     sdk/knglobal.h \
@@ -60,7 +69,16 @@ HEADERS += \
     sdk/knsideshadowwidget.h \
     sdk/knlocalemanager.h \
     sdk/knlanguagemanager.h \
-    plugins/knwelcome/knwelcomenewbutton.h
+    plugins/knwelcome/knwelcomenewbutton.h \
+    sdk/kncodeeditor.h \
+    sdk/kntabmanager.h \
+    sdk/kntabmanageritem.h \
+    sdk/kntabmanageritemselector.h \
+    sdk/kntextedit.h \
+    sdk/kntexteditpanel.h \
+    sdk/kntexteditpanelcontainer.h \
+    plugins/kntexteditnumberpanel/kntexteditnumberpanel.h \
+    sdk/kntextblockdata.h
 
 RESOURCES += \
     res.qrc

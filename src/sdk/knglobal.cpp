@@ -15,6 +15,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include <QApplication>
 #include <QDesktopServices>
 #include <QFileInfo>
 #include <QDir>
@@ -66,6 +67,14 @@ QString KNGlobal::ensurePathAvaliable(const QString &path)
                 detectFolder.absolutePath():QString();
 }
 
+void KNGlobal::loadTheme(const QString &themeFilePath)
+{
+    //Load the theme.
+    m_themeManager->loadTheme(themeFilePath);
+    //Apply the application sets.
+    QApplication::setPalette(getPalette("Application"));
+}
+
 KNGlobal::KNGlobal(QObject *parent) :
     QObject(parent),
     m_configureManager(KNConfigureManager::instance()),
@@ -80,7 +89,7 @@ KNGlobal::KNGlobal(QObject *parent) :
     m_configureManager->setConfigureDir(ensurePathAvaliable(m_configureDir));
 
     //Load the default theme.
-    m_themeManager->loadTheme(":/configure/resource/theme/default.json");
+    loadTheme(":/configure/resource/theme/default.json");
 
     //Load language and link the language update request.
     connect(m_localeManager, &KNLocaleManager::languageUpdate,

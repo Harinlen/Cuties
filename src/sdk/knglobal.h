@@ -35,6 +35,7 @@ public:
     QString simplifiedPath(const QString &path);
     QPalette getPalette(const QString &caption);
     static QString ensurePathAvaliable(const QString &path);
+    void loadTheme(const QString &themeFilePath);
 
 signals:
     void languageUpdate();

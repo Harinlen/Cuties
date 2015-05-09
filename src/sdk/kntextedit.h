@@ -16,47 +16,35 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KNSIDESHADOWWIDGET_H
-#define KNSIDESHADOWWIDGET_H
+#ifndef KNTEXTEDIT_H
+#define KNTEXTEDIT_H
 
-#include <QWidget>
+#include <QPlainTextEdit>
 
-namespace KNSideShadow
-{
-enum ShadowDirection
-{
-    TopShadow,
-    LeftShadow,
-    RightShadow,
-    BottomShadow
-};
-}
-
-using namespace KNSideShadow;
-
-class KNSideShadowWidget : public QWidget
+class KNTextEditPanelContainer;
+class KNTextEdit : public QPlainTextEdit
 {
     Q_OBJECT
 public:
-    explicit KNSideShadowWidget(QWidget *parent = 0);
-    explicit KNSideShadowWidget(int direction, QWidget *parent=0);
-
-    int direction() const;
-    void setDirection(int direction);
+    explicit KNTextEdit(QWidget *parent = 0);
 
 signals:
 
 public slots:
-    void setBrightness(const int &brightness);
 
 protected:
-    void paintEvent(QPaintEvent *event);
     void resizeEvent(QResizeEvent *event);
 
+private slots:
+    void onActionUpdateMargins();
+    void updateHighlights();
+
 private:
-    void updateGradient();
-    int m_direction;
-    QLinearGradient m_shadow;
+    inline void highlightCurrentLine(QList<QTextEdit::ExtraSelection> &selections);
+    KNTextEditPanelContainer *m_panelContainer;
+    friend class KNTextEditPanel;
+
+    QColor m_lineColor;
 };
 
-#endif // KNSIDESHADOWWIDGET_H
+#endif // KNTEXTEDIT_H

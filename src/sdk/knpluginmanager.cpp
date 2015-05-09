@@ -22,6 +22,8 @@
 #include "knversion.h"
 #include "knglobal.h"
 #include "knmainwindow.h"
+#include "kntabmanager.h"
+#include "kncodeeditor.h"
 
 //Ports
 #include "knwelcomebase.h"
@@ -40,7 +42,12 @@ KNPluginManager *KNPluginManager::instance()
 
 void KNPluginManager::loadPlugins()
 {
-    m_mainWindow->setWelcome(new KNWelcome);
+    m_mainWindow->setCentralWidget(new KNCodeEditor);
+    //Set tab manager.
+    m_mainWindow->setTabManager(new KNTabManager);
+
+    //Load welcome.
+//    m_mainWindow->setWelcome(new KNWelcome);
 }
 
 KNMainWindow *KNPluginManager::mainWindow() const
