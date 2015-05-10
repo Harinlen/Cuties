@@ -20,6 +20,7 @@
 #include <QFileInfo>
 #include <QDir>
 
+#include "kncodestylemanager.h"
 #include "knlanguagemanager.h"
 #include "knthememanager.h"
 #include "knlocalemanager.h"
@@ -42,6 +43,11 @@ QString KNGlobal::simplifiedPath(const QString &path)
 QPalette KNGlobal::getPalette(const QString &caption)
 {
     return m_themeManager->getPalette(caption);
+}
+
+QTextCharFormat KNGlobal::getFormat(const QString &name)
+{
+    return m_codeStyleManager->getFormat(name);
 }
 
 QString KNGlobal::ensurePathAvaliable(const QString &path)
@@ -75,12 +81,18 @@ void KNGlobal::loadTheme(const QString &themeFilePath)
     QApplication::setPalette(getPalette("Application"));
 }
 
+void KNGlobal::loadCodeStyle(const QString &codeStylePath)
+{
+    m_codeStyleManager->loadCodeStyle(codeStylePath);
+}
+
 KNGlobal::KNGlobal(QObject *parent) :
     QObject(parent),
     m_configureManager(KNConfigureManager::instance()),
     m_themeManager(KNThemeManager::instance()),
     m_localeManager(KNLocaleManager::instance()),
-    m_languageManager(KNLanguageManager::instance())
+    m_languageManager(KNLanguageManager::instance()),
+    m_codeStyleManager(KNCodeStyleManager::instance())
 {
     //Configure the running environment.
     initialDefaultPath();
@@ -90,6 +102,7 @@ KNGlobal::KNGlobal(QObject *parent) :
 
     //Load the default theme.
     loadTheme(":/configure/resource/theme/default.json");
+    loadCodeStyle(":/configure/resource/code_style/default_style.json");
 
     //Load language and link the language update request.
     connect(m_localeManager, &KNLocaleManager::languageUpdate,

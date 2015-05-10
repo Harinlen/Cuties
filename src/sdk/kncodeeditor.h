@@ -22,6 +22,7 @@
 #include <QWidget>
 
 class KNTextEdit;
+class KNCodeEditorUnibar;
 class KNCodeEditor : public QWidget
 {
     Q_OBJECT
@@ -33,6 +34,7 @@ signals:
 public slots:
 
 private:
+    KNCodeEditorUnibar *m_unibar;
     KNTextEdit *m_editor;
 };
 

@@ -16,7 +16,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include <QBoxLayout>
-#include <QScrollArea>
 #include <QSignalMapper>
 
 #include "kntabmanageritem.h"
@@ -28,7 +27,7 @@
 #include <QDebug>
 
 KNTabManager::KNTabManager(QWidget *parent) :
-    QDockWidget(parent),
+    QScrollArea(parent),
     m_container(new QWidget(this)),
     m_itemMapper(new QSignalMapper(this)),
     m_selector(new KNTabManagerItemSelector(this)),
@@ -36,27 +35,20 @@ KNTabManager::KNTabManager(QWidget *parent) :
 {
     setObjectName("TabManager");
     //Set properties.
-    setAllowedAreas(Qt::LeftDockWidgetArea);
     setFixedWidth(200);
-    //Hack, make the title bar widget empty to disable the floating.
-    setTitleBarWidget(new QWidget(this));
+    setFrameStyle(QFrame::NoFrame);
+    setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
     //Set palette.
     QPalette managerPalette=KNGlobal::instance()->getPalette(objectName());
     setPalette(managerPalette);
 
-    //Set the container scroll area.
-    QScrollArea *scrollArea=new QScrollArea(this);
-    scrollArea->setFrameStyle(QFrame::NoFrame);
-    scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    setWidget(scrollArea);
-
     //Set container widget.
     m_container->setFixedWidth(200);
     m_container->setAutoFillBackground(true);
     m_container->setPalette(managerPalette);
-    scrollArea->setWidget(m_container);
+    setWidget(m_container);
     m_selector->setParent(m_container);
     m_selector->move(200-m_selector->width(), 0);
 

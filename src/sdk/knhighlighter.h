@@ -16,9 +16,43 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kntextblockdata.h"
+#ifndef KNHIGHLIGHTER_H
+#define KNHIGHLIGHTER_H
 
-KNTextBlockData::KNTextBlockData() :
-    marked(false)
+#include <QLinkedList>
+#include <QRegularExpression>
+
+#include <QSyntaxHighlighter>
+
+namespace KNHighlighterSpace
 {
+struct SyntaxRule
+{
+    QString name;
+    QRegularExpression express;
+};
 }
+
+using namespace KNHighlighterSpace;
+
+class KNHighlighter : public QSyntaxHighlighter
+{
+    Q_OBJECT
+public:
+    explicit KNHighlighter(QObject *parent = 0);
+    void addRules(const QString &name, const QString &pattern);
+
+signals:
+
+public slots:
+
+protected:
+    void highlightBlock(const QString &text);
+
+private:
+    void syntaxHighlight(const QString &text);
+
+    QLinkedList<SyntaxRule> m_rules;
+};
+
+#endif // KNHIGHLIGHTER_H

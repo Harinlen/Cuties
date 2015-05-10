@@ -19,11 +19,13 @@
 
 #include "knglobal.h"
 #include "kntextedit.h"
+#include "kncodeeditorunibar.h"
 
 #include "kncodeeditor.h"
 
 KNCodeEditor::KNCodeEditor(QWidget *parent) :
     QWidget(parent),
+    m_unibar(new KNCodeEditorUnibar),
     m_editor(new KNTextEdit(this))
 {
     setObjectName("CodeEditor");
@@ -39,5 +41,9 @@ KNCodeEditor::KNCodeEditor(QWidget *parent) :
     mainLayout->setSpacing(0);
     setLayout(mainLayout);
 
+    mainLayout->addWidget(m_unibar);
     mainLayout->addWidget(m_editor, 1);
+
+    //Configure unibar.
+    m_unibar->setEditor(m_editor);
 }

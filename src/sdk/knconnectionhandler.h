@@ -15,10 +15,27 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#ifndef KNCONNECTIONHANDLER_H
+#define KNCONNECTIONHANDLER_H
 
-#include "kntextblockdata.h"
+#include <QLinkedList>
 
-KNTextBlockData::KNTextBlockData() :
-    marked(false)
+#include <QObject>
+
+class KNConnectionHandler : public QObject
 {
-}
+    Q_OBJECT
+public:
+    explicit KNConnectionHandler(QObject *parent = 0);
+    ~KNConnectionHandler();
+    bool isEmpty() const;
+    int size() const;
+    void disconnectAll();
+    void append(const QMetaObject::Connection connection);
+    KNConnectionHandler &operator += (const QMetaObject::Connection connection);
+
+private:
+    QLinkedList<QMetaObject::Connection> m_connections;
+};
+
+#endif // KNCONNECTIONHANDLER_H

@@ -16,6 +16,9 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+
+#include "knlanguagemode.h"
+
 #include "knlanguagemanager.h"
 
 KNLanguageManager *KNLanguageManager::m_instance=nullptr;
@@ -25,7 +28,13 @@ KNLanguageManager *KNLanguageManager::instance()
     return m_instance==nullptr?m_instance=new KNLanguageManager:m_instance;
 }
 
+KNLanguageMode *KNLanguageManager::getLanguageMode(const QString &suffix)
+{
+    ;
+}
+
 KNLanguageManager::KNLanguageManager(QObject *parent) :
     QObject(parent)
 {
+    ;
 }

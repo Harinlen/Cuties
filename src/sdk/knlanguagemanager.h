@@ -19,13 +19,26 @@
 #ifndef KNLANGUAGEMANAGER_H
 #define KNLANGUAGEMANAGER_H
 
+#include <QMap>
+
 #include <QObject>
 
+/*
+ * A language should contains things below:
+ * 1. Highlighter.
+ * 2. Compiler.
+ * 3. Debugger.
+ * The language manager will generate a class named KNLanguageMode, and set the
+ * language mode to KCCodeEditor, and the editor will link those contents.
+ */
+
+class KNLanguageMode;
 class KNLanguageManager : public QObject
 {
     Q_OBJECT
 public:
     static KNLanguageManager *instance();
+    KNLanguageMode *getLanguageMode(const QString &suffix);
 
 signals:
 

@@ -16,9 +16,11 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kntextblockdata.h"
+#include "kncpphighlighter.h"
 
-KNTextBlockData::KNTextBlockData() :
-    marked(false)
+KNCppHighlighter::KNCppHighlighter(QObject *parent) :
+    KNHighlighter(parent)
 {
+    //Add cpp rules.
+    ;
 }

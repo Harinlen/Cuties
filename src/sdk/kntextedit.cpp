@@ -16,8 +16,10 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "../plugins/kntexteditnumberpanel/kntexteditnumberpanel.h"
+#include <QScrollBar>
 
+#include "../plugins/kntexteditmarkpanel/kntexteditmarkpanel.h"
+#include "../plugins/kntexteditnumberpanel/kntexteditnumberpanel.h"
 #include "knglobal.h"
 #include "kntexteditpanelcontainer.h"
 
@@ -43,14 +45,18 @@ KNTextEdit::KNTextEdit(QWidget *parent) :
             m_panelContainer, &KNTextEditPanelContainer::updatePanels);
     connect(this, &KNTextEdit::cursorPositionChanged,
             m_panelContainer, &KNTextEditPanelContainer::updatePanels);
+    connect(verticalScrollBar(), SIGNAL(valueChanged(int)),
+            m_panelContainer, SLOT(updatePanels()));
     connect(m_panelContainer, &KNTextEditPanelContainer::requireResizeMargin,
             this, &KNTextEdit::onActionUpdateMargins);
     //Add panels.
+    m_panelContainer->addPanel(new KNTextEditMarkPanel);
     m_panelContainer->addPanel(new KNTextEditNumberPanel);
 
     //Update the highlight for initialize.
     updateHighlights();
     //Emit all changed signal for initialize.
+    ;
 }
 
 void KNTextEdit::resizeEvent(QResizeEvent *event)

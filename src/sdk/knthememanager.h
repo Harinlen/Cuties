@@ -42,7 +42,6 @@ private:
     inline void parsePalette(const QString &name,
                              QJsonObject *data,
                              QHash<QString, QPalette> &map);
-    inline QColor parseColor(const QString &data);
 
     static KNThemeManager *m_instance;
     explicit KNThemeManager(QObject *parent = 0);

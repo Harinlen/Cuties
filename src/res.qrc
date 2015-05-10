@@ -1,10 +1,12 @@
 <RCC>
     <qresource prefix="/configure">
         <file>resource/theme/default.json</file>
+        <file>resource/code_style/default_style.json</file>
     </qresource>
     <qresource prefix="/image">
         <file>resource/images/welcome_banner.png</file>
         <file>resource/images/icon.png</file>
+        <file>resource/images/BreakPoint.png</file>
     </qresource>
     <qresource prefix="/icon">
         <file>resource/icons/file/PlainText/PlainText_64x64.png</file>

@@ -16,9 +16,34 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kntextblockdata.h"
+#ifndef KNCODESTYLEMANAGER_H
+#define KNCODESTYLEMANAGER_H
 
-KNTextBlockData::KNTextBlockData() :
-    marked(false)
+#include <QMap>
+#include <QTextCharFormat>
+
+#include <QObject>
+
+class KNCodeStyleManager : public QObject
 {
-}
+    Q_OBJECT
+public:
+    static KNCodeStyleManager *instance();
+    QTextCharFormat getFormat(const QString &name);
+
+signals:
+
+public slots:
+    void loadCodeStyle(const QString &styleFilePath);
+
+private:
+    inline void parseStyle(const QString &ruleName,
+                           const QString &ruleData,
+                           QMap<QString, QTextCharFormat> map);
+    static KNCodeStyleManager *m_instance;
+    explicit KNCodeStyleManager(QObject *parent = 0);
+
+    QMap<QString, QTextCharFormat> m_codeStyle;
+};
+
+#endif // KNCODESTYLEMANAGER_H

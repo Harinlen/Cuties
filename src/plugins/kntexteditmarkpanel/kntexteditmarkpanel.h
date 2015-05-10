@@ -16,9 +16,34 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kntextblockdata.h"
+#ifndef KNTEXTEDITMARKPANEL_H
+#define KNTEXTEDITMARKPANEL_H
 
-KNTextBlockData::KNTextBlockData() :
-    marked(false)
+#include <QPixmap>
+
+#include "kntexteditpanel.h"
+
+class KNTextEditMarkPanel : public KNTextEditPanel
 {
-}
+    Q_OBJECT
+public:
+    explicit KNTextEditMarkPanel(QWidget *parent = 0);
+
+signals:
+
+public slots:
+
+protected:
+    void drawContent(int x,
+                     int y,
+                     int width,
+                     int height,
+                     const QTextBlock &block,
+                     QPainter *painter,
+                     bool currentLine);
+
+private:
+    QPixmap m_mark;
+};
+
+#endif // KNTEXTEDITMARKPANEL_H

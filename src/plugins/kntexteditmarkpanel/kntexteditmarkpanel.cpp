@@ -17,43 +17,46 @@
  */
 #include <QPainter>
 
+#include "kntextblockdata.h"
 #include "knglobal.h"
 
-#include "kntexteditnumberpanel.h"
+#include "kntexteditmarkpanel.h"
 
-KNTextEditNumberPanel::KNTextEditNumberPanel(QWidget *parent) :
-    KNTextEditPanel(parent)
+KNTextEditMarkPanel::KNTextEditMarkPanel(QWidget *parent) :
+    KNTextEditPanel(parent),
+    m_mark(QPixmap(":/image/resource/images/BreakPoint.png"))
 {
-    setObjectName("TextEditNumberPanel");
+    setObjectName("TextEditMarkPanel");
     //Set properties.
-    setMinimumWidth(30);
-    //Set the palette.
+    setFixedWidth(m_mark.width());
+
+    //Set palette.
     setPalette(KNGlobal::instance()->getPalette(objectName()));
 }
 
-void KNTextEditNumberPanel::drawContent(int x,
-                                        int y,
-                                        int width,
-                                        int height,
-                                        const QTextBlock &block,
-                                        QPainter *painter,
-                                        bool currentLine)
+void KNTextEditMarkPanel::drawContent(int x,
+                                      int y,
+                                      int width,
+                                      int height,
+                                      const QTextBlock &block,
+                                      QPainter *painter,
+                                      bool currentLine)
 {
     //Draw the highlight if the block is the current line.
     if(currentLine)
     {
         painter->fillRect(QRect(x,y,width,height), palette().highlight());
     }
-    //Draw the block number.
-    painter->drawText(x, y, width, height,
-                      Qt::AlignVCenter | Qt::AlignRight,
-                      QString::number(block.blockNumber()+1));
-}
-
-void KNTextEditNumberPanel::onActionBlockCountChange(int blockCount)
-{
-    //Resize the panel.
-    resize(fontMetrics().width(QString::number(blockCount)), height());
-    //Emit update signal.
-    emit requireResizeMargin();
+    //Ignore no user data line.
+    if(block.userData()==nullptr)
+    {
+        return;
+    }
+    //Get block data.
+    KNTextBlockData *blockData=static_cast<KNTextBlockData *>(block.userData());
+    //If this line is marked, then draw the mark.
+    if(!blockData->marked)
+    {
+        painter->drawPixmap(x,y,width,height,m_mark);
+    }
 }

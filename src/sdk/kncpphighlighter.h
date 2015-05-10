@@ -16,9 +16,21 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kntextblockdata.h"
+#ifndef KNCPPHIGHLIGHTER_H
+#define KNCPPHIGHLIGHTER_H
 
-KNTextBlockData::KNTextBlockData() :
-    marked(false)
+#include "knhighlighter.h"
+
+class KNCppHighlighter : public KNHighlighter
 {
-}
+    Q_OBJECT
+public:
+    explicit KNCppHighlighter(QObject *parent = 0);
+
+signals:
+
+public slots:
+
+};
+
+#endif // KNCPPHIGHLIGHTER_H

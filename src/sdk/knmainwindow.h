@@ -22,6 +22,7 @@
 #include <QMainWindow>
 
 class QPropertyAnimation;
+class QBoxLayout;
 class KNWelcomeBase;
 class KNMainWindow : public QMainWindow
 {
@@ -34,7 +35,8 @@ signals:
 
 public slots:
     void setWelcome(KNWelcomeBase *welcome);
-    void setTabManager(QDockWidget *widget);
+    void setTabManager(QWidget *widget);
+    void setEditor(QWidget *widget);
 
 protected:
     void resizeEvent(QResizeEvent *event);
@@ -45,8 +47,9 @@ private slots:
 private:
     inline QPropertyAnimation *generateAnime();
     KNWelcomeBase *m_welcome;
-    QDockWidget *m_tabManager;
+    QWidget *m_tabManager;
     QPropertyAnimation *m_welcomeIn, *m_welcomeOut;
+    QBoxLayout *m_tabLayout;
 };
 
 #endif // KNMAINWINDOW_H

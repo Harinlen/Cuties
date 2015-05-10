@@ -21,13 +21,13 @@
 
 #include <QList>
 
-#include <QDockWidget>
+#include <QScrollArea>
 
 class QSignalMapper;
 class QBoxLayout;
 class KNTabManagerItem;
 class KNTabManagerItemSelector;
-class KNTabManager : public QDockWidget
+class KNTabManager : public QScrollArea
 {
     Q_OBJECT
 public:

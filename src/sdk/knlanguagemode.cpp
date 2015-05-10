@@ -16,9 +16,20 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kntextblockdata.h"
+#include "knlanguagemode.h"
 
-KNTextBlockData::KNTextBlockData() :
-    marked(false)
+KNLanguageMode::KNLanguageMode() :
+    m_highlighter(nullptr)
 {
 }
+
+KNHighlighter *KNLanguageMode::highlighter() const
+{
+    return m_highlighter;
+}
+
+void KNLanguageMode::setHighlighter(KNHighlighter *highlighter)
+{
+    m_highlighter = highlighter;
+}
+

@@ -16,9 +16,16 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kntextblockdata.h"
+#ifndef KNUTILITIES_H
+#define KNUTILITIES_H
 
-KNTextBlockData::KNTextBlockData() :
-    marked(false)
+#include <QColor>
+#include <QString>
+
+class KNUtilities
 {
-}
+public:
+    static QColor parseColor(const QString &data);
+};
+
+#endif // KNUTILITIES_H

@@ -21,18 +21,28 @@
         "Parent" : "MainWindow",
         "Window" : "#1F1F1F"
     },
+    "CodeEditorUnibar" : {
+        "Parent" : "CodeEditor",
+        "WindowText" : "#FFFFFF",
+        "Window" : "#000000"
+    },
     "TextEditor" : {
         "Parent" : "CodeEditor",
         "Base" : "#00000000",
-        "Text" : "#FFFFFF"
+        "Text" : "#DDDDDD",
+        "Highlight" : "#f7cf3d",
+        "HighlightedText" : "#222222"
     },
     "TextEditPanel" : {
         "Parent" : "TextEditor",
-        "WindowText" : "#FFFFFF"
+        "WindowText" : "#707070"
     },
     "TextEditNumberPanel" : {
         "Parent" : "TextEditPanel",
         "Highlight" : "#303030"
+    },
+    "TextEditMarkPanel" : {
+        "Parent" : "TextEditNumberPanel"
     },
     "Welcome" : {
         "Parent" : "MainWindow",

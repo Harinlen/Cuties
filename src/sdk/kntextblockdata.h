@@ -25,6 +25,7 @@ class KNTextBlockData : public QTextBlockUserData
 {
 public:
     KNTextBlockData();
+    bool marked;
 };
 
 #endif // KNTEXTBLOCKDATA_H

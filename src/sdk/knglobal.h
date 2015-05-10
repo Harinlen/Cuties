@@ -19,6 +19,7 @@
 #ifndef KNGLOBAL_H
 #define KNGLOBAL_H
 
+#include <QTextCharFormat>
 #include <QPalette>
 
 #include <QObject>
@@ -27,6 +28,7 @@ class KNLanguageManager;
 class KNConfigureManager;
 class KNLocaleManager;
 class KNThemeManager;
+class KNCodeStyleManager;
 class KNGlobal : public QObject
 {
     Q_OBJECT
@@ -34,8 +36,10 @@ public:
     static KNGlobal *instance();
     QString simplifiedPath(const QString &path);
     QPalette getPalette(const QString &caption);
+    QTextCharFormat getFormat(const QString &name);
     static QString ensurePathAvaliable(const QString &path);
     void loadTheme(const QString &themeFilePath);
+    void loadCodeStyle(const QString &codeStylePath);
 
 signals:
     void languageUpdate();
@@ -52,6 +56,7 @@ private:
     KNThemeManager *m_themeManager;
     KNLocaleManager *m_localeManager;
     KNLanguageManager *m_languageManager;
+    KNCodeStyleManager *m_codeStyleManager;
 
     QString m_userDataDir, m_resourceDir, m_configureDir;
 };

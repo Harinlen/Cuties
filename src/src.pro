@@ -54,7 +54,15 @@ SOURCES += \
     sdk/kntexteditpanel.cpp \
     sdk/kntexteditpanelcontainer.cpp \
     plugins/kntexteditnumberpanel/kntexteditnumberpanel.cpp \
-    sdk/kntextblockdata.cpp
+    sdk/kntextblockdata.cpp \
+    sdk/knhighlighter.cpp \
+    sdk/kncodestylemanager.cpp \
+    sdk/knutilities.cpp \
+    sdk/kncodeeditorunibar.cpp \
+    sdk/knconnectionhandler.cpp \
+    plugins/kntexteditmarkpanel/kntexteditmarkpanel.cpp \
+    sdk/knlanguagemode.cpp \
+    sdk/kncpphighlighter.cpp
 
 HEADERS += \
     sdk/knglobal.h \
@@ -78,7 +86,15 @@ HEADERS += \
     sdk/kntexteditpanel.h \
     sdk/kntexteditpanelcontainer.h \
     plugins/kntexteditnumberpanel/kntexteditnumberpanel.h \
-    sdk/kntextblockdata.h
+    sdk/kntextblockdata.h \
+    sdk/knhighlighter.h \
+    sdk/kncodestylemanager.h \
+    sdk/knutilities.h \
+    sdk/kncodeeditorunibar.h \
+    sdk/knconnectionhandler.h \
+    plugins/kntexteditmarkpanel/kntexteditmarkpanel.h \
+    sdk/knlanguagemode.h \
+    sdk/kncpphighlighter.h
 
 RESOURCES += \
     res.qrc

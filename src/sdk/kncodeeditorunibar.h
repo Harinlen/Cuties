@@ -16,9 +16,36 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kntextblockdata.h"
+#ifndef KNCODEEDITORUNIBAR_H
+#define KNCODEEDITORUNIBAR_H
 
-KNTextBlockData::KNTextBlockData() :
-    marked(false)
+#include <QWidget>
+
+class QLabel;
+class KNTextEdit;
+class KNConnectionHandler;
+class KNCodeEditorUnibar : public QWidget
 {
-}
+    Q_OBJECT
+public:
+    explicit KNCodeEditorUnibar(QWidget *parent = 0);
+    KNTextEdit *editor() const;
+    void setEditor(KNTextEdit *editor);
+
+signals:
+
+public slots:
+
+private slots:
+    void retranslate();
+    void onActionCursorPositionChange();
+
+private:
+    KNConnectionHandler *m_editorConections;
+    KNTextEdit *m_editor;
+    QLabel *m_cursorPosition;
+
+    QString m_positionText;
+};
+
+#endif // KNCODEEDITORUNIBAR_H

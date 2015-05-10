@@ -16,6 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include <QPropertyAnimation>
+#include <QBoxLayout>
 
 #include "knwelcomebase.h"
 
@@ -26,11 +27,21 @@ KNMainWindow::KNMainWindow(QWidget *parent) :
     m_welcome(nullptr),
     m_tabManager(nullptr),
     m_welcomeIn(generateAnime()),
-    m_welcomeOut(generateAnime())
+    m_welcomeOut(generateAnime()),
+    m_tabLayout(new QBoxLayout(QBoxLayout::LeftToRight))
 {
     setObjectName("MainWindow");
     //Set properties.
     setMinimumSize(950, 600);
+
+    //Configure tab layout.
+    m_tabLayout->setContentsMargins(0,0,0,0);
+    m_tabLayout->setSpacing(0);
+    //Generate central widget.
+    QWidget *container=new QWidget(this);
+    container->setContentsMargins(0,0,0,0);
+    container->setLayout(m_tabLayout);
+    setCentralWidget(container);
 }
 
 KNWelcomeBase *KNMainWindow::welcome() const
@@ -41,7 +52,7 @@ KNWelcomeBase *KNMainWindow::welcome() const
 void KNMainWindow::setWelcome(KNWelcomeBase *welcome)
 {
     //Save the welcome pointer.
-    m_welcome = welcome;
+    m_welcome=welcome;
     //Check the welcome is null or not.
     if(m_welcome==nullptr)
     {
@@ -59,12 +70,17 @@ void KNMainWindow::setWelcome(KNWelcomeBase *welcome)
             this, &KNMainWindow::onActionNewFile);
 }
 
-void KNMainWindow::setTabManager(QDockWidget *widget)
+void KNMainWindow::setTabManager(QWidget *widget)
 {
     //Save the tab manager.
     m_tabManager=widget;
     //Add the tab manager to widget.
-    addDockWidget(Qt::LeftDockWidgetArea, m_tabManager);
+    m_tabLayout->addWidget(m_tabManager);
+}
+
+void KNMainWindow::setEditor(QWidget *widget)
+{
+    m_tabLayout->addWidget(widget);
 }
 
 void KNMainWindow::resizeEvent(QResizeEvent *event)
