@@ -20,13 +20,15 @@
 
 #include "knhighlighter.h"
 
+#include <QDebug>
+
 KNHighlighter::KNHighlighter(QObject *parent) :
     QSyntaxHighlighter(parent)
 {
     ;
 }
 
-void KNHighlighter::addRules(const QString &name,
+void KNHighlighter::addRule(const QString &name,
                              const QString &pattern)
 {
     SyntaxRule rule;
@@ -47,7 +49,6 @@ void KNHighlighter::highlightBlock(const QString &text)
         data=new KNTextBlockData;
         setCurrentBlockUserData(data);
     }
-
     //Do highlight.
     syntaxHighlight(text);
 }

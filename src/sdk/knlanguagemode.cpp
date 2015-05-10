@@ -15,15 +15,15 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-
 #include "knlanguagemode.h"
 
-KNLanguageMode::KNLanguageMode() :
+KNLanguageMode::KNLanguageMode(QObject *parent) :
+    QObject(parent),
     m_highlighter(nullptr)
 {
 }
 
-KNHighlighter *KNLanguageMode::highlighter() const
+KNHighlighter *KNLanguageMode::highlighter()
 {
     return m_highlighter;
 }

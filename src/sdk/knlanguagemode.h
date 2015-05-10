@@ -19,13 +19,16 @@
 #ifndef KNLANGUAGEMODE_H
 #define KNLANGUAGEMODE_H
 
-class KNHighlighter;
-class KNLanguageMode
-{
-public:
-    explicit KNLanguageMode();
+#include <QObject>
 
-    KNHighlighter *highlighter() const;
+class KNHighlighter;
+class KNLanguageMode : public QObject
+{
+    Q_OBJECT
+public:
+    explicit KNLanguageMode(QObject *parent = 0);
+
+    KNHighlighter *highlighter();
     void setHighlighter(KNHighlighter *highlighter);
 
 private:

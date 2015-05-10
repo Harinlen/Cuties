@@ -31,10 +31,7 @@ KNTextEditNumberPanel::KNTextEditNumberPanel(QWidget *parent) :
     setPalette(KNGlobal::instance()->getPalette(objectName()));
 }
 
-void KNTextEditNumberPanel::drawContent(int x,
-                                        int y,
-                                        int width,
-                                        int height,
+void KNTextEditNumberPanel::drawContent(QRect blockRect,
                                         const QTextBlock &block,
                                         QPainter *painter,
                                         bool currentLine)
@@ -42,10 +39,10 @@ void KNTextEditNumberPanel::drawContent(int x,
     //Draw the highlight if the block is the current line.
     if(currentLine)
     {
-        painter->fillRect(QRect(x,y,width,height), palette().highlight());
+        painter->fillRect(blockRect, palette().highlight());
     }
     //Draw the block number.
-    painter->drawText(x, y, width, height,
+    painter->drawText(blockRect,
                       Qt::AlignVCenter | Qt::AlignRight,
                       QString::number(block.blockNumber()+1));
 }

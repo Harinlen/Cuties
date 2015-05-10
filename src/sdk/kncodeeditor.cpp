@@ -20,13 +20,16 @@
 #include "knglobal.h"
 #include "kntextedit.h"
 #include "kncodeeditorunibar.h"
+#include "knlanguagemode.h"
+#include "knhighlighter.h"
 
 #include "kncodeeditor.h"
 
 KNCodeEditor::KNCodeEditor(QWidget *parent) :
     QWidget(parent),
     m_unibar(new KNCodeEditorUnibar),
-    m_editor(new KNTextEdit(this))
+    m_editor(new KNTextEdit(this)),
+    m_languageMode(nullptr)
 {
     setObjectName("CodeEditor");
     //Set properties.
@@ -46,4 +49,38 @@ KNCodeEditor::KNCodeEditor(QWidget *parent) :
 
     //Configure unibar.
     m_unibar->setEditor(m_editor);
+
+    //Set language mode.
+    setLanguageMode(KNGlobal::instance()->getLanguageMode("cpp"));
+}
+
+KNCodeEditor::~KNCodeEditor()
+{
+    //Clear the language mode and recover the memory.
+    clearLanguageMode();
+}
+
+KNLanguageMode *KNCodeEditor::languageMode() const
+{
+    return m_languageMode;
+}
+
+void KNCodeEditor::setLanguageMode(KNLanguageMode *languageMode)
+{
+    //Clear the old language mode.
+    clearLanguageMode();
+    //Set new language mode.
+    m_languageMode = languageMode;
+    //Link the language mode.
+    m_languageMode->highlighter()->setDocument(m_editor->document());
+}
+
+inline void KNCodeEditor::clearLanguageMode()
+{
+    if(m_languageMode)
+    {
+        //Delete the language mode.
+        delete m_languageMode;
+        m_languageMode=nullptr;
+    }
 }

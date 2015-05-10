@@ -24,11 +24,13 @@
 
 #include <QObject>
 
+class KNLanguageMode;
 class KNLanguageManager;
 class KNConfigureManager;
 class KNLocaleManager;
 class KNThemeManager;
 class KNCodeStyleManager;
+class KNLanguageManager;
 class KNGlobal : public QObject
 {
     Q_OBJECT
@@ -37,6 +39,7 @@ public:
     QString simplifiedPath(const QString &path);
     QPalette getPalette(const QString &caption);
     QTextCharFormat getFormat(const QString &name);
+    KNLanguageMode *getLanguageMode(const QString &suffix);
     static QString ensurePathAvaliable(const QString &path);
     void loadTheme(const QString &themeFilePath);
     void loadCodeStyle(const QString &codeStylePath);

@@ -50,6 +50,11 @@ QTextCharFormat KNGlobal::getFormat(const QString &name)
     return m_codeStyleManager->getFormat(name);
 }
 
+KNLanguageMode *KNGlobal::getLanguageMode(const QString &suffix)
+{
+    return m_languageManager->getLanguageMode(suffix);
+}
+
 QString KNGlobal::ensurePathAvaliable(const QString &path)
 {
     //Check if there's a file named the same as the path.

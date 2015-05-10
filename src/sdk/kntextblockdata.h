@@ -26,6 +26,7 @@ class KNTextBlockData : public QTextBlockUserData
 public:
     KNTextBlockData();
     bool marked;
+    QRect blockBorder;
 };
 
 #endif // KNTEXTBLOCKDATA_H

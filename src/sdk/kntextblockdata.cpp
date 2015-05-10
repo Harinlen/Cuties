@@ -19,6 +19,7 @@
 #include "kntextblockdata.h"
 
 KNTextBlockData::KNTextBlockData() :
-    marked(false)
+    marked(false),
+    blockBorder(QRect())
 {
 }

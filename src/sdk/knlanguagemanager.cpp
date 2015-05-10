@@ -16,6 +16,8 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+//Highlighters
+#include "kncpphighlighter.h"
 
 #include "knlanguagemode.h"
 
@@ -30,7 +32,16 @@ KNLanguageManager *KNLanguageManager::instance()
 
 KNLanguageMode *KNLanguageManager::getLanguageMode(const QString &suffix)
 {
-    ;
+    KNLanguageMode *mode=new KNLanguageMode;
+    if(suffix=="cpp")
+    {
+        mode->setHighlighter(new KNCppHighlighter(mode));
+    }
+    else
+    {
+        mode->setHighlighter(new KNHighlighter(mode));
+    }
+    return mode;
 }
 
 KNLanguageManager::KNLanguageManager(QObject *parent) :

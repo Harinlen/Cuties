@@ -30,6 +30,7 @@
         "Parent" : "CodeEditor",
         "Base" : "#00000000",
         "Text" : "#DDDDDD",
+        "Button" : "#535353",
         "Highlight" : "#f7cf3d",
         "HighlightedText" : "#222222"
     },

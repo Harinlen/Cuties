@@ -34,10 +34,7 @@ KNTextEditMarkPanel::KNTextEditMarkPanel(QWidget *parent) :
     setPalette(KNGlobal::instance()->getPalette(objectName()));
 }
 
-void KNTextEditMarkPanel::drawContent(int x,
-                                      int y,
-                                      int width,
-                                      int height,
+void KNTextEditMarkPanel::drawContent(QRect blockRect,
                                       const QTextBlock &block,
                                       QPainter *painter,
                                       bool currentLine)
@@ -45,18 +42,27 @@ void KNTextEditMarkPanel::drawContent(int x,
     //Draw the highlight if the block is the current line.
     if(currentLine)
     {
-        painter->fillRect(QRect(x,y,width,height), palette().highlight());
+        painter->fillRect(blockRect, palette().highlight());
     }
     //Ignore no user data line.
-    if(block.userData()==nullptr)
+    if(nullptr==block.userData())
     {
         return;
     }
-    //Get block data.
-    KNTextBlockData *blockData=static_cast<KNTextBlockData *>(block.userData());
     //If this line is marked, then draw the mark.
-    if(!blockData->marked)
+    KNTextBlockData *blockData=static_cast<KNTextBlockData *>(block.userData());
+    if(blockData->marked)
     {
-        painter->drawPixmap(x,y,width,height,m_mark);
+        painter->drawPixmap(blockRect, m_mark);
     }
+}
+
+void KNTextEditMarkPanel::itemClickEvent(const QTextBlock &block,
+                                         KNTextBlockData *data)
+{
+    Q_UNUSED(block)
+    //Set marked to the other side.
+    data->marked^=1;
+    //Update the panel.
+    update();
 }

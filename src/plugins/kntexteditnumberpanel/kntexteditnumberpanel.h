@@ -32,11 +32,9 @@ signals:
 public slots:
 
 protected:
-    void drawContent(int x,
-                     int y,
-                     int width,
-                     int height,
-                     const QTextBlock &block, QPainter *painter,
+    void drawContent(QRect blockRect,
+                     const QTextBlock &block,
+                     QPainter *painter,
                      bool currentLine);
 
 protected slots:

@@ -34,13 +34,12 @@ signals:
 public slots:
 
 protected:
-    void drawContent(int x,
-                     int y,
-                     int width,
-                     int height,
+    void drawContent(QRect blockRect,
                      const QTextBlock &block,
                      QPainter *painter,
                      bool currentLine);
+    void itemClickEvent(const QTextBlock &block,
+                        KNTextBlockData *data);
 
 private:
     QPixmap m_mark;

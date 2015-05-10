@@ -39,7 +39,7 @@ public slots:
 private:
     inline void parseStyle(const QString &ruleName,
                            const QString &ruleData,
-                           QMap<QString, QTextCharFormat> map);
+                           QMap<QString, QTextCharFormat> &map);
     static KNCodeStyleManager *m_instance;
     explicit KNCodeStyleManager(QObject *parent = 0);
 

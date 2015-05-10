@@ -22,5 +22,34 @@ KNCppHighlighter::KNCppHighlighter(QObject *parent) :
     KNHighlighter(parent)
 {
     //Add cpp rules.
-    ;
+    addRule("datatype",
+            "\\b(bool|char|double|float|int|long|short|signed|unsigned|void|"
+            "wchar_t|char16_t|char32_t|nullptr)\\b");
+    addRule("keyword",
+            "\\b(__asm|__cdecl|__declspec|__export|__far16|"
+            "__fastcall|__fortran|__import|"
+            "__pascal|__rtti|__stdcall|_asm|_cdecl|"
+            "__except|_export|_far16|_fastcall|"
+            "__finally|_fortran|_import|_stdcall|__thread|__try|asm|auto|"
+            "break|case|catch|cdecl|const|continue|default|"
+            "do|else|enum|extern|for|goto|"
+            "if|register|return|sizeof|static|"
+            "struct|switch|"
+            "typedef|union|"
+            "volatile|while|"
+            "class|const_cast|delete|"
+            "dynamic_cast|explicit|false|friend|"
+            "inline|mutable|namespace|new|operator|private|protected|"
+            "public|reinterpret_cast|static_cast|"
+            "template|this|throw|true|"
+            "try|typeid|typename|"
+            "using|virtual)\\b");
+    addRule("number",
+            "\\b\\d+(\\.)?\\d*\\b");
+    addRule("preprocdata",
+            "^[[:blank:]]*#([[:blank:]]*[[:word:]]*).*");
+    addRule("preproc",
+            "^[[:blank:]]*#([[:blank:]]*[[:word:]]*)");
+    addRule("todo",
+            "(TODO|FIXME|BUG)([:]?)");
 }

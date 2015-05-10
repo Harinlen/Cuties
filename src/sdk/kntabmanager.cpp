@@ -17,7 +17,9 @@
  */
 #include <QBoxLayout>
 #include <QSignalMapper>
+#include <QScrollBar>
 
+#include "knsideshadowwidget.h"
 #include "kntabmanageritem.h"
 #include "kntabmanageritemselector.h"
 #include "knglobal.h"
@@ -31,6 +33,8 @@ KNTabManager::KNTabManager(QWidget *parent) :
     m_container(new QWidget(this)),
     m_itemMapper(new QSignalMapper(this)),
     m_selector(new KNTabManagerItemSelector(this)),
+    m_topShadow(new KNSideShadowWidget(KNSideShadow::TopShadow, this)),
+    m_bottomShadow(new KNSideShadowWidget(KNSideShadow::BottomShadow, this)),
     m_currentItem(nullptr)
 {
     setObjectName("TabManager");
@@ -45,9 +49,10 @@ KNTabManager::KNTabManager(QWidget *parent) :
     setPalette(managerPalette);
 
     //Set container widget.
-    m_container->setFixedWidth(200);
+    m_container->setFixedWidth(width());
     m_container->setAutoFillBackground(true);
     m_container->setPalette(managerPalette);
+    m_container->lower();
     setWidget(m_container);
     m_selector->setParent(m_container);
     m_selector->move(200-m_selector->width(), 0);
@@ -58,6 +63,15 @@ KNTabManager::KNTabManager(QWidget *parent) :
     m_containerLayout->setContentsMargins(0,0,0,0);
     m_containerLayout->setSpacing(0);
     m_container->setLayout(m_containerLayout);
+
+    //Resize shadows
+    m_topShadow->setGeometry(0,0,width(),15);
+    m_topShadow->setBrightness(100);
+    m_bottomShadow->setGeometry(0,102,width(),15);
+    m_bottomShadow->setBrightness(100);
+    //Link scrollbar signals.
+    connect(verticalScrollBar(), SIGNAL(valueChanged(int)),
+            this, SLOT(onActionVerticalValueChanged(int)));
 
     //Debug.
     for(int i=0; i<100; i++)
@@ -108,6 +122,14 @@ void KNTabManager::setCurrentItem(KNTabManagerItem *item)
     ;
 }
 
+void KNTabManager::resizeEvent(QResizeEvent *event)
+{
+    //Do resize.
+    QScrollArea::resizeEvent(event);
+    //Move the shadow.
+    m_bottomShadow->move(0, height()-m_bottomShadow->height());
+}
+
 void KNTabManager::onActionItemClicked()
 {
     //Ignore unavailable calling.
@@ -124,4 +146,12 @@ void KNTabManager::onActionItemClicked()
         return;
     }
     setCurrentIndex(itemIndex);
+}
+
+void KNTabManager::onActionVerticalValueChanged(const int &value)
+{
+    //When the vertical scroll bar reaches the minimum, hide the top shadow.
+    m_topShadow->setVisible(verticalScrollBar()->minimum()!=value);
+    //When the vertival scroll bar reaches the maximum, hide the bottom shadow.
+    m_bottomShadow->setVisible(verticalScrollBar()->maximum()!=value);
 }

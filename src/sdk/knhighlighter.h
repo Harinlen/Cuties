@@ -40,7 +40,7 @@ class KNHighlighter : public QSyntaxHighlighter
     Q_OBJECT
 public:
     explicit KNHighlighter(QObject *parent = 0);
-    void addRules(const QString &name, const QString &pattern);
+    void addRule(const QString &name, const QString &pattern);
 
 signals:
 

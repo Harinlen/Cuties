@@ -23,6 +23,8 @@
 
 #include "kncodestylemanager.h"
 
+#include <QDebug>
+
 KNCodeStyleManager *KNCodeStyleManager::m_instance=nullptr;
 
 KNCodeStyleManager *KNCodeStyleManager::instance()
@@ -67,7 +69,7 @@ void KNCodeStyleManager::loadCodeStyle(const QString &styleFilePath)
 
 void KNCodeStyleManager::parseStyle(const QString &ruleName,
                                     const QString &ruleData,
-                                    QMap<QString, QTextCharFormat> map)
+                                    QMap<QString, QTextCharFormat> &map)
 {
     QTextCharFormat textFormat;
     textFormat.setForeground(KNUtilities::parseColor(ruleData));

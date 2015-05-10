@@ -23,19 +23,25 @@
 
 class KNTextEdit;
 class KNCodeEditorUnibar;
+class KNLanguageMode;
 class KNCodeEditor : public QWidget
 {
     Q_OBJECT
 public:
     explicit KNCodeEditor(QWidget *parent = 0);
+    ~KNCodeEditor();
+    KNLanguageMode *languageMode() const;
 
 signals:
 
 public slots:
+    void setLanguageMode(KNLanguageMode *languageMode);
 
 private:
+    inline void clearLanguageMode();
     KNCodeEditorUnibar *m_unibar;
     KNTextEdit *m_editor;
+    KNLanguageMode *m_languageMode;
 };
 
 #endif // KNCODEEDITOR_H

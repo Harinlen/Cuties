@@ -27,6 +27,7 @@ class QSignalMapper;
 class QBoxLayout;
 class KNTabManagerItem;
 class KNTabManagerItemSelector;
+class KNSideShadowWidget;
 class KNTabManager : public QScrollArea
 {
     Q_OBJECT
@@ -40,8 +41,12 @@ public slots:
     void setCurrentIndex(int index);
     void setCurrentItem(KNTabManagerItem *item);
 
+protected:
+    void resizeEvent(QResizeEvent *event);
+
 private slots:
     void onActionItemClicked();
+    void onActionVerticalValueChanged(const int &value);
 
 private:
     QBoxLayout *m_containerLayout;
@@ -49,6 +54,7 @@ private:
     QSignalMapper *m_itemMapper;
     KNTabManagerItemSelector *m_selector;
     QList<KNTabManagerItem *> m_itemList;
+    KNSideShadowWidget *m_topShadow, *m_bottomShadow;
 
     KNTabManagerItem *m_currentItem;
 };

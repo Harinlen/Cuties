@@ -23,6 +23,7 @@
 
 #include <QWidget>
 
+class KNTextBlockData;
 class KNTextEdit;
 class KNTextEditPanel : public QWidget
 {
@@ -37,20 +38,23 @@ public slots:
     void setEditor(KNTextEdit *editor);
 
 protected:
-    virtual void drawContent(int x,
-                             int y,
-                             int width,
-                             int height,
+    virtual void drawContent(QRect blockRect,
                              const QTextBlock &block,
                              QPainter *painter,
                              bool currentLine)=0;
+    virtual void itemClickEvent(const QTextBlock &block,
+                                KNTextBlockData *data);
     void paintEvent(QPaintEvent *event);
+    void mousePressEvent(QMouseEvent *event);
+    void mouseReleaseEvent(QMouseEvent *event);
 
 protected slots:
     virtual void onActionBlockCountChange(int blockCount);
 
 private:
+    bool m_pressed;
     KNTextEdit *m_editor;
+    QTextBlock m_firstBlock, m_lastBlock;
 };
 
 #endif // KNTEXTEDITPANEL_H
