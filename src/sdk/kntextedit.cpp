@@ -21,6 +21,7 @@
 #include "../plugins/kntexteditmarkpanel/kntexteditmarkpanel.h"
 #include "../plugins/kntexteditnumberpanel/kntexteditnumberpanel.h"
 #include "knglobal.h"
+#include "knsideshadowwidget.h"
 #include "kntexteditpanelcontainer.h"
 
 #include "kntextedit.h"
@@ -28,6 +29,7 @@
 KNTextEdit::KNTextEdit(QWidget *parent) :
     QPlainTextEdit(parent),
     m_panelContainer(new KNTextEditPanelContainer(this)),
+    m_topShadow(new KNSideShadowWidget(KNSideShadow::TopShadow, this)),
     m_lineColor(QColor(0x30,0x30,0x30))
 {
     setObjectName("TextEditor");
@@ -39,6 +41,8 @@ KNTextEdit::KNTextEdit(QWidget *parent) :
     connect(this, &KNTextEdit::cursorPositionChanged,
             this, &KNTextEdit::updateHighlights);
 
+    //Configure the shadow.
+    m_topShadow->resize(width(), 15);
     //Configure panel container.
     m_panelContainer->setEditor(this);
     connect(this, &KNTextEdit::textChanged,
@@ -63,6 +67,8 @@ void KNTextEdit::resizeEvent(QResizeEvent *event)
 {
     //Resize the widget.
     QPlainTextEdit::resizeEvent(event);
+    //Resize the shadow.
+    m_topShadow->resize(width(), m_topShadow->height());
     //Resize the panel container.
     QRect cr=contentsRect();
     m_panelContainer->setGeometry(cr.left(),

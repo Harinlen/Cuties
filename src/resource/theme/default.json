@@ -23,8 +23,7 @@
     },
     "CodeEditorUnibar" : {
         "Parent" : "CodeEditor",
-        "WindowText" : "#FFFFFF",
-        "Window" : "#000000"
+        "WindowText" : "#bababa"
     },
     "TextEditor" : {
         "Parent" : "CodeEditor",

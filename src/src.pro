@@ -62,7 +62,8 @@ SOURCES += \
     sdk/knconnectionhandler.cpp \
     plugins/kntexteditmarkpanel/kntexteditmarkpanel.cpp \
     sdk/knlanguagemode.cpp \
-    sdk/kncpphighlighter.cpp
+    sdk/kncpphighlighter.cpp \
+    sdk/knlabelanimebutton.cpp
 
 HEADERS += \
     sdk/knglobal.h \
@@ -94,7 +95,8 @@ HEADERS += \
     sdk/knconnectionhandler.h \
     plugins/kntexteditmarkpanel/kntexteditmarkpanel.h \
     sdk/knlanguagemode.h \
-    sdk/kncpphighlighter.h
+    sdk/kncpphighlighter.h \
+    sdk/knlabelanimebutton.h
 
 RESOURCES += \
     res.qrc

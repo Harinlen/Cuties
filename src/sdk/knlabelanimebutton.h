@@ -16,41 +16,32 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KNCODEEDITORUNIBAR_H
-#define KNCODEEDITORUNIBAR_H
+#ifndef KNLABELANIMEBUTTON_H
+#define KNLABELANIMEBUTTON_H
 
-#include <QWidget>
+#include <QLabel>
 
-class QLabel;
-class QFrame;
-class KNTextEdit;
-class KNConnectionHandler;
-class KNLabelAnimeButton;
-class KNCodeEditorUnibar : public QWidget
+class QTimeLine;
+class KNLabelAnimeButton : public QLabel
 {
     Q_OBJECT
 public:
-    explicit KNCodeEditorUnibar(QWidget *parent = 0);
-    KNTextEdit *editor() const;
-    void setEditor(KNTextEdit *editor);
+    explicit KNLabelAnimeButton(QWidget *parent = 0);
 
 signals:
 
 public slots:
 
+protected:
+    void enterEvent(QEvent *event);
+    void leaveEvent(QEvent *event);
+
 private slots:
-    void retranslate();
-    void onActionCursorPositionChange();
+    void onActionUpdateBackground(const int &frame);
 
 private:
-    QFrame *generateSeperateLine();
-    KNConnectionHandler *m_editorConections;
-    KNTextEdit *m_editor;
-    QLabel *m_fileName, *m_cursorPosition, *m_encoded;
-    KNLabelAnimeButton *m_close;
-    QColor m_borderColor;
-
-    QString m_positionText;
+    inline void startAnime(const int &end);
+    QTimeLine *m_backgroundAnime;
 };
 
-#endif // KNCODEEDITORUNIBAR_H
+#endif // KNLABELANIMEBUTTON_H

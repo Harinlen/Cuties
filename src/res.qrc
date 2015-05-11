@@ -7,6 +7,7 @@
         <file>resource/images/welcome_banner.png</file>
         <file>resource/images/icon.png</file>
         <file>resource/images/BreakPoint.png</file>
+        <file>resource/images/close.png</file>
     </qresource>
     <qresource prefix="/icon">
         <file>resource/icons/file/PlainText/PlainText_64x64.png</file>

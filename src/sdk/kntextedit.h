@@ -21,6 +21,7 @@
 
 #include <QPlainTextEdit>
 
+class KNSideShadowWidget;
 class KNTextEditPanelContainer;
 class KNTextEdit : public QPlainTextEdit
 {
@@ -42,6 +43,7 @@ private slots:
 private:
     inline void highlightCurrentLine(QList<QTextEdit::ExtraSelection> &selections);
     KNTextEditPanelContainer *m_panelContainer;
+    KNSideShadowWidget *m_topShadow;
     friend class KNTextEditPanel;
 
     QColor m_lineColor;
