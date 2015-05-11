@@ -24,6 +24,8 @@ KNLabelAnimeButton::KNLabelAnimeButton(QWidget *parent) :
     QLabel(parent),
     m_backgroundAnime(new QTimeLine(200, this))
 {
+    //Set properties.
+    setAutoFillBackground(true);
     //Configure time line.
     m_backgroundAnime->setEasingCurve(QEasingCurve::OutCubic);
     m_backgroundAnime->setUpdateInterval(16);
@@ -31,10 +33,20 @@ KNLabelAnimeButton::KNLabelAnimeButton(QWidget *parent) :
             this, &KNLabelAnimeButton::onActionUpdateBackground);
 }
 
+void KNLabelAnimeButton::setPalette(const QPalette &pal)
+{
+    //Set the palette.
+    QLabel::setPalette(pal);
+    //Initial the palette.
+    onActionUpdateBackground(0);
+}
+
 void KNLabelAnimeButton::enterEvent(QEvent *event)
 {
     //Start anime.
-    startAnime(100);
+    startAnime(255);
+    //Emit entered signal.
+    emit entered();
     //Do enter event.
     QLabel::enterEvent(event);
 }
@@ -43,8 +55,31 @@ void KNLabelAnimeButton::leaveEvent(QEvent *event)
 {
     //Start anime.
     startAnime(0);
+    //Emit leaved signal.
+    emit leaved();
     //Do leave event.
     QLabel::leaveEvent(event);
+}
+
+void KNLabelAnimeButton::mousePressEvent(QMouseEvent *event)
+{
+    //Set pressed flag.
+    m_pressed=true;
+    //Show pressed background.
+    onActionUpdateBackground(100);
+    QLabel::mousePressEvent(event);
+}
+
+void KNLabelAnimeButton::mouseReleaseEvent(QMouseEvent *event)
+{
+    //Check flag.
+    if(m_pressed)
+    {
+        emit clicked();
+    }
+    //Show released anime.
+    startAnime(255);
+    QLabel::mouseReleaseEvent(event);
 }
 
 void KNLabelAnimeButton::onActionUpdateBackground(const int &frame)
@@ -54,7 +89,7 @@ void KNLabelAnimeButton::onActionUpdateBackground(const int &frame)
     QColor backgroundColor=pal.color(QPalette::Window);
     backgroundColor.setAlpha(frame);
     pal.setColor(QPalette::Window, backgroundColor);
-    setPalette(pal);
+    QLabel::setPalette(pal);
 }
 
 void KNLabelAnimeButton::startAnime(const int &end)

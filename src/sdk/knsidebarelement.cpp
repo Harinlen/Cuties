@@ -16,39 +16,8 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KNLABELANIMEBUTTON_H
-#define KNLABELANIMEBUTTON_H
+#include "knsidebarelement.h"
 
-#include <QLabel>
-
-class QTimeLine;
-class KNLabelAnimeButton : public QLabel
+KNSidebarElement::KNSidebarElement()
 {
-    Q_OBJECT
-public:
-    explicit KNLabelAnimeButton(QWidget *parent = 0);
-    void setPalette(const QPalette &pal);
-
-signals:
-    void clicked();
-    void entered();
-    void leaved();
-
-public slots:
-
-protected:
-    void enterEvent(QEvent *event);
-    void leaveEvent(QEvent *event);
-    void mousePressEvent(QMouseEvent *event);
-    void mouseReleaseEvent(QMouseEvent *event);
-
-private slots:
-    void onActionUpdateBackground(const int &frame);
-
-private:
-    inline void startAnime(const int &end);
-    QTimeLine *m_backgroundAnime;
-    bool m_pressed=false;
-};
-
-#endif // KNLABELANIMEBUTTON_H
+}

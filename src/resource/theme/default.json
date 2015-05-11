@@ -6,6 +6,14 @@
         "Parent" : "Application",
         "Window" : "#1F1F1F"
     },
+    "Sidebar" : {
+        "Parent" : "MainWindow",
+        "Window" : "#5d5f60"
+    },
+    "MainMenuButton" : {
+        "Parent" : "Sidebar",
+        "Window" : "#464748"
+    },
     "TabManager" : {
         "Parent" : "MainWindow",
         "Window" : "#414141"

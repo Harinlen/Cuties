@@ -16,43 +16,24 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KNMAINWINDOW_H
-#define KNMAINWINDOW_H
+#ifndef KNSIDEBAR_H
+#define KNSIDEBAR_H
 
-#include <QMainWindow>
+#include <QWidget>
 
-class QPropertyAnimation;
-class QBoxLayout;
-class KNSidebar;
-class KNWelcomeBase;
-class KNMainWindow : public QMainWindow
+class KNLabelAnimeButton;
+class KNSidebar : public QWidget
 {
     Q_OBJECT
 public:
-    explicit KNMainWindow(QWidget *parent = 0);
-    KNWelcomeBase *welcome() const;
-    void addSidebarElement();
+    explicit KNSidebar(QWidget *parent = 0);
 
 signals:
 
 public slots:
-    void setWelcome(KNWelcomeBase *welcome);
-    void setTabManager(QWidget *widget);
-    void setEditor(QWidget *widget);
-
-protected:
-    void resizeEvent(QResizeEvent *event);
-
-private slots:
-    void onActionNewFile(const QString &suffix);
 
 private:
-    inline QPropertyAnimation *generateAnime();
-    KNSidebar *m_sidebar;
-    KNWelcomeBase *m_welcome;
-    QWidget *m_tabManager;
-    QPropertyAnimation *m_welcomeIn, *m_welcomeOut;
-    QBoxLayout *m_centralLayout;
+    KNLabelAnimeButton *m_mainMenu;
 };
 
-#endif // KNMAINWINDOW_H
+#endif // KNSIDEBAR_H

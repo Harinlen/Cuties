@@ -19,29 +19,36 @@
 #include <QBoxLayout>
 
 #include "knwelcomebase.h"
+#include "knsidebar.h"
 
 #include "knmainwindow.h"
 
 KNMainWindow::KNMainWindow(QWidget *parent) :
     QMainWindow(parent),
+    m_sidebar(new KNSidebar(this)),
     m_welcome(nullptr),
     m_tabManager(nullptr),
     m_welcomeIn(generateAnime()),
     m_welcomeOut(generateAnime()),
-    m_tabLayout(new QBoxLayout(QBoxLayout::LeftToRight))
+    m_centralLayout(new QBoxLayout(QBoxLayout::LeftToRight))
 {
     setObjectName("MainWindow");
     //Set properties.
     setMinimumSize(950, 600);
 
     //Configure tab layout.
-    m_tabLayout->setContentsMargins(0,0,0,0);
-    m_tabLayout->setSpacing(0);
+    m_centralLayout->setContentsMargins(0,0,0,0);
+    m_centralLayout->setSpacing(0);
     //Generate central widget.
     QWidget *container=new QWidget(this);
     container->setContentsMargins(0,0,0,0);
-    container->setLayout(m_tabLayout);
+    container->setLayout(m_centralLayout);
     setCentralWidget(container);
+
+    //Configure sidebar.
+    m_sidebar->setMinimumWidth(30);
+    //Add sidebar to central layout.
+    m_centralLayout->addWidget(m_sidebar);
 }
 
 KNWelcomeBase *KNMainWindow::welcome() const
@@ -75,12 +82,12 @@ void KNMainWindow::setTabManager(QWidget *widget)
     //Save the tab manager.
     m_tabManager=widget;
     //Add the tab manager to widget.
-    m_tabLayout->addWidget(m_tabManager);
+    m_centralLayout->addWidget(m_tabManager);
 }
 
 void KNMainWindow::setEditor(QWidget *widget)
 {
-    m_tabLayout->addWidget(widget);
+    m_centralLayout->addWidget(widget);
 }
 
 void KNMainWindow::resizeEvent(QResizeEvent *event)
