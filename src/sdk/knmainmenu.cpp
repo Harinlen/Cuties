@@ -15,38 +15,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include "knsaostyle.h"
 
-#ifndef KNSIDEBAR_H
-#define KNSIDEBAR_H
+#include "knmainmenu.h"
 
-#include "knglobal.h"
-
-#include <QWidget>
-
-class KNSAOSubMenu;
-class KNMainMenu;
-class KNLabelAnimeButton;
-class KNSidebar : public QWidget
+KNMainMenu::KNMainMenu(QWidget *parent) :
+    QMenu(parent)
 {
-    Q_OBJECT
-public:
-    explicit KNSidebar(QWidget *parent = 0);
-    void addCategoryAction(int category, QAction *action);
-
-signals:
-
-public slots:
-
-private slots:
-    void retranslate();
-    void onActionShowMainMenu();
-
-private:
-    KNLabelAnimeButton *m_mainMenuButton;
-    KNMainMenu *m_mainMenu;
-    QAction *m_exitAction;
-
-    KNSAOSubMenu *m_categories[MainMenuCategoryCount];
-};
-
-#endif // KNSIDEBAR_H
+    setStyle(KNSAOStyle::instance());
+}

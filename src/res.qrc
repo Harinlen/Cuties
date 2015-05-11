@@ -8,8 +8,20 @@
         <file>resource/images/icon.png</file>
         <file>resource/images/BreakPoint.png</file>
         <file>resource/images/close.png</file>
+        <file>resource/images/indicator.png</file>
+        <file>resource/images/expand.png</file>
     </qresource>
     <qresource prefix="/icon">
         <file>resource/icons/file/PlainText/PlainText_64x64.png</file>
+        <file>resource/icons/category/Debug.png</file>
+        <file>resource/icons/category/Edit.png</file>
+        <file>resource/icons/category/File.png</file>
+        <file>resource/icons/category/Help.png</file>
+        <file>resource/icons/category/Run.png</file>
+        <file>resource/icons/category/Search.png</file>
+        <file>resource/icons/category/Tabs.png</file>
+        <file>resource/icons/category/Tools.png</file>
+        <file>resource/icons/category/View.png</file>
+        <file>resource/icons/actions/exit.png</file>
     </qresource>
 </RCC>

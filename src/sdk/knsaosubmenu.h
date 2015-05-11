@@ -15,45 +15,33 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#ifndef KNSAOSUBMENU_H
+#define KNSAOSUBMENU_H
 
-#ifndef KNMAINWINDOW_H
-#define KNMAINWINDOW_H
+#include <QMenu>
 
-#include <QMainWindow>
-
+class QLabel;
 class QPropertyAnimation;
-class QBoxLayout;
-class KNSidebar;
-class KNLabelAnimeButton;
-class KNWelcomeBase;
-class KNMainWindow : public QMainWindow
+class KNSAOSubMenu : public QMenu
 {
     Q_OBJECT
 public:
-    explicit KNMainWindow(QWidget *parent = 0);
-    KNWelcomeBase *welcome() const;
-    void addSidebarElement();
+    explicit KNSAOSubMenu(QWidget *parent = 0);
+    ~KNSAOSubMenu();
 
 signals:
 
 public slots:
-    void setWelcome(KNWelcomeBase *welcome);
-    void setTabManager(QWidget *widget);
 
 protected:
-    void resizeEvent(QResizeEvent *event);
-
-private slots:
-    void retranslate();
-    void onActionNewFile(const QString &suffix);
+    void showEvent(QShowEvent *event);
+    void hideEvent(QHideEvent *event);
 
 private:
-    inline QPropertyAnimation *generateAnime();
-    KNLabelAnimeButton *m_expandSidebar;
-    KNSidebar *m_sidebar;
-    KNWelcomeBase *m_welcome;
-    QWidget *m_tabManager;
-    QPropertyAnimation *m_welcomeIn, *m_welcomeOut;
+#ifndef Q_OS_MACX
+    QPropertyAnimation *m_start;
+#endif
+    QWidget *m_indicator;
 };
 
-#endif // KNMAINWINDOW_H
+#endif // KNSAOSUBMENU_H

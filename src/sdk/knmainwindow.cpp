@@ -20,40 +20,35 @@
 
 #include "knwelcomebase.h"
 #include "knsidebar.h"
+#include "knlabelanimebutton.h"
 
 #include "knmainwindow.h"
 
 KNMainWindow::KNMainWindow(QWidget *parent) :
     QMainWindow(parent),
+    m_expandSidebar(new KNLabelAnimeButton(this)),
     m_sidebar(new KNSidebar(this)),
     m_welcome(nullptr),
     m_tabManager(nullptr),
     m_welcomeIn(generateAnime()),
-    m_welcomeOut(generateAnime()),
-    m_centralLayout(new QBoxLayout(QBoxLayout::LeftToRight))
+    m_welcomeOut(generateAnime())
 {
     setObjectName("MainWindow");
     //Set properties.
     setMinimumSize(950, 600);
 
-    //Configure tab layout.
-    m_centralLayout->setContentsMargins(0,0,0,0);
-    m_centralLayout->setSpacing(0);
-    //Generate central widget.
-    QWidget *container=new QWidget(this);
-    container->setContentsMargins(0,0,0,0);
-    container->setLayout(m_centralLayout);
-    setCentralWidget(container);
-
-    //Configure sidebar.
-    m_sidebar->setMinimumWidth(30);
-    //Add sidebar to central layout.
-    m_centralLayout->addWidget(m_sidebar);
+    //Configure sidebar button.
+    m_expandSidebar->setPixmap(QPixmap(":/image/resource/images/expand.png"));
 }
 
 KNWelcomeBase *KNMainWindow::welcome() const
 {
     return m_welcome;
+}
+
+void KNMainWindow::addSidebarElement()
+{
+    ;
 }
 
 void KNMainWindow::setWelcome(KNWelcomeBase *welcome)
@@ -81,13 +76,7 @@ void KNMainWindow::setTabManager(QWidget *widget)
 {
     //Save the tab manager.
     m_tabManager=widget;
-    //Add the tab manager to widget.
-    m_centralLayout->addWidget(m_tabManager);
-}
-
-void KNMainWindow::setEditor(QWidget *widget)
-{
-    m_centralLayout->addWidget(widget);
+    m_tabManager->setParent(this);
 }
 
 void KNMainWindow::resizeEvent(QResizeEvent *event)
@@ -100,6 +89,14 @@ void KNMainWindow::resizeEvent(QResizeEvent *event)
         m_welcome->move((width()-m_welcome->width())>>1,
                         (height()-m_welcome->height())>>1);
     }
+    //Resize the sidebar.
+    m_sidebar->resize(m_sidebar->width(),
+                      height());
+}
+
+void KNMainWindow::retranslate()
+{
+    ;
 }
 
 void KNMainWindow::onActionNewFile(const QString &suffix)

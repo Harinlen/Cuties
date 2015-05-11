@@ -24,6 +24,25 @@
 
 #include <QObject>
 
+namespace KNGlobalNamespace
+{
+enum MainMenuCategory
+{
+    File,
+    Edit,
+    View,
+    Search,
+    Execute,
+    Debug,
+    Tools,
+    Tabs,
+    Help,
+    MainMenuCategoryCount
+};
+}
+
+using namespace KNGlobalNamespace;
+
 class KNLanguageMode;
 class KNLanguageManager;
 class KNConfigureManager;

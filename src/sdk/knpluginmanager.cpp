@@ -44,7 +44,6 @@ void KNPluginManager::loadPlugins()
 {
     //Set tab manager.
 //    m_mainWindow->setTabManager(new KNTabManager);
-    m_mainWindow->setEditor(new KNCodeEditor);
 
     //Load welcome.
 //    m_mainWindow->setWelcome(new KNWelcome);

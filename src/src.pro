@@ -65,7 +65,10 @@ SOURCES += \
     sdk/kncpphighlighter.cpp \
     sdk/knlabelanimebutton.cpp \
     sdk/knsidebarelement.cpp \
-    sdk/knsidebar.cpp
+    sdk/knsidebar.cpp \
+    sdk/knmainmenu.cpp \
+    sdk/knsaostyle.cpp \
+    sdk/knsaosubmenu.cpp
 
 HEADERS += \
     sdk/knglobal.h \
@@ -100,7 +103,10 @@ HEADERS += \
     sdk/kncpphighlighter.h \
     sdk/knlabelanimebutton.h \
     sdk/knsidebarelement.h \
-    sdk/knsidebar.h
+    sdk/knsidebar.h \
+    sdk/knmainmenu.h \
+    sdk/knsaostyle.h \
+    sdk/knsaosubmenu.h
 
 RESOURCES += \
     res.qrc
