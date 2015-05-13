@@ -25,6 +25,7 @@
 
 class QSignalMapper;
 class QBoxLayout;
+class KNSidebar;
 class KNTabManagerItem;
 class KNSideShadowWidget;
 class KNTabManager : public QScrollArea
@@ -32,6 +33,7 @@ class KNTabManager : public QScrollArea
     Q_OBJECT
 public:
     explicit KNTabManager(QWidget *parent = 0);
+    void setSidebar(KNSidebar *sidebar);
 
 signals:
 
@@ -44,10 +46,26 @@ protected:
     void resizeEvent(QResizeEvent *event);
 
 private slots:
+    void retranslate();
     void onActionItemClicked();
     void onActionVerticalValueChanged(const int &value);
 
 private:
+    enum TabManagerActions
+    {
+        New,
+        Open,
+        Save,
+        SaveAs,
+        SaveAll,
+        Close,
+        CloseAll,
+        CloseAllOthers,
+        TabManagerActionCount
+    };
+    inline void initialActions();
+    QAction *m_actions[TabManagerActionCount];
+
     QBoxLayout *m_containerLayout;
     QWidget *m_container;
     QSignalMapper *m_itemMapper;

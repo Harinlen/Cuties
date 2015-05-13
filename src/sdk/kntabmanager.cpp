@@ -15,10 +15,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include <QAction>
 #include <QBoxLayout>
 #include <QSignalMapper>
 #include <QScrollBar>
 
+#include "knsidebar.h"
 #include "knsideshadowwidget.h"
 #include "kntabmanageritem.h"
 #include "knglobal.h"
@@ -68,8 +70,28 @@ KNTabManager::KNTabManager(QWidget *parent) :
     m_bottomShadow->setGeometry(0,102,width(),15);
     m_bottomShadow->setBrightness(100);
     //Link scrollbar signals.
-    connect(verticalScrollBar(), SIGNAL(valueChanged(int)),
-            this, SLOT(onActionVerticalValueChanged(int)));
+    connect(verticalScrollBar(), &QScrollBar::valueChanged,
+            this, &KNTabManager::onActionVerticalValueChanged);
+
+    //Initial the actions.
+    initialActions();
+    //Link retranslate signal.
+    connect(KNGlobal::instance(), &KNGlobal::languageUpdate,
+            this, &KNTabManager::retranslate);
+    retranslate();
+}
+
+void KNTabManager::setSidebar(KNSidebar *sidebar)
+{
+    //Add actions to main menu.
+    sidebar->addCategoryAction(File, m_actions[New]);
+    sidebar->addCategoryAction(File, m_actions[Open]);
+    sidebar->addCategoryAction(File, m_actions[Save]);
+    sidebar->addCategoryAction(File, m_actions[SaveAs]);
+    sidebar->addCategoryAction(File, m_actions[SaveAll]);
+    sidebar->addCategoryAction(File, m_actions[Close]);
+    sidebar->addCategoryAction(File, m_actions[CloseAll]);
+    sidebar->addCategoryAction(File, m_actions[CloseAllOthers]);
 }
 
 void KNTabManager::addTab(const QString &caption)
@@ -118,6 +140,18 @@ void KNTabManager::resizeEvent(QResizeEvent *event)
     m_bottomShadow->move(0, height()-m_bottomShadow->height());
 }
 
+void KNTabManager::retranslate()
+{
+    m_actions[New]->setText(tr("New Source File"));
+    m_actions[Open]->setText(tr("Open"));
+    m_actions[Save]->setText(tr("Save"));
+    m_actions[SaveAs]->setText(tr("Save As"));
+    m_actions[SaveAll]->setText(tr("Save All"));
+    m_actions[Close]->setText(tr("Close"));
+    m_actions[CloseAll]->setText(tr("Close All"));
+    m_actions[CloseAllOthers]->setText(tr("Close All Other Files"));
+}
+
 void KNTabManager::onActionItemClicked()
 {
     //Ignore unavailable calling.
@@ -142,4 +176,23 @@ void KNTabManager::onActionVerticalValueChanged(const int &value)
     m_topShadow->setVisible(verticalScrollBar()->minimum()!=value);
     //When the vertival scroll bar reaches the maximum, hide the bottom shadow.
     m_bottomShadow->setVisible(verticalScrollBar()->maximum()!=value);
+}
+
+void KNTabManager::initialActions()
+{
+    QString actionIcon[TabManagerActionCount];
+    actionIcon[New]=":/icon/resource/icons/actions/new.png";
+    actionIcon[Open]=":/icon/resource/icons/actions/open.png";
+    actionIcon[Save]=":/icon/resource/icons/actions/save.png";
+    actionIcon[SaveAs]=":/icon/resource/icons/actions/saveas.png";
+    actionIcon[SaveAll]=":/icon/resource/icons/actions/saveall.png";
+    actionIcon[Close]=":/icon/resource/icons/actions/close.png";
+    actionIcon[CloseAll]=":/icon/resource/icons/actions/close.png";
+    actionIcon[CloseAllOthers]=":/icon/resource/icons/actions/close.png";
+
+    for(int i=0; i<TabManagerActionCount; i++)
+    {
+        m_actions[i]=new QAction(this);
+        m_actions[i]->setIcon(QIcon(actionIcon[i]));
+    }
 }

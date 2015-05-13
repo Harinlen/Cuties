@@ -19,6 +19,7 @@
 #include <QBoxLayout>
 
 #include "knwelcomebase.h"
+#include "kntabmanager.h"
 #include "knsidebar.h"
 #include "knsidetabcontentcontainer.h"
 #include "knlabelanimebutton.h"
@@ -30,7 +31,9 @@ KNMainWindow::KNMainWindow(QWidget *parent) :
     m_expandSidebar(new KNLabelAnimeButton(this)),
     m_sidebar(new KNSidebar(this)),
     m_welcome(nullptr),
-    m_tabManager(nullptr),
+    m_tabManager(new KNTabManager),
+    m_tabSideButton(new KNLabelAnimeButton(this)),
+    m_tabSideCaption(new QLabel(this)),
     m_tabContentContainer(new KNSideTabContentContainer(this)),
     m_welcomeIn(generateAnime()),
     m_welcomeOut(generateAnime())
@@ -46,6 +49,17 @@ KNMainWindow::KNMainWindow(QWidget *parent) :
     m_tabContentContainer->move(m_sidebar->width(), 0);
     m_tabContentContainer->resize(0, height());
     m_tabContentContainer->hide();
+
+    //Add tab manager to sidebar.
+    m_tabSideButton->setPixmap(QPixmap(":/image/resource/images/tabs.png"));
+    m_sidebar->addTab(m_tabSideButton, m_tabSideCaption, m_tabManager);
+    //Give the tab manager the main window to add actions.
+    m_tabManager->setSidebar(m_sidebar);
+
+    //Link retranslate.
+    connect(KNGlobal::instance(), &KNGlobal::languageUpdate,
+            this, &KNMainWindow::retranslate);
+    retranslate();
 }
 
 KNWelcomeBase *KNMainWindow::welcome() const
@@ -79,21 +93,9 @@ void KNMainWindow::setWelcome(KNWelcomeBase *welcome)
             this, &KNMainWindow::onActionNewFile);
 }
 
-void KNMainWindow::setTabManager(QWidget *widget)
+void KNMainWindow::setUnibar(QWidget *widget)
 {
-    if(m_tabManager!=nullptr)
-    {
-        qWarning("You have already set a tab manager.");
-        return;
-    }
-    //Save the tab manager.
-    m_tabManager=widget;
-    m_tabManager->setParent(this);
-    //Add tab manager to sidebar.
-    KNLabelAnimeButton *button=new KNLabelAnimeButton(this);
-    button->setPixmap(QPixmap(":/image/resource/images/tabs.png"));
-    QLabel *caption=new QLabel("Opened Files", this);
-    m_sidebar->addTab(button, caption, m_tabManager);
+    ;
 }
 
 void KNMainWindow::resizeEvent(QResizeEvent *event)
@@ -117,16 +119,19 @@ void KNMainWindow::resizeEvent(QResizeEvent *event)
 
 void KNMainWindow::retranslate()
 {
-    ;
+    m_tabSideCaption->setText(tr("Opened Files"));
 }
 
 void KNMainWindow::onActionNewFile(const QString &suffix)
 {
+    Q_UNUSED(suffix)
     //Hide the welcome window.
     m_welcomeOut->setStartValue(m_welcome->pos());
     m_welcomeOut->setEndValue(QPoint(m_welcome->x(),
                                      -5-m_welcome->height()));
     m_welcomeOut->start();
+    //Show all the widget.
+    ;
 }
 
 inline QPropertyAnimation *KNMainWindow::generateAnime()

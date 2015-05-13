@@ -32,7 +32,7 @@ enum MainMenuCategory
     Edit,
     View,
     Search,
-    Execute,
+    Build,
     Debug,
     Tools,
     Tabs,

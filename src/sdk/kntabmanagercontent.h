@@ -16,30 +16,21 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KNCODEEDITOR_H
-#define KNCODEEDITOR_H
+#ifndef KNTABMANAGERCONTENT_H
+#define KNTABMANAGERCONTENT_H
 
 #include <QWidget>
 
-class KNTextEdit;
-class KNLanguageMode;
-class KNCodeEditor : public QWidget
+class KNTabManagerContent : public QWidget
 {
     Q_OBJECT
 public:
-    explicit KNCodeEditor(QWidget *parent = 0);
-    ~KNCodeEditor();
-    KNLanguageMode *languageMode() const;
+    explicit KNTabManagerContent(QWidget *parent = 0);
+    ~KNTabManagerContent();
 
 signals:
 
 public slots:
-    void setLanguageMode(KNLanguageMode *languageMode);
-
-private:
-    inline void clearLanguageMode();
-    KNTextEdit *m_editor;
-    KNLanguageMode *m_languageMode;
 };
 
-#endif // KNCODEEDITOR_H
+#endif // KNTABMANAGERCONTENT_H

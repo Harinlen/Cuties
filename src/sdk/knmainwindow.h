@@ -23,7 +23,9 @@
 
 class QPropertyAnimation;
 class QBoxLayout;
+class QLabel;
 class KNSidebar;
+class KNTabManager;
 class KNLabelAnimeButton;
 class KNWelcomeBase;
 class KNSideTabContentContainer;
@@ -39,7 +41,7 @@ signals:
 
 public slots:
     void setWelcome(KNWelcomeBase *welcome);
-    void setTabManager(QWidget *widget);
+    void setUnibar(QWidget *widget);
 
 protected:
     void resizeEvent(QResizeEvent *event);
@@ -53,7 +55,9 @@ private:
     KNLabelAnimeButton *m_expandSidebar;
     KNSidebar *m_sidebar;
     KNWelcomeBase *m_welcome;
-    QWidget *m_tabManager;
+    KNTabManager *m_tabManager;
+    KNLabelAnimeButton *m_tabSideButton;
+    QLabel *m_tabSideCaption;
     KNSideTabContentContainer *m_tabContentContainer;
     QPropertyAnimation *m_welcomeIn, *m_welcomeOut;
 };

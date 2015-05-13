@@ -43,7 +43,6 @@ KNPluginManager *KNPluginManager::instance()
 void KNPluginManager::loadPlugins()
 {
     //Set tab manager.
-    m_mainWindow->setTabManager(new KNTabManager);
 
     //Load welcome.
 //    m_mainWindow->setWelcome(new KNWelcome);

@@ -15,31 +15,20 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include "kntabmanager.h"
 
-#ifndef KNCODEEDITOR_H
-#define KNCODEEDITOR_H
+#include "kncodeeditorunibar.h"
 
-#include <QWidget>
+#include "kntabmanagercontent.h"
 
-class KNTextEdit;
-class KNLanguageMode;
-class KNCodeEditor : public QWidget
+KNTabManagerContent::KNTabManagerContent(QWidget *parent) :
+    QWidget(parent)
 {
-    Q_OBJECT
-public:
-    explicit KNCodeEditor(QWidget *parent = 0);
-    ~KNCodeEditor();
-    KNLanguageMode *languageMode() const;
 
-signals:
+}
 
-public slots:
-    void setLanguageMode(KNLanguageMode *languageMode);
+KNTabManagerContent::~KNTabManagerContent()
+{
 
-private:
-    inline void clearLanguageMode();
-    KNTextEdit *m_editor;
-    KNLanguageMode *m_languageMode;
-};
+}
 
-#endif // KNCODEEDITOR_H

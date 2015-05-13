@@ -94,6 +94,7 @@ void KNSidebarContent::addTab(KNLabelAnimeButton *icon,
     caption->setParent(this);
     caption->hide();
     //Configure the widget.
+    widget->setParent(this);
     widget->hide();
     //Generate a tab and save the pointer.
     SidebarTab currentTab;

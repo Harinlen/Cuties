@@ -86,7 +86,7 @@ KNSidebar::KNSidebar(QWidget *parent) :
     categoryIcons[Edit]=":/icon/resource/icons/category/Edit.png";
     categoryIcons[View]=":/icon/resource/icons/category/View.png";
     categoryIcons[Search]=":/icon/resource/icons/category/Search.png";
-    categoryIcons[Execute]=":/icon/resource/icons/category/Run.png";
+    categoryIcons[Build]=":/icon/resource/icons/category/Run.png";
     categoryIcons[Debug]=":/icon/resource/icons/category/Debug.png";
     categoryIcons[Tools]=":/icon/resource/icons/category/Tools.png";
     categoryIcons[Tabs]=":/icon/resource/icons/category/Tabs.png";
@@ -177,7 +177,7 @@ void KNSidebar::retranslate()
     m_categories[Edit]->setTitle(tr("Edit"));
     m_categories[View]->setTitle(tr("View"));
     m_categories[Search]->setTitle(tr("Search"));
-    m_categories[Execute]->setTitle(tr("Run"));
+    m_categories[Build]->setTitle(tr("Build"));
     m_categories[Debug]->setTitle(tr("Debug"));
     m_categories[Tools]->setTitle("Tools");
     m_categories[Tabs]->setTitle("Tabs");

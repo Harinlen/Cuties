@@ -69,7 +69,8 @@ SOURCES += \
     sdk/knsaostyle.cpp \
     sdk/knsaosubmenu.cpp \
     sdk/knsidebarcontent.cpp \
-    sdk/knsidetabcontentcontainer.cpp
+    sdk/knsidetabcontentcontainer.cpp \
+    sdk/kntabmanagercontent.cpp
 
 HEADERS += \
     sdk/knglobal.h \
@@ -108,7 +109,8 @@ HEADERS += \
     sdk/knsaostyle.h \
     sdk/knsaosubmenu.h \
     sdk/knsidebarcontent.h \
-    sdk/knsidetabcontentcontainer.h
+    sdk/knsidetabcontentcontainer.h \
+    sdk/kntabmanagercontent.h
 
 RESOURCES += \
     res.qrc

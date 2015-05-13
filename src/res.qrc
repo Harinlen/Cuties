@@ -24,5 +24,11 @@
         <file>resource/icons/category/Tools.png</file>
         <file>resource/icons/category/View.png</file>
         <file>resource/icons/actions/exit.png</file>
+        <file>resource/icons/actions/close.png</file>
+        <file>resource/icons/actions/new.png</file>
+        <file>resource/icons/actions/open.png</file>
+        <file>resource/icons/actions/save.png</file>
+        <file>resource/icons/actions/saveall.png</file>
+        <file>resource/icons/actions/saveas.png</file>
     </qresource>
 </RCC>
