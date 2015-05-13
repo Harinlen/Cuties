@@ -61,19 +61,15 @@ KNTabManager::KNTabManager(QWidget *parent) :
     m_container->setLayout(m_containerLayout);
 
     //Resize shadows
+    m_topShadow->hide();
     m_topShadow->setGeometry(0,0,width(),15);
     m_topShadow->setBrightness(100);
+    m_bottomShadow->hide();
     m_bottomShadow->setGeometry(0,102,width(),15);
     m_bottomShadow->setBrightness(100);
     //Link scrollbar signals.
     connect(verticalScrollBar(), SIGNAL(valueChanged(int)),
             this, SLOT(onActionVerticalValueChanged(int)));
-
-    //Debug.
-    for(int i=0; i<100; i++)
-    {
-        addTab("Label " + QString::number(i) + ".cpp");
-    }
 }
 
 void KNTabManager::addTab(const QString &caption)
