@@ -26,6 +26,7 @@ class QBoxLayout;
 class KNSidebar;
 class KNLabelAnimeButton;
 class KNWelcomeBase;
+class KNSideTabContentContainer;
 class KNMainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -53,6 +54,7 @@ private:
     KNSidebar *m_sidebar;
     KNWelcomeBase *m_welcome;
     QWidget *m_tabManager;
+    KNSideTabContentContainer *m_tabContentContainer;
     QPropertyAnimation *m_welcomeIn, *m_welcomeOut;
 };
 

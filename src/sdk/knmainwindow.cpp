@@ -20,6 +20,7 @@
 
 #include "knwelcomebase.h"
 #include "knsidebar.h"
+#include "knsidetabcontentcontainer.h"
 #include "knlabelanimebutton.h"
 
 #include "knmainwindow.h"
@@ -30,6 +31,7 @@ KNMainWindow::KNMainWindow(QWidget *parent) :
     m_sidebar(new KNSidebar(this)),
     m_welcome(nullptr),
     m_tabManager(nullptr),
+    m_tabContentContainer(new KNSideTabContentContainer(this)),
     m_welcomeIn(generateAnime()),
     m_welcomeOut(generateAnime())
 {
@@ -39,6 +41,11 @@ KNMainWindow::KNMainWindow(QWidget *parent) :
 
     //Configure sidebar button.
     m_expandSidebar->setPixmap(QPixmap(":/image/resource/images/expand.png"));
+    //Configure sidebar tab content container.
+    m_sidebar->setTabContentContainer(m_tabContentContainer);
+    m_tabContentContainer->move(m_sidebar->width(), 0);
+    m_tabContentContainer->resize(0, height());
+    m_tabContentContainer->hide();
 }
 
 KNWelcomeBase *KNMainWindow::welcome() const
@@ -74,9 +81,19 @@ void KNMainWindow::setWelcome(KNWelcomeBase *welcome)
 
 void KNMainWindow::setTabManager(QWidget *widget)
 {
+    if(m_tabManager!=nullptr)
+    {
+        qWarning("You have already set a tab manager.");
+        return;
+    }
     //Save the tab manager.
     m_tabManager=widget;
     m_tabManager->setParent(this);
+    //Add tab manager to sidebar.
+    KNLabelAnimeButton *button=new KNLabelAnimeButton(this);
+    button->setPixmap(QPixmap(":/image/resource/images/tabs.png"));
+    QLabel *caption=new QLabel("Opened Files", this);
+    m_sidebar->addTab(button, caption, m_tabManager);
 }
 
 void KNMainWindow::resizeEvent(QResizeEvent *event)
@@ -92,6 +109,10 @@ void KNMainWindow::resizeEvent(QResizeEvent *event)
     //Resize the sidebar.
     m_sidebar->resize(m_sidebar->width(),
                       height());
+    //Resize the sidebar tab content container.
+    //Keep the height sync to main window.
+    m_tabContentContainer->resize(m_tabContentContainer->width(),
+                                  height());
 }
 
 void KNMainWindow::retranslate()

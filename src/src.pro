@@ -49,7 +49,6 @@ SOURCES += \
     sdk/kncodeeditor.cpp \
     sdk/kntabmanager.cpp \
     sdk/kntabmanageritem.cpp \
-    sdk/kntabmanageritemselector.cpp \
     sdk/kntextedit.cpp \
     sdk/kntexteditpanel.cpp \
     sdk/kntexteditpanelcontainer.cpp \
@@ -68,7 +67,9 @@ SOURCES += \
     sdk/knsidebar.cpp \
     sdk/knmainmenu.cpp \
     sdk/knsaostyle.cpp \
-    sdk/knsaosubmenu.cpp
+    sdk/knsaosubmenu.cpp \
+    sdk/knsidebarcontent.cpp \
+    sdk/knsidetabcontentcontainer.cpp
 
 HEADERS += \
     sdk/knglobal.h \
@@ -87,7 +88,6 @@ HEADERS += \
     sdk/kncodeeditor.h \
     sdk/kntabmanager.h \
     sdk/kntabmanageritem.h \
-    sdk/kntabmanageritemselector.h \
     sdk/kntextedit.h \
     sdk/kntexteditpanel.h \
     sdk/kntexteditpanelcontainer.h \
@@ -106,7 +106,9 @@ HEADERS += \
     sdk/knsidebar.h \
     sdk/knmainmenu.h \
     sdk/knsaostyle.h \
-    sdk/knsaosubmenu.h
+    sdk/knsaosubmenu.h \
+    sdk/knsidebarcontent.h \
+    sdk/knsidetabcontentcontainer.h
 
 RESOURCES += \
     res.qrc

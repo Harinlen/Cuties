@@ -28,9 +28,14 @@ class KNLabelAnimeButton : public QLabel
 public:
     explicit KNLabelAnimeButton(QWidget *parent = 0);
     void setPalette(const QPalette &pal);
+    bool checkable() const;
+    void setCheckable(bool checkable);
+    bool checked() const;
+    void setChecked(bool checked);
 
 signals:
     void clicked();
+    void rightClicked();
     void entered();
     void leaved();
 
@@ -48,7 +53,7 @@ private slots:
 private:
     inline void startAnime(const int &end);
     QTimeLine *m_backgroundAnime;
-    bool m_pressed=false;
+    bool m_pressed, m_checkable, m_checked;
 };
 
 #endif // KNLABELANIMEBUTTON_H

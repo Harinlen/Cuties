@@ -21,7 +21,6 @@
 
 #include "knsideshadowwidget.h"
 #include "kntabmanageritem.h"
-#include "kntabmanageritemselector.h"
 #include "knglobal.h"
 
 #include "kntabmanager.h"
@@ -32,14 +31,13 @@ KNTabManager::KNTabManager(QWidget *parent) :
     QScrollArea(parent),
     m_container(new QWidget(this)),
     m_itemMapper(new QSignalMapper(this)),
-    m_selector(new KNTabManagerItemSelector(this)),
     m_topShadow(new KNSideShadowWidget(KNSideShadow::TopShadow, this)),
     m_bottomShadow(new KNSideShadowWidget(KNSideShadow::BottomShadow, this)),
     m_currentItem(nullptr)
 {
     setObjectName("TabManager");
     //Set properties.
-    setFixedWidth(200);
+    setMinimumWidth(200);
     setFrameStyle(QFrame::NoFrame);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -54,8 +52,6 @@ KNTabManager::KNTabManager(QWidget *parent) :
     m_container->setPalette(managerPalette);
     m_container->lower();
     setWidget(m_container);
-    m_selector->setParent(m_container);
-    m_selector->move(200-m_selector->width(), 0);
 
     //Initialize the container layout.
     m_containerLayout=new QBoxLayout(QBoxLayout::TopToBottom,
@@ -91,8 +87,6 @@ void KNTabManager::addTab(const QString &caption)
     //Add the item to layout, resize the container.
     m_containerLayout->addWidget(item);
     m_container->resize(m_container->sizeHint());
-    //Raise the selector.
-    m_selector->raise();
     //Check if this item is the first item, then set the current item to this
     //item.
     if(m_itemList.size()==1)
@@ -113,8 +107,6 @@ void KNTabManager::setCurrentIndex(int index)
     m_currentItem=m_itemList.at(index);
     //Select the current item.
     m_currentItem->setSelected(true);
-    //Move the selector.
-    m_selector->move(m_selector->x(), m_currentItem->y());
 }
 
 void KNTabManager::setCurrentItem(KNTabManagerItem *item)

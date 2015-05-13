@@ -15,6 +15,11 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include <QScrollArea>
+#include <QTimeLine>
+
+#include "knsidebarcontent.h"
+#include "knsidetabcontentcontainer.h"
 #include "knmainmenu.h"
 #include "knsaosubmenu.h"
 #include "knlabelanimebutton.h"
@@ -24,25 +29,54 @@
 KNSidebar::KNSidebar(QWidget *parent) :
     QWidget(parent),
     m_mainMenuButton(new KNLabelAnimeButton(this)),
-    m_mainMenu(new KNMainMenu(this))
+    m_mainMenu(new KNMainMenu(this)),
+    m_exitAction(nullptr),
+    m_sidebarArea(new QScrollArea(this)),
+    m_sidebarContent(new KNSidebarContent(this)),
+    m_expandFoldAnime(new QTimeLine(306, this)),
+    m_tabContentContainer(nullptr)
 {
     setObjectName("Sidebar");
+    //UI Parameters.
+    const int sideMargin=3, contentWidth=24;
+    //Calculate all kinds of sides.
+    m_foldWidth=contentWidth+(sideMargin<<1);
+    m_expandWidth=306;
     //Set properties.
     setAutoFillBackground(true);
-    setMinimumWidth(30);
+    setMinimumWidth(m_foldWidth);
     setPalette(KNGlobal::instance()->getPalette(objectName()));
-    resize(30, height());
+    resize(m_foldWidth, height());
 
     //Initial the main menu button.
     m_mainMenuButton->setObjectName("MainMenuButton");
     m_mainMenuButton->setPixmap(
-                QPixmap(":/image/resource/images/icon.png").scaled(QSize(24,24),
+                QPixmap(":/image/resource/images/icon.png").scaled(QSize(contentWidth,
+                                                                         contentWidth),
                                                                    Qt::KeepAspectRatio,
                                                                    Qt::SmoothTransformation));
-    m_mainMenuButton->setContentsMargins(3,3,3,3);
+    m_mainMenuButton->setContentsMargins(sideMargin,
+                                         sideMargin,
+                                         sideMargin,
+                                         sideMargin);
     QPalette mainMenuPalette=
             KNGlobal::instance()->getPalette(m_mainMenuButton->objectName());
     m_mainMenuButton->setPalette(mainMenuPalette);
+
+    //Configure the animation.
+    m_expandFoldAnime->setEasingCurve(QEasingCurve::OutCubic);
+    m_expandFoldAnime->setUpdateInterval(16);
+    m_expandFoldAnime->setDuration(306);
+    connect(m_expandFoldAnime, &QTimeLine::frameChanged,
+            [=](const int &sidebarWidth){resize(sidebarWidth, height());});
+
+    //Configure the sidebar area.
+    m_sidebarArea->move(0, m_foldWidth);
+    m_sidebarArea->setFrameStyle(QFrame::NoFrame);
+    m_sidebarArea->setWidget(m_sidebarContent);
+    //Configure sidebar content.
+    connect(m_sidebarContent, &KNSidebarContent::requireShowWidget,
+            this, &KNSidebar::onActionShowWidget);
 
     //Configure main menu.
     m_mainMenu->setObjectName("SAOSubMenu");
@@ -96,6 +130,44 @@ void KNSidebar::addCategoryAction(int category, QAction *action)
     }
 }
 
+void KNSidebar::addTab(KNLabelAnimeButton *icon,
+                       QLabel *caption,
+                       QWidget *widget)
+{
+    //Add to sidebar content.
+    m_sidebarContent->addTab(icon, caption, widget);
+}
+
+void KNSidebar::setTabContentContainer(KNSideTabContentContainer *container)
+{
+    m_tabContentContainer=container;
+    //Give the sidebar to the content.
+    m_tabContentContainer->setSidebar(this);
+    //Connect the request.
+    connect(m_sidebarContent, &KNSidebarContent::requireHideWidget,
+            m_tabContentContainer, &KNSideTabContentContainer::fold);
+}
+
+void KNSidebar::expand()
+{
+    //Start anime to resize to expand width.
+    startResizeAnime(m_expandWidth);
+}
+
+void KNSidebar::fold()
+{
+    //Start anime to resize to fold width.
+    startResizeAnime(m_foldWidth);
+}
+
+void KNSidebar::resizeEvent(QResizeEvent *event)
+{
+    //Resize the sidebar first.
+    QWidget::resizeEvent(event);
+    //Resize the sidebar area.
+    m_sidebarArea->resize(width(), height()-m_sidebarArea->y());
+}
+
 void KNSidebar::retranslate()
 {
     //Update exit.
@@ -117,4 +189,27 @@ void KNSidebar::onActionShowMainMenu()
     QPoint buttonGlobalPos(mapToGlobal(m_mainMenuButton->pos()));
     m_mainMenu->exec(QPoint(buttonGlobalPos.x(),
                             buttonGlobalPos.y()+m_mainMenuButton->height()));
+}
+
+void KNSidebar::onActionShowWidget(QWidget *widget)
+{
+    //If we don't have a container, ignore the request.
+    if(m_tabContentContainer==nullptr)
+    {
+        return;
+    }
+    //Set the widget.
+    m_tabContentContainer->setWidget(widget);
+    //Show the container.
+    m_tabContentContainer->expand();
+}
+
+void KNSidebar::startResizeAnime(const int &targetWidth)
+{
+    //Stop anime.
+    m_expandFoldAnime->stop();
+    //Set parameters.
+    m_expandFoldAnime->setFrameRange(width(), targetWidth);
+    //Start anime.
+    m_expandFoldAnime->start();
 }

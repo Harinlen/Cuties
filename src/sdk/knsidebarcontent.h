@@ -15,60 +15,49 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#ifndef KNSIDEBARCONTENT_H
+#define KNSIDEBARCONTENT_H
 
-#ifndef KNSIDEBAR_H
-#define KNSIDEBAR_H
-
-#include "knglobal.h"
+#include <QList>
 
 #include <QWidget>
 
-class QTimeLine;
-class QLabel;
-class QScrollArea;
-class KNSidebarContent;
-class KNSAOSubMenu;
-class KNMainMenu;
 class KNLabelAnimeButton;
-class KNSideTabContentContainer;
-class KNSidebar : public QWidget
+class QLabel;
+class KNSidebarContent : public QWidget
 {
     Q_OBJECT
 public:
-    explicit KNSidebar(QWidget *parent = 0);
-    void addCategoryAction(int category, QAction *action);
+    explicit KNSidebarContent(QWidget *parent = 0);
+    ~KNSidebarContent();
     void addTab(KNLabelAnimeButton *icon,
                 QLabel *caption,
                 QWidget *widget);
-    void setTabContentContainer(KNSideTabContentContainer *container);
 
 signals:
+    void requireHideWidget();
+    void requireShowWidget(QWidget *widget);
 
 public slots:
-    void expand();
-    void fold();
 
 protected:
     void resizeEvent(QResizeEvent *event);
 
-private slots:
-    void retranslate();
-    void onActionShowMainMenu();
-    void onActionShowWidget(QWidget *widget);
-
 private:
-    inline void startResizeAnime(const int &targetWidth);
-    KNLabelAnimeButton *m_mainMenuButton;
-    KNMainMenu *m_mainMenu;
-    QAction *m_exitAction;
-    QScrollArea *m_sidebarArea;
-    KNSidebarContent *m_sidebarContent;
-    QTimeLine *m_expandFoldAnime;
-    KNSideTabContentContainer *m_tabContentContainer;
+    struct SidebarTab
+    {
+        KNLabelAnimeButton *icon;
+        QLabel *caption;
+        QWidget *widget;
+    };
+    inline void positionTab(const int &index, const SidebarTab &tab);
+    QList<SidebarTab> m_tabList;
 
-    int m_foldWidth, m_expandWidth;
-
-    KNSAOSubMenu *m_categories[MainMenuCategoryCount];
+    const int m_foldIconSize=30, m_buttonMargin=3, m_contentMargin=3;
+    int m_buttonSize;
+    bool m_expand;
+    int m_expandHeight;
+    KNLabelAnimeButton *m_currentIcon;
 };
 
-#endif // KNSIDEBAR_H
+#endif // KNSIDEBARCONTENT_H

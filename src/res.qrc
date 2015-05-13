@@ -10,6 +10,7 @@
         <file>resource/images/close.png</file>
         <file>resource/images/indicator.png</file>
         <file>resource/images/expand.png</file>
+        <file>resource/images/tabs.png</file>
     </qresource>
     <qresource prefix="/icon">
         <file>resource/icons/file/PlainText/PlainText_64x64.png</file>

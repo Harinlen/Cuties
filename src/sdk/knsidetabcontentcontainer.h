@@ -16,32 +16,42 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KNTABMANAGERITEMSELECTOR_H
-#define KNTABMANAGERITEMSELECTOR_H
-
-#include <QPolygon>
+#ifndef KNSIDETABCONTENTCONTAINER_H
+#define KNSIDETABCONTENTCONTAINER_H
 
 #include <QWidget>
 
-class KNTabManagerItemSelector : public QWidget
+class QTimeLine;
+class KNSideTabContentContainer : public QWidget
 {
     Q_OBJECT
 public:
-    explicit KNTabManagerItemSelector(QWidget *parent = 0);
+    explicit KNSideTabContentContainer(QWidget *parent = 0);
+    ~KNSideTabContentContainer();
+
+    QWidget *widget() const;
+    void setWidget(QWidget *widget);
+    void setSidebar(QWidget *sidebar);
 
 signals:
 
 public slots:
+    void expand();
+    void fold();
 
 protected:
-    void paintEvent(QPaintEvent *event);
+    void resizeEvent(QResizeEvent *event);
 
 private slots:
-    void updateBackground();
+    void onActionExpandFinished();
 
 private:
-    QPolygon m_selectorBorder;
-    QColor m_backgroundColor;
+    inline void startAnime(QTimeLine *timeLine);
+    QTimeLine *generateAnime(const int &endFrame);
+
+    QTimeLine *m_expandAnime, *m_foldAnime;
+    QWidget *m_widget;
+    QWidget *m_sidebar;
 };
 
-#endif // KNTABMANAGERITEMSELECTOR_H
+#endif // KNSIDETABCONTENTCONTAINER_H

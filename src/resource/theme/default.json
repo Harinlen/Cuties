@@ -8,7 +8,19 @@
     },
     "Sidebar" : {
         "Parent" : "MainWindow",
-        "Window" : "#5d5f60"
+        "Window" : "#5d5d5d"
+    },
+    "SideTabContentContainer" : {
+        "Parent" : "Sidebar",
+        "Window" : "#414141"
+    },
+    "SidebarContent" : {
+        "Parent" : "Sidebar",
+        "Window" : "#00000000"
+    },
+    "SidebarButton" : {
+        "Parent" : "SidebarContent",
+        "Window" : "#414141"
     },
     "MainMenuButton" : {
         "Parent" : "Sidebar",

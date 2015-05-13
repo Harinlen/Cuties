@@ -15,14 +15,18 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-
+#include <QMouseEvent>
+#include <QAction>
 #include <QTimeLine>
 
 #include "knlabelanimebutton.h"
 
 KNLabelAnimeButton::KNLabelAnimeButton(QWidget *parent) :
     QLabel(parent),
-    m_backgroundAnime(new QTimeLine(200, this))
+    m_backgroundAnime(new QTimeLine(200, this)),
+    m_pressed(false),
+    m_checkable(false),
+    m_checked(false)
 {
     //Set properties.
     setAutoFillBackground(true);
@@ -53,8 +57,12 @@ void KNLabelAnimeButton::enterEvent(QEvent *event)
 
 void KNLabelAnimeButton::leaveEvent(QEvent *event)
 {
-    //Start anime.
-    startAnime(0);
+    //If the button is not checked.
+    if(!(m_checkable && m_checked))
+    {
+        //Start anime.
+        startAnime(0);
+    }
     //Emit leaved signal.
     emit leaved();
     //Do leave event.
@@ -66,7 +74,7 @@ void KNLabelAnimeButton::mousePressEvent(QMouseEvent *event)
     //Set pressed flag.
     m_pressed=true;
     //Show pressed background.
-    onActionUpdateBackground(100);
+    onActionUpdateBackground(200);
     QLabel::mousePressEvent(event);
 }
 
@@ -75,10 +83,26 @@ void KNLabelAnimeButton::mouseReleaseEvent(QMouseEvent *event)
     //Check flag.
     if(m_pressed)
     {
-        emit clicked();
+        //Check the event.
+        if(event->button()==Qt::LeftButton)
+        {
+            //If the button is checkable, set the button to check mode.
+            if(m_checkable)
+            {
+                setChecked(!m_checked);
+            }
+            emit clicked();
+        }
+        else if(event->button()==Qt::RightButton)
+        {
+            emit rightClicked();
+        }
     }
     //Show released anime.
-    startAnime(255);
+    if(!m_checkable)
+    {
+        startAnime(255);
+    }
     QLabel::mouseReleaseEvent(event);
 }
 
@@ -102,3 +126,28 @@ void KNLabelAnimeButton::startAnime(const int &end)
     //Start the anime.
     m_backgroundAnime->start();
 }
+bool KNLabelAnimeButton::checked() const
+{
+    return m_checked;
+}
+
+void KNLabelAnimeButton::setChecked(bool checked)
+{
+    if(m_checkable)
+    {
+        m_checked = checked;
+        //Change the background according to the state.
+        startAnime(m_checked?255:0);
+    }
+}
+
+bool KNLabelAnimeButton::checkable() const
+{
+    return m_checkable;
+}
+
+void KNLabelAnimeButton::setCheckable(bool checkable)
+{
+    m_checkable = checkable;
+}
+

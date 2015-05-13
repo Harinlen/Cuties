@@ -26,7 +26,6 @@
 class QSignalMapper;
 class QBoxLayout;
 class KNTabManagerItem;
-class KNTabManagerItemSelector;
 class KNSideShadowWidget;
 class KNTabManager : public QScrollArea
 {
@@ -52,7 +51,6 @@ private:
     QBoxLayout *m_containerLayout;
     QWidget *m_container;
     QSignalMapper *m_itemMapper;
-    KNTabManagerItemSelector *m_selector;
     QList<KNTabManagerItem *> m_itemList;
     KNSideShadowWidget *m_topShadow, *m_bottomShadow;
 
