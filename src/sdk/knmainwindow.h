@@ -59,6 +59,7 @@ private:
     KNLabelAnimeButton *m_tabSideButton;
     QLabel *m_tabSideCaption;
     KNSideTabContentContainer *m_tabContentContainer;
+    QBoxLayout *m_headerLayout;
     QPropertyAnimation *m_welcomeIn, *m_welcomeOut;
 };
 

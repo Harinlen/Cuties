@@ -24,6 +24,7 @@
 #include "knmainwindow.h"
 #include "kntabmanager.h"
 #include "kncodeeditor.h"
+#include "kncodeeditorunibar.h"
 
 //Ports
 #include "knwelcomebase.h"
@@ -43,6 +44,7 @@ KNPluginManager *KNPluginManager::instance()
 void KNPluginManager::loadPlugins()
 {
     //Set tab manager.
+    m_mainWindow->setUnibar(new KNCodeEditorUnibar);
 
     //Load welcome.
 //    m_mainWindow->setWelcome(new KNWelcome);

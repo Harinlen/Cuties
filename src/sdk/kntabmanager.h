@@ -28,12 +28,14 @@ class QBoxLayout;
 class KNSidebar;
 class KNTabManagerItem;
 class KNSideShadowWidget;
+class KNTabManagerContent;
 class KNTabManager : public QScrollArea
 {
     Q_OBJECT
 public:
     explicit KNTabManager(QWidget *parent = 0);
     void setSidebar(KNSidebar *sidebar);
+    QWidget *contentWidget();
 
 signals:
 
@@ -72,6 +74,7 @@ private:
     QList<KNTabManagerItem *> m_itemList;
     KNSideShadowWidget *m_topShadow, *m_bottomShadow;
 
+    KNTabManagerContent *m_content;
     KNTabManagerItem *m_currentItem;
 };
 

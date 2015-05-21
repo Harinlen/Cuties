@@ -35,12 +35,39 @@ KNMainWindow::KNMainWindow(QWidget *parent) :
     m_tabSideButton(new KNLabelAnimeButton(this)),
     m_tabSideCaption(new QLabel(this)),
     m_tabContentContainer(new KNSideTabContentContainer(this)),
+    m_headerLayout(new QBoxLayout(QBoxLayout::TopToBottom)),
     m_welcomeIn(generateAnime()),
     m_welcomeOut(generateAnime())
 {
     setObjectName("MainWindow");
     //Set properties.
     setMinimumSize(950, 600);
+
+    //Set central widget and set layout.
+    QWidget *container=new QWidget(this);
+    setCentralWidget(container);
+    QBoxLayout *centralLayout=new QBoxLayout(QBoxLayout::LeftToRight,
+                                             container);
+    centralLayout->setContentsMargins(0,0,0,0);
+    centralLayout->setSpacing(0);
+    container->setLayout(centralLayout);
+
+    //Add widget to central layout.
+    centralLayout->addWidget(m_sidebar);
+
+    QBoxLayout *contentLayout=new QBoxLayout(QBoxLayout::TopToBottom,
+                                             centralLayout->widget());
+    contentLayout->setContentsMargins(0,0,0,0);
+    contentLayout->setSpacing(0);
+    centralLayout->addLayout(contentLayout, 1);
+
+    //Configure header layout.
+    m_headerLayout->setParent(contentLayout->widget());
+    m_headerLayout->setContentsMargins(0,0,0,0);
+    m_headerLayout->setSpacing(0);
+    contentLayout->addLayout(m_headerLayout);
+
+    contentLayout->addWidget(m_tabManager->contentWidget(), 1);
 
     //Configure sidebar button.
     m_expandSidebar->setPixmap(QPixmap(":/image/resource/images/expand.png"));
@@ -95,7 +122,10 @@ void KNMainWindow::setWelcome(KNWelcomeBase *welcome)
 
 void KNMainWindow::setUnibar(QWidget *widget)
 {
-    ;
+    //Add to header layout.
+    m_headerLayout->addWidget(widget);
+    //Raise the sidebar container.
+    m_tabContentContainer->raise();
 }
 
 void KNMainWindow::resizeEvent(QResizeEvent *event)
@@ -108,9 +138,6 @@ void KNMainWindow::resizeEvent(QResizeEvent *event)
         m_welcome->move((width()-m_welcome->width())>>1,
                         (height()-m_welcome->height())>>1);
     }
-    //Resize the sidebar.
-    m_sidebar->resize(m_sidebar->width(),
-                      height());
     //Resize the sidebar tab content container.
     //Keep the height sync to main window.
     m_tabContentContainer->resize(m_tabContentContainer->width(),

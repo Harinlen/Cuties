@@ -15,13 +15,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-
 #ifndef KNTABMANAGERCONTENT_H
 #define KNTABMANAGERCONTENT_H
 
-#include <QWidget>
+#include <QStackedWidget>
 
-class KNTabManagerContent : public QWidget
+class KNTabManagerContent : public QStackedWidget
 {
     Q_OBJECT
 public:

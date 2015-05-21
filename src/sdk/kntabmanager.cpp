@@ -23,6 +23,7 @@
 #include "knsidebar.h"
 #include "knsideshadowwidget.h"
 #include "kntabmanageritem.h"
+#include "kntabmanagercontent.h"
 #include "knglobal.h"
 
 #include "kntabmanager.h"
@@ -35,6 +36,7 @@ KNTabManager::KNTabManager(QWidget *parent) :
     m_itemMapper(new QSignalMapper(this)),
     m_topShadow(new KNSideShadowWidget(KNSideShadow::TopShadow, this)),
     m_bottomShadow(new KNSideShadowWidget(KNSideShadow::BottomShadow, this)),
+    m_content(new KNTabManagerContent(this)),
     m_currentItem(nullptr)
 {
     setObjectName("TabManager");
@@ -92,6 +94,11 @@ void KNTabManager::setSidebar(KNSidebar *sidebar)
     sidebar->addCategoryAction(File, m_actions[Close]);
     sidebar->addCategoryAction(File, m_actions[CloseAll]);
     sidebar->addCategoryAction(File, m_actions[CloseAllOthers]);
+}
+
+QWidget *KNTabManager::contentWidget()
+{
+    return m_content;
 }
 
 void KNTabManager::addTab(const QString &caption)
