@@ -43,7 +43,8 @@ protected:
                              QPainter *painter,
                              bool currentLine)=0;
     virtual void itemClickEvent(const QTextBlock &block,
-                                KNTextBlockData *data);
+                                KNTextBlockData *data,
+                                KNTextEdit *editor);
     void paintEvent(QPaintEvent *event);
     void mousePressEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);

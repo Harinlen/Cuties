@@ -23,6 +23,8 @@
 
 class QLabel;
 class QFrame;
+class KNSidebar;
+class KNCodeEditor;
 class KNTextEdit;
 class KNConnectionHandler;
 class KNLabelAnimeButton;
@@ -31,8 +33,9 @@ class KNCodeEditorUnibar : public QWidget
     Q_OBJECT
 public:
     explicit KNCodeEditorUnibar(QWidget *parent = 0);
-    KNTextEdit *editor() const;
-    void setEditor(KNTextEdit *editor);
+    void setSidebar(KNSidebar *sidebar);
+    KNCodeEditor *editor() const;
+    void setEditor(KNCodeEditor *editor);
 
 signals:
 
@@ -41,16 +44,34 @@ public slots:
 private slots:
     void retranslate();
     void onActionCursorPositionChange();
+    void onActionUpdateOverwrite();
+    void onActionLanguageChange();
 
 private:
+    inline void syncEditorStatusData();
+    enum UnibarActions
+    {
+        Undo,
+        Redo,
+        Cut,
+        Copy,
+        Paste,
+        SelectAll,
+        UnibarActionCount
+    };
+    inline void initialActions();
+    QAction *m_unibarActions[UnibarActionCount];
+
     QFrame *generateSeperateLine();
     KNConnectionHandler *m_editorConections;
-    KNTextEdit *m_editor;
-    QLabel *m_fileName, *m_cursorPosition, *m_encoded;
+    KNCodeEditor *m_codeEditor;
+    KNTextEdit *m_textEditor;
+    QLabel *m_fileName, *m_cursorPosition, *m_encoded, *m_language,
+           *m_overwrite;
     KNLabelAnimeButton *m_close;
     QColor m_borderColor;
 
-    QString m_positionText;
+    QString m_positionText, m_overwriteStatus[2];
 };
 
 #endif // KNCODEEDITORUNIBAR_H

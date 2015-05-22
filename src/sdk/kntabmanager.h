@@ -29,6 +29,7 @@ class KNSidebar;
 class KNTabManagerItem;
 class KNSideShadowWidget;
 class KNTabManagerContent;
+class KNCodeEditorUnibar;
 class KNTabManager : public QScrollArea
 {
     Q_OBJECT
@@ -36,11 +37,14 @@ public:
     explicit KNTabManager(QWidget *parent = 0);
     void setSidebar(KNSidebar *sidebar);
     QWidget *contentWidget();
+    KNCodeEditorUnibar *unibar() const;
+    void setUnibar(KNCodeEditorUnibar *unibar);
 
 signals:
 
 public slots:
-    void addTab(const QString &caption);
+    void createTab(const QString &caption,
+                   const QString &suffix="");
     void setCurrentIndex(int index);
     void setCurrentItem(KNTabManagerItem *item);
 
@@ -51,6 +55,9 @@ private slots:
     void retranslate();
     void onActionItemClicked();
     void onActionVerticalValueChanged(const int &value);
+
+    //Action slots.
+    void onActionNewSourceFile();
 
 private:
     enum TabManagerActions
@@ -68,6 +75,7 @@ private:
     inline void initialActions();
     QAction *m_actions[TabManagerActionCount];
 
+    KNCodeEditorUnibar *m_unibar;
     QBoxLayout *m_containerLayout;
     QWidget *m_container;
     QSignalMapper *m_itemMapper;
@@ -76,6 +84,9 @@ private:
 
     KNTabManagerContent *m_content;
     KNTabManagerItem *m_currentItem;
+
+    int m_untitledCounter;
+    QString m_untitledPrefix;
 };
 
 #endif // KNTABMANAGER_H

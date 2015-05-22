@@ -37,6 +37,11 @@ KNTextEdit::KNTextEdit(QWidget *parent) :
     setFrameStyle(QFrame::NoFrame);
     setPalette(KNGlobal::instance()->getPalette(objectName()));
 
+    //Set the default coding font: Monaco
+    QFont codeFont=font();
+    codeFont.setFamily("Monaco");
+    setFont(codeFont);
+
     //Link request.
     connect(this, &KNTextEdit::cursorPositionChanged,
             this, &KNTextEdit::updateHighlights);

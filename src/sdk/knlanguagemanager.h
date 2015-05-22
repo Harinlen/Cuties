@@ -38,7 +38,7 @@ class KNLanguageManager : public QObject
     Q_OBJECT
 public:
     static KNLanguageManager *instance();
-    KNLanguageMode *getLanguageMode(const QString &suffix);
+    KNLanguageMode *getLanguageMode(QString suffix);
 
 signals:
 

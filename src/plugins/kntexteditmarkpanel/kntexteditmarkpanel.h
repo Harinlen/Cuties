@@ -39,7 +39,8 @@ protected:
                      QPainter *painter,
                      bool currentLine);
     void itemClickEvent(const QTextBlock &block,
-                        KNTextBlockData *data);
+                        KNTextBlockData *data,
+                        KNTextEdit *editor);
 
 private:
     QPixmap m_mark;

@@ -29,6 +29,7 @@ class KNTabManager;
 class KNLabelAnimeButton;
 class KNWelcomeBase;
 class KNSideTabContentContainer;
+class KNCodeEditorUnibar;
 class KNMainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -41,7 +42,7 @@ signals:
 
 public slots:
     void setWelcome(KNWelcomeBase *welcome);
-    void setUnibar(QWidget *widget);
+    void setUnibar(KNCodeEditorUnibar *widget);
 
 protected:
     void resizeEvent(QResizeEvent *event);

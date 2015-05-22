@@ -33,3 +33,13 @@ void KNLanguageMode::setHighlighter(KNHighlighter *highlighter)
     m_highlighter = highlighter;
 }
 
+QString KNLanguageMode::languageName() const
+{
+    return m_languageName.isEmpty()?tr("Plain Text"):m_languageName;
+}
+
+void KNLanguageMode::setLanguageName(const QString &languageName)
+{
+    m_languageName = languageName;
+}
+

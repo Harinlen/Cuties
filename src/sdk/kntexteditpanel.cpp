@@ -117,7 +117,7 @@ void KNTextEditPanel::mouseReleaseEvent(QMouseEvent *event)
             //Check the border contains the pos or not. If so, do click event.
             if(nullptr!=data && data->blockBorder.contains(event->pos()))
             {
-                itemClickEvent(block, data);
+                itemClickEvent(block, data, m_editor);
                 break;
             }
             //Switch to next block.
@@ -137,10 +137,12 @@ void KNTextEditPanel::setEditor(KNTextEdit *editor)
 }
 
 void KNTextEditPanel::itemClickEvent(const QTextBlock &block,
-                                     KNTextBlockData *data)
+                                     KNTextBlockData *data,
+                                     KNTextEdit *editor)
 {
     Q_UNUSED(block);
     Q_UNUSED(data);
+    Q_UNUSED(editor);
     //Do nothing for default.
 }
 

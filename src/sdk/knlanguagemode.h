@@ -31,8 +31,12 @@ public:
     KNHighlighter *highlighter();
     void setHighlighter(KNHighlighter *highlighter);
 
+    QString languageName() const;
+    void setLanguageName(const QString &languageName);
+
 private:
     KNHighlighter *m_highlighter;
+    QString m_languageName;
 };
 
 #endif // KNLANGUAGEMODE_H

@@ -23,6 +23,7 @@
 #include "knsidebar.h"
 #include "knsidetabcontentcontainer.h"
 #include "knlabelanimebutton.h"
+#include "kncodeeditorunibar.h"
 
 #include "knmainwindow.h"
 
@@ -120,8 +121,11 @@ void KNMainWindow::setWelcome(KNWelcomeBase *welcome)
             this, &KNMainWindow::onActionNewFile);
 }
 
-void KNMainWindow::setUnibar(QWidget *widget)
+void KNMainWindow::setUnibar(KNCodeEditorUnibar *widget)
 {
+    widget->setSidebar(m_sidebar);
+    //Set the unibar.
+    m_tabManager->setUnibar(widget);
     //Add to header layout.
     m_headerLayout->addWidget(widget);
     //Raise the sidebar container.

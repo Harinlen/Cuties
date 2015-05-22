@@ -30,5 +30,11 @@
         <file>resource/icons/actions/save.png</file>
         <file>resource/icons/actions/saveall.png</file>
         <file>resource/icons/actions/saveas.png</file>
+        <file>resource/icons/actions/copy.png</file>
+        <file>resource/icons/actions/cut.png</file>
+        <file>resource/icons/actions/paste.png</file>
+        <file>resource/icons/actions/redo.png</file>
+        <file>resource/icons/actions/select_all.png</file>
+        <file>resource/icons/actions/undo.png</file>
     </qresource>
 </RCC>

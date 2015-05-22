@@ -17,13 +17,15 @@
  */
 #include "knglobal.h"
 
+#include "kncodeeditor.h"
 #include "kntabmanageritem.h"
 
 #include <QDebug>
 
 KNTabManagerItem::KNTabManagerItem(const QString &caption, QWidget *parent) :
     QLabel(parent),
-    m_selected(false)
+    m_selected(false),
+    m_codeEditor(new KNCodeEditor(this))
 {
     setObjectName("TabManagerItem");
     //Set properties.
@@ -42,6 +44,11 @@ KNTabManagerItem::KNTabManagerItem(const QString &caption, QWidget *parent) :
 int KNTabManagerItem::itemHeight()
 {
     return 24;
+}
+
+KNCodeEditor *KNTabManagerItem::codeEditor()
+{
+    return m_codeEditor;
 }
 
 void KNTabManagerItem::mousePressEvent(QMouseEvent *event)

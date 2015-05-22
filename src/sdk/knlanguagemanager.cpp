@@ -30,12 +30,15 @@ KNLanguageManager *KNLanguageManager::instance()
     return m_instance==nullptr?m_instance=new KNLanguageManager:m_instance;
 }
 
-KNLanguageMode *KNLanguageManager::getLanguageMode(const QString &suffix)
+KNLanguageMode *KNLanguageManager::getLanguageMode(QString suffix)
 {
+    //Get the lower case of the suffix.
+    suffix=suffix.toLower();
     KNLanguageMode *mode=new KNLanguageMode;
     if(suffix=="cpp")
     {
         mode->setHighlighter(new KNCppHighlighter(mode));
+        mode->setLanguageName("C++");
     }
     else
     {

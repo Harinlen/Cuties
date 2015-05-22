@@ -21,12 +21,14 @@
 
 #include <QLabel>
 
+class KNCodeEditor;
 class KNTabManagerItem : public QLabel
 {
     Q_OBJECT
 public:
     explicit KNTabManagerItem(const QString &caption = "", QWidget *parent = 0);
     static int itemHeight();
+    KNCodeEditor *codeEditor();
 
 signals:
     void clicked();
@@ -48,6 +50,7 @@ private:
     QString m_fileName, m_suffix;
     QPalette m_palette;
     bool m_selected;
+    KNCodeEditor *m_codeEditor;
 };
 
 #endif // KNTABMANAGERITEM_H

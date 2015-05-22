@@ -36,6 +36,9 @@ protected:
                      const QTextBlock &block,
                      QPainter *painter,
                      bool currentLine);
+    void itemClickEvent(const QTextBlock &block,
+                        KNTextBlockData *data,
+                        KNTextEdit *editor);
 
 protected slots:
     void onActionBlockCountChange(int blockCount);

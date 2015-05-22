@@ -58,9 +58,11 @@ void KNTextEditMarkPanel::drawContent(QRect blockRect,
 }
 
 void KNTextEditMarkPanel::itemClickEvent(const QTextBlock &block,
-                                         KNTextBlockData *data)
+                                         KNTextBlockData *data,
+                                         KNTextEdit *editor)
 {
     Q_UNUSED(block)
+    Q_UNUSED(editor)
     //Set marked to the other side.
     data->marked^=1;
     //Update the panel.

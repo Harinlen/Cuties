@@ -18,6 +18,7 @@
 #include <QPainter>
 
 #include "knglobal.h"
+#include "kntextedit.h"
 
 #include "kntexteditnumberpanel.h"
 
@@ -45,6 +46,21 @@ void KNTextEditNumberPanel::drawContent(QRect blockRect,
     painter->drawText(blockRect,
                       Qt::AlignVCenter | Qt::AlignRight,
                       QString::number(block.blockNumber()+1));
+}
+
+void KNTextEditNumberPanel::itemClickEvent(const QTextBlock &block,
+                                           KNTextBlockData *data,
+                                           KNTextEdit *editor)
+{
+    Q_UNUSED(data);
+    //Generate the selection text cursor.
+    QTextCursor cursor=editor->textCursor();
+    cursor.setPosition(block.position());
+    cursor.movePosition(QTextCursor::NextCharacter,
+                        QTextCursor::KeepAnchor,
+                        block.length()-1);
+    //Set the selection cursor.
+    editor->setTextCursor(cursor);
 }
 
 void KNTextEditNumberPanel::onActionBlockCountChange(int blockCount)

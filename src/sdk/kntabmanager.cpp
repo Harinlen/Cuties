@@ -22,6 +22,8 @@
 
 #include "knsidebar.h"
 #include "knsideshadowwidget.h"
+#include "kncodeeditor.h"
+#include "kncodeeditorunibar.h"
 #include "kntabmanageritem.h"
 #include "kntabmanagercontent.h"
 #include "knglobal.h"
@@ -32,12 +34,14 @@
 
 KNTabManager::KNTabManager(QWidget *parent) :
     QScrollArea(parent),
+    m_unibar(nullptr),
     m_container(new QWidget(this)),
     m_itemMapper(new QSignalMapper(this)),
     m_topShadow(new KNSideShadowWidget(KNSideShadow::TopShadow, this)),
     m_bottomShadow(new KNSideShadowWidget(KNSideShadow::BottomShadow, this)),
     m_content(new KNTabManagerContent(this)),
-    m_currentItem(nullptr)
+    m_currentItem(nullptr),
+    m_untitledCounter(0)
 {
     setObjectName("TabManager");
     //Set properties.
@@ -101,17 +105,22 @@ QWidget *KNTabManager::contentWidget()
     return m_content;
 }
 
-void KNTabManager::addTab(const QString &caption)
+void KNTabManager::createTab(const QString &caption, const QString &suffix)
 {
     //Generate the item.
     KNTabManagerItem *item=new KNTabManagerItem(caption, m_container);
+    //Link the item and add to item list.
     connect(item, &KNTabManagerItem::clicked,
             this, &KNTabManager::onActionItemClicked);
+    //Configure the code editor of the item.
+    KNCodeEditor *codeEditor=item->codeEditor();
+    codeEditor->setLanguageMode(suffix);
+    m_content->addWidget(codeEditor);
     //Add the item to list.
     m_itemList.append(item);
     //Add the item to layout, resize the container.
     m_containerLayout->addWidget(item);
-    m_container->resize(m_container->sizeHint());
+    m_container->setFixedHeight(KNTabManagerItem::itemHeight()*m_itemList.size());
     //Check if this item is the first item, then set the current item to this
     //item.
     if(m_itemList.size()==1)
@@ -132,6 +141,17 @@ void KNTabManager::setCurrentIndex(int index)
     m_currentItem=m_itemList.at(index);
     //Select the current item.
     m_currentItem->setSelected(true);
+    //Switch the content to the item.
+    m_content->setCurrentIndex(index);
+    //Set focus to the content widget.
+    //Check if current widget is nullptr.
+    QWidget *currentWidget=m_content->currentWidget();
+    currentWidget->setFocus(Qt::MouseFocusReason);
+    //Connect the unibar to the editor.
+    if(m_unibar!=nullptr)
+    {
+        m_unibar->setEditor(m_currentItem->codeEditor());
+    }
 }
 
 void KNTabManager::setCurrentItem(KNTabManagerItem *item)
@@ -145,10 +165,13 @@ void KNTabManager::resizeEvent(QResizeEvent *event)
     QScrollArea::resizeEvent(event);
     //Move the shadow.
     m_bottomShadow->move(0, height()-m_bottomShadow->height());
+    //Resize the content.
+    m_container->setFixedWidth(width());
 }
 
 void KNTabManager::retranslate()
 {
+    //Translate actions.
     m_actions[New]->setText(tr("New Source File"));
     m_actions[Open]->setText(tr("Open"));
     m_actions[Save]->setText(tr("Save"));
@@ -157,6 +180,9 @@ void KNTabManager::retranslate()
     m_actions[Close]->setText(tr("Close"));
     m_actions[CloseAll]->setText(tr("Close All"));
     m_actions[CloseAllOthers]->setText(tr("Close All Other Files"));
+
+    //Translate title.
+    m_untitledPrefix=tr("Untitled");
 }
 
 void KNTabManager::onActionItemClicked()
@@ -185,6 +211,14 @@ void KNTabManager::onActionVerticalValueChanged(const int &value)
     m_bottomShadow->setVisible(verticalScrollBar()->maximum()!=value);
 }
 
+void KNTabManager::onActionNewSourceFile()
+{
+    //Add counter, generate the counter.
+    m_untitledCounter++;
+    //Create a new tab.
+    createTab(m_untitledPrefix + " " + QString::number(m_untitledCounter));
+}
+
 void KNTabManager::initialActions()
 {
     QString actionIcon[TabManagerActionCount];
@@ -202,4 +236,19 @@ void KNTabManager::initialActions()
         m_actions[i]=new QAction(this);
         m_actions[i]->setIcon(QIcon(actionIcon[i]));
     }
+
+    //Link the action with the slots.
+    connect(m_actions[New], SIGNAL(triggered()),
+            this, SLOT(onActionNewSourceFile()));
 }
+
+KNCodeEditorUnibar *KNTabManager::unibar() const
+{
+    return m_unibar;
+}
+
+void KNTabManager::setUnibar(KNCodeEditorUnibar *unibar)
+{
+    m_unibar = unibar;
+}
+

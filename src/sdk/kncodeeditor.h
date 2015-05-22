@@ -31,9 +31,13 @@ public:
     ~KNCodeEditor();
     KNLanguageMode *languageMode() const;
 
+    KNTextEdit *textEditor() const;
+
 signals:
+    void languageModeChange();
 
 public slots:
+    void setLanguageMode(const QString &suffix);
     void setLanguageMode(KNLanguageMode *languageMode);
 
 private:

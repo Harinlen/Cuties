@@ -44,8 +44,8 @@ KNCodeEditor::KNCodeEditor(QWidget *parent) :
 
     mainLayout->addWidget(m_editor, 1);
 
-    //Set language mode.
-    setLanguageMode(KNGlobal::instance()->getLanguageMode("cpp"));
+    //Set the default language mode.
+    setLanguageMode("");
 }
 
 KNCodeEditor::~KNCodeEditor()
@@ -67,6 +67,8 @@ void KNCodeEditor::setLanguageMode(KNLanguageMode *languageMode)
     m_languageMode = languageMode;
     //Link the language mode.
     m_languageMode->highlighter()->setDocument(m_editor->document());
+    //Emit the language mode changed signal.
+    emit languageModeChange();
 }
 
 inline void KNCodeEditor::clearLanguageMode()
@@ -77,4 +79,15 @@ inline void KNCodeEditor::clearLanguageMode()
         delete m_languageMode;
         m_languageMode=nullptr;
     }
+}
+
+KNTextEdit *KNCodeEditor::textEditor() const
+{
+    return m_editor;
+}
+
+void KNCodeEditor::setLanguageMode(const QString &suffix)
+{
+    //Set language mode according to suffix.
+    setLanguageMode(KNGlobal::instance()->getLanguageMode(suffix));
 }
