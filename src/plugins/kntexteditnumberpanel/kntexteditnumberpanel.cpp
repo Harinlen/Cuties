@@ -37,15 +37,18 @@ void KNTextEditNumberPanel::drawContent(QRect blockRect,
                                         QPainter *painter,
                                         bool currentLine)
 {
+    QPen painterPen=painter->pen();
     //Draw the highlight if the block is the current line.
     if(currentLine)
     {
         painter->fillRect(blockRect, palette().highlight());
+        painter->setPen(QColor(255,255,255));
     }
     //Draw the block number.
     painter->drawText(blockRect,
                       Qt::AlignVCenter | Qt::AlignRight,
                       QString::number(block.blockNumber()+1));
+    painter->setPen(painterPen);
 }
 
 void KNTextEditNumberPanel::itemClickEvent(const QTextBlock &block,

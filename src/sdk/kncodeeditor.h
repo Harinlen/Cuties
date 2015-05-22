@@ -30,6 +30,8 @@ public:
     explicit KNCodeEditor(QWidget *parent = 0);
     ~KNCodeEditor();
     KNLanguageMode *languageMode() const;
+    void openFile(const QString &filePath,
+                  const QString &codec=QString("UTF-8"));
 
     KNTextEdit *textEditor() const;
 
@@ -44,6 +46,8 @@ private:
     inline void clearLanguageMode();
     KNTextEdit *m_editor;
     KNLanguageMode *m_languageMode;
+
+    QString m_filePath;
 };
 
 #endif // KNCODEEDITOR_H

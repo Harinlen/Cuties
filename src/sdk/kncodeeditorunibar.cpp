@@ -246,7 +246,16 @@ void KNCodeEditorUnibar::initialActions()
     {
         m_unibarActions[i]=new QAction(this);
         m_unibarActions[i]->setIcon(QIcon(actionIcon[i]));
+        m_unibarActions[i]->setShortcutContext(Qt::WidgetShortcut);
     }
+
+    //Set shortcuts.
+    m_unibarActions[Undo]->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_Z));
+    m_unibarActions[Redo]->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_Y));
+    m_unibarActions[Cut]->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_X));
+    m_unibarActions[Copy]->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_C));
+    m_unibarActions[Paste]->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_V));
+    m_unibarActions[SelectAll]->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_A));
 }
 
 QFrame *KNCodeEditorUnibar::generateSeperateLine()

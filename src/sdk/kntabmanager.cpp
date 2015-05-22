@@ -19,6 +19,8 @@
 #include <QBoxLayout>
 #include <QSignalMapper>
 #include <QScrollBar>
+#include <QFileInfo>
+#include <QFileDialog>
 
 #include "knsidebar.h"
 #include "knsideshadowwidget.h"
@@ -105,17 +107,29 @@ QWidget *KNTabManager::contentWidget()
     return m_content;
 }
 
-void KNTabManager::createTab(const QString &caption, const QString &suffix)
+KNTabManagerItem *KNTabManager::createTab(const QString &caption,
+                                          const QString &filePath)
 {
     //Generate the item.
     KNTabManagerItem *item=new KNTabManagerItem(caption, m_container);
     //Link the item and add to item list.
     connect(item, &KNTabManagerItem::clicked,
             this, &KNTabManager::onActionItemClicked);
-    //Configure the code editor of the item.
+    //Get the code editor.
     KNCodeEditor *codeEditor=item->codeEditor();
-    codeEditor->setLanguageMode(suffix);
     m_content->addWidget(codeEditor);
+    //If there's a file to load, load the file.
+    if(!filePath.isEmpty())
+    {
+        //Get the file information.
+        QFileInfo fileInfo(filePath);
+        //Reset the item name.
+        item->setCaption(fileInfo.fileName());
+        //Configure the code editor of the item.
+        codeEditor->setLanguageMode(fileInfo.suffix());
+        //Open the file.
+        codeEditor->openFile(filePath);
+    }
     //Add the item to list.
     m_itemList.append(item);
     //Add the item to layout, resize the container.
@@ -127,6 +141,8 @@ void KNTabManager::createTab(const QString &caption, const QString &suffix)
     {
         setCurrentIndex(0);
     }
+    //Return the item.
+    return item;
 }
 
 void KNTabManager::setCurrentIndex(int index)
@@ -156,7 +172,8 @@ void KNTabManager::setCurrentIndex(int index)
 
 void KNTabManager::setCurrentItem(KNTabManagerItem *item)
 {
-    ;
+    //Get the index of the current item.
+    setCurrentIndex(m_itemList.indexOf(item));
 }
 
 void KNTabManager::resizeEvent(QResizeEvent *event)
@@ -216,7 +233,31 @@ void KNTabManager::onActionNewSourceFile()
     //Add counter, generate the counter.
     m_untitledCounter++;
     //Create a new tab.
-    createTab(m_untitledPrefix + " " + QString::number(m_untitledCounter));
+    setCurrentItem(createTab(m_untitledPrefix +
+                             " " +
+                             QString::number(m_untitledCounter)));
+}
+
+void KNTabManager::onActionOpen()
+{
+    //Get the file path.
+    QStringList filePathList=QFileDialog::getOpenFileNames(this,
+                                                           tr("Open"));
+    if(filePathList.isEmpty())
+    {
+        return;
+    }
+    //Open all of these files.
+    QString currentPath;
+    KNTabManagerItem *lastItem;
+    while(!filePathList.isEmpty())
+    {
+        currentPath=filePathList.takeFirst();
+        //Generate the item.
+        lastItem=createTab("", currentPath);
+    }
+    //Set the current item to the last opened item.
+    setCurrentItem(lastItem);
 }
 
 void KNTabManager::initialActions()
@@ -235,11 +276,18 @@ void KNTabManager::initialActions()
     {
         m_actions[i]=new QAction(this);
         m_actions[i]->setIcon(QIcon(actionIcon[i]));
+        m_actions[i]->setShortcutContext(Qt::ApplicationShortcut);
     }
+
+    //Set key sequences.
+    m_actions[New]->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_N));
+    m_actions[Open]->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_O));
 
     //Link the action with the slots.
     connect(m_actions[New], SIGNAL(triggered()),
             this, SLOT(onActionNewSourceFile()));
+    connect(m_actions[Open], SIGNAL(triggered()),
+            this, SLOT(onActionOpen()));
 }
 
 KNCodeEditorUnibar *KNTabManager::unibar() const

@@ -43,8 +43,8 @@ public:
 signals:
 
 public slots:
-    void createTab(const QString &caption,
-                   const QString &suffix="");
+    KNTabManagerItem *createTab(const QString &caption,
+                                const QString &filePath="");
     void setCurrentIndex(int index);
     void setCurrentItem(KNTabManagerItem *item);
 
@@ -58,6 +58,7 @@ private slots:
 
     //Action slots.
     void onActionNewSourceFile();
+    void onActionOpen();
 
 private:
     enum TabManagerActions

@@ -16,6 +16,8 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include <QBoxLayout>
+#include <QTextStream>
+#include <QTextCodec>
 
 #include "knglobal.h"
 #include "kntextedit.h"
@@ -27,7 +29,8 @@
 KNCodeEditor::KNCodeEditor(QWidget *parent) :
     QWidget(parent),
     m_editor(new KNTextEdit(this)),
-    m_languageMode(nullptr)
+    m_languageMode(nullptr),
+    m_filePath(QString())
 {
     setObjectName("CodeEditor");
     //Set properties.
@@ -57,6 +60,29 @@ KNCodeEditor::~KNCodeEditor()
 KNLanguageMode *KNCodeEditor::languageMode() const
 {
     return m_languageMode;
+}
+
+void KNCodeEditor::openFile(const QString &filePath,
+                            const QString &codec)
+{
+    //Try to open the file.
+    QFile file(filePath);
+    if(file.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+        //Generate the text stream.
+        QTextStream textIn(&file);
+        //Configure the text in stream.
+        textIn.setCodec(QTextCodec::codecForName(codec.toUtf8()));
+
+        //Read data.
+        m_editor->setPlainText(QString(textIn.readAll()));
+
+        //Close the file.
+        file.close();
+
+        //Save the file path at the end.
+        m_filePath=filePath;
+    }
 }
 
 void KNCodeEditor::setLanguageMode(KNLanguageMode *languageMode)
