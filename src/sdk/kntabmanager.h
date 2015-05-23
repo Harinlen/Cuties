@@ -47,6 +47,7 @@ public slots:
                                 const QString &filePath="");
     void setCurrentIndex(int index);
     void setCurrentItem(KNTabManagerItem *item);
+    void closeTab(KNTabManagerItem *item);
 
 protected:
     void resizeEvent(QResizeEvent *event);
@@ -59,6 +60,9 @@ private slots:
     //Action slots.
     void onActionNewSourceFile();
     void onActionOpen();
+    void onActionSave();
+    void onActionSaveAs();
+    void onActionCloseCurrent();
 
 private:
     enum TabManagerActions

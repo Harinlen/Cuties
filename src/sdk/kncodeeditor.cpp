@@ -16,6 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include <QBoxLayout>
+#include <QFileInfo>
 #include <QTextStream>
 #include <QTextCodec>
 
@@ -30,7 +31,8 @@ KNCodeEditor::KNCodeEditor(QWidget *parent) :
     QWidget(parent),
     m_editor(new KNTextEdit(this)),
     m_languageMode(nullptr),
-    m_filePath(QString())
+    m_filePath(QString()),
+    m_codec(QString("UTF-8"))
 {
     setObjectName("CodeEditor");
     //Set properties.
@@ -47,6 +49,10 @@ KNCodeEditor::KNCodeEditor(QWidget *parent) :
 
     mainLayout->addWidget(m_editor, 1);
 
+    //Link the editor to code editor.
+    connect(m_editor->document(), &QTextDocument::modificationChanged,
+            this, &KNCodeEditor::modificationChanged);
+
     //Set the default language mode.
     setLanguageMode("");
 }
@@ -62,8 +68,7 @@ KNLanguageMode *KNCodeEditor::languageMode() const
     return m_languageMode;
 }
 
-void KNCodeEditor::openFile(const QString &filePath,
-                            const QString &codec)
+void KNCodeEditor::openFile(const QString &filePath)
 {
     //Try to open the file.
     QFile file(filePath);
@@ -72,16 +77,38 @@ void KNCodeEditor::openFile(const QString &filePath,
         //Generate the text stream.
         QTextStream textIn(&file);
         //Configure the text in stream.
-        textIn.setCodec(QTextCodec::codecForName(codec.toUtf8()));
+        textIn.setCodec(QTextCodec::codecForName(m_codec.toUtf8()));
 
         //Read data.
         m_editor->setPlainText(QString(textIn.readAll()));
 
         //Close the file.
         file.close();
+    }
+}
 
-        //Save the file path at the end.
-        m_filePath=filePath;
+void KNCodeEditor::saveFile()
+{
+    //Check the file path. Ignore the request when it's empty.
+    if(m_filePath.isEmpty())
+    {
+        return;
+    }
+    //Try to open the file in write only mode.
+    QFile file(m_filePath);
+    if(file.open(QIODevice::WriteOnly | QIODevice::Text))
+    {
+        //Generate the text stream.
+        QTextStream textOut(&file);
+        //Configure the text out stream.
+        textOut.setCodec(QTextCodec::codecForName(m_codec.toUtf8()));
+        //Output data to stream & flush.
+        textOut << m_editor->toPlainText() << flush;
+        //Close the file
+        file.close();
+
+        //Set the modification to false.
+        m_editor->document()->setModified(false);
     }
 }
 
@@ -106,6 +133,35 @@ inline void KNCodeEditor::clearLanguageMode()
         m_languageMode=nullptr;
     }
 }
+
+QString KNCodeEditor::encoded() const
+{
+    return m_codec;
+}
+
+void KNCodeEditor::setEncoded(const QString &encoded)
+{
+    //Save the encoded.
+    m_codec = encoded;
+}
+
+QString KNCodeEditor::filePath() const
+{
+    return m_filePath;
+}
+
+void KNCodeEditor::setFilePath(const QString &filePath)
+{
+    //Save the changed file path.
+    m_filePath = filePath;
+    //Get the detail information.
+    QFileInfo currentFile(m_filePath);
+    //Change the langauge mode.
+    setLanguageMode(currentFile.suffix());
+    //Emit file name changed signal.
+    emit fileNameChange(currentFile.fileName());
+}
+
 
 KNTextEdit *KNCodeEditor::textEditor() const
 {

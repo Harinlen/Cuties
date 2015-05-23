@@ -22,6 +22,7 @@
 #include <QLabel>
 
 class KNCodeEditor;
+class KNLabelAnimeButton;
 class KNTabManagerItem : public QLabel
 {
     Q_OBJECT
@@ -32,17 +33,22 @@ public:
 
 signals:
     void clicked();
+    void requireCloseTab(KNTabManagerItem *item);
 
 public slots:
     void setCaption(const QString &text);
     void setSelected(bool selected);
 
 protected:
+    void enterEvent(QEvent *event);
+    void leaveEvent(QEvent *event);
     void mousePressEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
+    void resizeEvent(QResizeEvent *event);
 
 private slots:
     void onActionPressed();
+    void onActionClose();
 
 private:
     inline void clearFileName();
@@ -51,6 +57,7 @@ private:
     QPalette m_palette;
     bool m_selected;
     KNCodeEditor *m_codeEditor;
+    KNLabelAnimeButton *m_closeButton;
 };
 
 #endif // KNTABMANAGERITEM_H

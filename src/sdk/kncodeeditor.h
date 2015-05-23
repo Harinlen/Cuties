@@ -30,12 +30,20 @@ public:
     explicit KNCodeEditor(QWidget *parent = 0);
     ~KNCodeEditor();
     KNLanguageMode *languageMode() const;
-    void openFile(const QString &filePath,
-                  const QString &codec=QString("UTF-8"));
+    void openFile(const QString &filePath);
+    void saveFile();
 
     KNTextEdit *textEditor() const;
 
+    QString filePath() const;
+    void setFilePath(const QString &filePath);
+
+    QString encoded() const;
+    void setEncoded(const QString &encoded);
+
 signals:
+    void fileNameChange(const QString &fileName);
+    void modificationChanged(bool c);
     void languageModeChange();
 
 public slots:
@@ -47,7 +55,7 @@ private:
     KNTextEdit *m_editor;
     KNLanguageMode *m_languageMode;
 
-    QString m_filePath;
+    QString m_filePath, m_codec;
 };
 
 #endif // KNCODEEDITOR_H

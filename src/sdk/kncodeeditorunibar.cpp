@@ -84,6 +84,8 @@ KNCodeEditorUnibar::KNCodeEditorUnibar(QWidget *parent) :
     m_close->setScaledContents(true);
     m_close->setFixedSize(25,25);
     m_close->setPixmap(QPixmap(":/image/resource/images/close.png"));
+    connect(m_close, &KNLabelAnimeButton::clicked,
+            this, &KNCodeEditorUnibar::requireCloseCurrent);
 
     mainLayout->addWidget(m_fileName, 1);
     mainLayout->addWidget(generateSeperateLine());
@@ -126,6 +128,9 @@ void KNCodeEditorUnibar::setEditor(KNCodeEditor *editor)
     //Disconnect with the old connections.
     if(m_codeEditor!=nullptr)
     {
+        //Clear the original status data.
+        clearStatusData();
+        //Disconnect all previous links.
         m_editorConections->disconnectAll();
         //Clear the pointer.
         m_codeEditor=nullptr;
@@ -139,6 +144,10 @@ void KNCodeEditorUnibar::setEditor(KNCodeEditor *editor)
     }
     //Get the text edit.
     m_textEditor=m_codeEditor->textEditor();
+    //Link the language mode change signal with the new editor.
+    m_editorConections->append(
+                connect(m_codeEditor, &KNCodeEditor::languageModeChange,
+                        this, &KNCodeEditorUnibar::onActionLanguageChange));
     //Link the status display with the new editor.
     m_editorConections->append(
                 connect(m_textEditor, &KNTextEdit::cursorPositionChanged,
@@ -230,6 +239,18 @@ inline void KNCodeEditorUnibar::syncEditorStatusData()
     onActionCursorPositionChange();
     onActionUpdateOverwrite();
     onActionLanguageChange();
+}
+
+void KNCodeEditorUnibar::clearStatusData()
+{
+    //Clear cursor position data.
+    m_cursorPosition->clear();
+    //Clear codec data.
+    m_encoded->clear();
+    //Clear language data.
+    m_language->clear();
+    //Clear overwrite data.
+    m_overwrite->clear();
 }
 
 void KNCodeEditorUnibar::initialActions()

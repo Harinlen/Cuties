@@ -23,4 +23,10 @@ KNMainMenu::KNMainMenu(QWidget *parent) :
     QMenu(parent)
 {
     setStyle(KNSAOStyle::instance());
+
+    //Set palette.
+    QPalette pal=palette();
+    pal.setColor(QPalette::Window, QColor(255,255,255,0));
+    pal.setColor(QPalette::WindowText, QColor(0,0,0));
+    setPalette(pal);
 }

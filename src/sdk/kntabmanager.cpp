@@ -24,6 +24,7 @@
 
 #include "knsidebar.h"
 #include "knsideshadowwidget.h"
+#include "kntextedit.h"
 #include "kncodeeditor.h"
 #include "kncodeeditorunibar.h"
 #include "kntabmanageritem.h"
@@ -115,6 +116,8 @@ KNTabManagerItem *KNTabManager::createTab(const QString &caption,
     //Link the item and add to item list.
     connect(item, &KNTabManagerItem::clicked,
             this, &KNTabManager::onActionItemClicked);
+    connect(item, &KNTabManagerItem::requireCloseTab,
+            this, &KNTabManager::closeTab);
     //Get the code editor.
     KNCodeEditor *codeEditor=item->codeEditor();
     m_content->addWidget(codeEditor);
@@ -127,8 +130,9 @@ KNTabManagerItem *KNTabManager::createTab(const QString &caption,
         item->setCaption(fileInfo.fileName());
         //Configure the code editor of the item.
         codeEditor->setLanguageMode(fileInfo.suffix());
-        //Open the file.
+        //Open the file and set the file path.
         codeEditor->openFile(filePath);
+        codeEditor->setFilePath(filePath);
     }
     //Add the item to list.
     m_itemList.append(item);
@@ -161,8 +165,7 @@ void KNTabManager::setCurrentIndex(int index)
     m_content->setCurrentIndex(index);
     //Set focus to the content widget.
     //Check if current widget is nullptr.
-    QWidget *currentWidget=m_content->currentWidget();
-    currentWidget->setFocus(Qt::MouseFocusReason);
+    m_currentItem->codeEditor()->textEditor()->setFocus();
     //Connect the unibar to the editor.
     if(m_unibar!=nullptr)
     {
@@ -172,8 +175,59 @@ void KNTabManager::setCurrentIndex(int index)
 
 void KNTabManager::setCurrentItem(KNTabManagerItem *item)
 {
+    //If the item is nullptr, then clear the current item and reset the unibar.
+    if(item==nullptr)
+    {
+        //Clear current item.
+        m_currentItem=nullptr;
+        if(m_unibar!=nullptr)
+        {
+            m_unibar->setEditor(nullptr);
+        }
+        return;
+    }
     //Get the index of the current item.
     setCurrentIndex(m_itemList.indexOf(item));
+}
+
+void KNTabManager::closeTab(KNTabManagerItem *item)
+{
+    //Check item is null or not.
+    if(item==nullptr)
+    {
+        return;
+    }
+    //Get the current item index.
+    int itemIndex=m_itemList.indexOf(item);
+    //Check the current index and the item size.
+    if((itemIndex+1)<m_itemList.size())
+    {
+        setCurrentIndex(itemIndex+1);
+    }
+    else
+    {
+        //There's still previous item of the current index
+        if((itemIndex-1)>-1)
+        {
+            setCurrentIndex(itemIndex-1);
+        }
+        else
+        {
+            setCurrentItem(nullptr);
+        }
+    }
+    //Get the code editor.
+    KNCodeEditor *editor=item->codeEditor();
+    //Remove the editor from the stacked widget.
+    m_content->removeWidget(editor);
+    //Give the parent of the code editor back to item.
+    editor->setParent(item);
+    //Remove the item from the item list.
+    m_itemList.removeAt(itemIndex);
+    //Resize the container.
+    m_container->setFixedHeight(KNTabManagerItem::itemHeight()*m_itemList.size());
+    //Delete the item.
+    item->deleteLater();
 }
 
 void KNTabManager::resizeEvent(QResizeEvent *event)
@@ -260,6 +314,51 @@ void KNTabManager::onActionOpen()
     setCurrentItem(lastItem);
 }
 
+void KNTabManager::onActionSave()
+{
+    //Check the current item.
+    if(m_currentItem==nullptr)
+    {
+        return;
+    }
+    //Get the code editor.
+    KNCodeEditor *codeEditor=m_currentItem->codeEditor();
+    //Check if the file path can save or not.
+    if(codeEditor->filePath().isEmpty())
+    {
+        onActionSaveAs();
+        return;
+    }
+    //Save the file.
+    codeEditor->saveFile();
+}
+
+void KNTabManager::onActionSaveAs()
+{
+    //Get the file path.
+    QString filePath=QFileDialog::getSaveFileName(this,
+                                                  tr("Save"));
+    if(filePath.isEmpty())
+    {
+        return;
+    }
+    //Get the code editor.
+    KNCodeEditor *codeEditor=m_currentItem->codeEditor();
+    //Set the file path.
+    codeEditor->setFilePath(filePath);
+    //Save the file.
+    codeEditor->saveFile();
+}
+
+void KNTabManager::onActionCloseCurrent()
+{
+    //Close the current item.
+    if(m_currentItem!=nullptr)
+    {
+        closeTab(m_currentItem);
+    }
+}
+
 void KNTabManager::initialActions()
 {
     QString actionIcon[TabManagerActionCount];
@@ -282,12 +381,24 @@ void KNTabManager::initialActions()
     //Set key sequences.
     m_actions[New]->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_N));
     m_actions[Open]->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_O));
+    m_actions[Save]->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_S));
+    m_actions[SaveAs]->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_S));
+    m_actions[SaveAll]->setShortcut(QKeySequence(Qt::CTRL+Qt::ALT+Qt::Key_S));
+    m_actions[Close]->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_W));
+    m_actions[CloseAll]->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_W));
+    m_actions[CloseAllOthers]->setShortcut(QKeySequence(Qt::CTRL+Qt::ALT+Qt::Key_W));
 
     //Link the action with the slots.
     connect(m_actions[New], SIGNAL(triggered()),
             this, SLOT(onActionNewSourceFile()));
     connect(m_actions[Open], SIGNAL(triggered()),
             this, SLOT(onActionOpen()));
+    connect(m_actions[Save], SIGNAL(triggered()),
+            this, SLOT(onActionSave()));
+    connect(m_actions[SaveAs], SIGNAL(triggered()),
+            this, SLOT(onActionSaveAs()));
+    connect(m_actions[Close], SIGNAL(triggered()),
+            this, SLOT(onActionCloseCurrent()));
 }
 
 KNCodeEditorUnibar *KNTabManager::unibar() const
@@ -297,6 +408,10 @@ KNCodeEditorUnibar *KNTabManager::unibar() const
 
 void KNTabManager::setUnibar(KNCodeEditorUnibar *unibar)
 {
-    m_unibar = unibar;
+    //Save unibar.
+    m_unibar=unibar;
+    //Link the unibar.
+    connect(m_unibar, &KNCodeEditorUnibar::requireCloseCurrent,
+            m_actions[Close], &QAction::trigger);
 }
 

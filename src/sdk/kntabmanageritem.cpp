@@ -17,7 +17,9 @@
  */
 #include "knglobal.h"
 
+#include "knlabelanimebutton.h"
 #include "kncodeeditor.h"
+#include "kntextedit.h"
 #include "kntabmanageritem.h"
 
 #include <QDebug>
@@ -25,7 +27,8 @@
 KNTabManagerItem::KNTabManagerItem(const QString &caption, QWidget *parent) :
     QLabel(parent),
     m_selected(false),
-    m_codeEditor(new KNCodeEditor(this))
+    m_codeEditor(new KNCodeEditor(this)),
+    m_closeButton(new KNLabelAnimeButton(this))
 {
     setObjectName("TabManagerItem");
     //Set properties.
@@ -39,6 +42,17 @@ KNTabManagerItem::KNTabManagerItem(const QString &caption, QWidget *parent) :
 
     //Set the caption.
     setCaption(caption);
+    //Configure the close button.
+    m_closeButton->setPixmap(QPixmap(":/image/resource/images/close.png"));
+    m_closeButton->setScaledContents(true);
+    m_closeButton->resize(itemHeight(), itemHeight());
+    m_closeButton->hide();
+    connect(m_closeButton, &KNLabelAnimeButton::clicked,
+            this, &KNTabManagerItem::onActionClose);
+
+    //Link the code editor.
+    connect(m_codeEditor, &KNCodeEditor::fileNameChange,
+            this, &KNTabManagerItem::setCaption);
 }
 
 int KNTabManagerItem::itemHeight()
@@ -70,9 +84,34 @@ void KNTabManagerItem::mouseReleaseEvent(QMouseEvent *event)
     QLabel::mouseReleaseEvent(event);
 }
 
+void KNTabManagerItem::resizeEvent(QResizeEvent *event)
+{
+    //Resize the item.
+    QLabel::resizeEvent(event);
+    //Move the button.
+    m_closeButton->move(width()-itemHeight(), 0);
+}
+
 void KNTabManagerItem::onActionPressed()
 {
     ;
+}
+
+void KNTabManagerItem::onActionClose()
+{
+    //Check the modified status.
+    if(m_codeEditor->textEditor()->document()->isModified())
+    {
+        //Ask user if they want to save the file.
+        //!TODO: Add question ask code here.
+        bool saveFile=false;
+        if(saveFile)
+        {
+            m_codeEditor->saveFile();
+        }
+    }
+    //Require to close the tab.
+    emit requireCloseTab(this);
 }
 
 void KNTabManagerItem::setCaption(const QString &text)
@@ -131,6 +170,22 @@ void KNTabManagerItem::setSelected(bool selected)
     setPalette(pal);
     setText(generateCaption());
     return;
+}
+
+void KNTabManagerItem::enterEvent(QEvent *event)
+{
+    //Show the close button.
+    m_closeButton->show();
+    //Execute the original enter event.
+    QLabel::enterEvent(event);
+}
+
+void KNTabManagerItem::leaveEvent(QEvent *event)
+{
+    //Hide the close button.
+    m_closeButton->hide();
+    //Execute the leave event.
+    QLabel::leaveEvent(event);
 }
 
 inline void KNTabManagerItem::clearFileName()

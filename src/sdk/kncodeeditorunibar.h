@@ -38,6 +38,7 @@ public:
     void setEditor(KNCodeEditor *editor);
 
 signals:
+    void requireCloseCurrent();
 
 public slots:
 
@@ -49,6 +50,7 @@ private slots:
 
 private:
     inline void syncEditorStatusData();
+    inline void clearStatusData();
     enum UnibarActions
     {
         Undo,

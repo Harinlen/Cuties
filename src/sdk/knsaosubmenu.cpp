@@ -51,19 +51,23 @@ KNSAOSubMenu::KNSAOSubMenu(QWidget *parent) :
     m_indicator->setAttribute(Qt::WA_TranslucentBackground, true);
     m_indicator->setAttribute(Qt::WA_TransparentForMouseEvents, true);
     //Set palette.
-    QPalette pal=m_indicator->palette();
-    pal.setColor(QPalette::Base, QColor(0,0,0,0));
-    pal.setColor(QPalette::Window, QColor(0,0,0,0));
-    pal.setColor(QPalette::WindowText, QColor(0,0,0,0));
-    pal.setColor(QPalette::AlternateBase, QColor(0,0,0,0));
-    pal.setColor(QPalette::ToolTipBase, QColor(255,255,255,0));
-    pal.setColor(QPalette::ToolTipText, QColor(255,255,255,0));
-    pal.setColor(QPalette::Button, QColor(255,255,255,0));
-    pal.setColor(QPalette::ButtonText, QColor(255,255,255,0));
-    m_indicator->setPalette(pal);
+    QPalette pal=palette();
+    pal.setColor(QPalette::Window, QColor(255,255,255,0));
+    pal.setColor(QPalette::WindowText, QColor(0,0,0));
+    setPalette(pal);
+    QPalette indicatorPal=m_indicator->palette();
+    indicatorPal.setColor(QPalette::Base, QColor(0,0,0,0));
+    indicatorPal.setColor(QPalette::Window, QColor(0,0,0,0));
+    indicatorPal.setColor(QPalette::WindowText, QColor(0,0,0,0));
+    indicatorPal.setColor(QPalette::AlternateBase, QColor(0,0,0,0));
+    indicatorPal.setColor(QPalette::ToolTipBase, QColor(255,255,255,0));
+    indicatorPal.setColor(QPalette::ToolTipText, QColor(255,255,255,0));
+    indicatorPal.setColor(QPalette::Button, QColor(255,255,255,0));
+    indicatorPal.setColor(QPalette::ButtonText, QColor(255,255,255,0));
+    m_indicator->setPalette(indicatorPal);
     //Generate the image label.
     QLabel *indicatorLabel=new QLabel(m_indicator);
-    indicatorLabel->setPalette(pal);
+    indicatorLabel->setPalette(indicatorPal);
     QPixmap indicatorPixmap=QPixmap(":/image/resource/images/indicator.png");
     indicatorLabel->setPixmap(indicatorPixmap);
 #ifdef Q_OS_WIN32
