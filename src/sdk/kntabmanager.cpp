@@ -197,37 +197,30 @@ void KNTabManager::closeTab(KNTabManagerItem *item)
     {
         return;
     }
-    //Get the current item index.
-    int itemIndex=m_itemList.indexOf(item);
-    //Check the current index and the item size.
-    if((itemIndex+1)<m_itemList.size())
+    if(item==m_currentItem)
     {
-        setCurrentIndex(itemIndex+1);
-    }
-    else
-    {
-        //There's still previous item of the current index
-        if((itemIndex-1)>-1)
+        //Get the current item index.
+        int itemIndex=m_itemList.indexOf(item);
+        //Check the current index and the item size.
+        if((itemIndex+1)<m_itemList.size())
         {
-            setCurrentIndex(itemIndex-1);
+            setCurrentIndex(itemIndex+1);
         }
         else
         {
-            setCurrentItem(nullptr);
+            //There's still previous item of the current index
+            if((itemIndex-1)>-1)
+            {
+                setCurrentIndex(itemIndex-1);
+            }
+            else
+            {
+                setCurrentItem(nullptr);
+            }
         }
     }
-    //Get the code editor.
-    KNCodeEditor *editor=item->codeEditor();
-    //Remove the editor from the stacked widget.
-    m_content->removeWidget(editor);
-    //Give the parent of the code editor back to item.
-    editor->setParent(item);
-    //Remove the item from the item list.
-    m_itemList.removeAt(itemIndex);
-    //Resize the container.
-    m_container->setFixedHeight(KNTabManagerItem::itemHeight()*m_itemList.size());
-    //Delete the item.
-    item->deleteLater();
+    //Remove the item.
+    removeItem(item);
 }
 
 void KNTabManager::resizeEvent(QResizeEvent *event)
@@ -316,24 +309,83 @@ void KNTabManager::onActionOpen()
 
 void KNTabManager::onActionSave()
 {
+    saveItem(m_currentItem);
+}
+
+void KNTabManager::onActionSaveAs()
+{
+    saveAsItem(m_currentItem);
+}
+
+void KNTabManager::onActionSaveAll()
+{
+    //Save all the item.
+    for(QList<KNTabManagerItem *>::iterator i=m_itemList.begin();
+        i!=m_itemList.end();
+        ++i)
+    {
+        saveItem(*i);
+    }
+}
+
+void KNTabManager::onActionClose()
+{
+    //Close the current item.
+    if(m_currentItem!=nullptr)
+    {
+        closeTab(m_currentItem);
+    }
+}
+
+void KNTabManager::onActionCloseAll()
+{
+    //Set the current item to nullptr.
+    setCurrentItem(nullptr);
+    //Remove all the item.
+    while(!m_itemList.isEmpty())
+    {
+        removeItem(m_itemList.takeLast());
+    }
+}
+
+void KNTabManager::onActionCloseAllOthers()
+{
+    //Close all the item, then insert the current item to item list.
+    while(!m_itemList.isEmpty())
+    {
+        //Close the other items.
+        KNTabManagerItem *item=m_itemList.takeLast();
+        if(item!=m_currentItem)
+        {
+            removeItem(item);
+        }
+    }
+    //Insert the current item.
+    m_itemList.append(m_currentItem);
+    //Resize the container.
+    m_container->setFixedHeight(KNTabManagerItem::itemHeight());
+}
+
+inline void KNTabManager::saveItem(KNTabManagerItem *item)
+{
     //Check the current item.
-    if(m_currentItem==nullptr)
+    if(item==nullptr)
     {
         return;
     }
     //Get the code editor.
-    KNCodeEditor *codeEditor=m_currentItem->codeEditor();
+    KNCodeEditor *codeEditor=item->codeEditor();
     //Check if the file path can save or not.
     if(codeEditor->filePath().isEmpty())
     {
-        onActionSaveAs();
+        saveAsItem(item);
         return;
     }
     //Save the file.
     codeEditor->saveFile();
 }
 
-void KNTabManager::onActionSaveAs()
+inline void KNTabManager::saveAsItem(KNTabManagerItem *item)
 {
     //Get the file path.
     QString filePath=QFileDialog::getSaveFileName(this,
@@ -343,20 +395,34 @@ void KNTabManager::onActionSaveAs()
         return;
     }
     //Get the code editor.
-    KNCodeEditor *codeEditor=m_currentItem->codeEditor();
+    KNCodeEditor *codeEditor=item->codeEditor();
     //Set the file path.
     codeEditor->setFilePath(filePath);
     //Save the file.
     codeEditor->saveFile();
 }
 
-void KNTabManager::onActionCloseCurrent()
+void KNTabManager::removeItem(KNTabManagerItem *item)
 {
-    //Close the current item.
-    if(m_currentItem!=nullptr)
+    //Ignore the illegal request.
+    if(item==nullptr)
     {
-        closeTab(m_currentItem);
+        return;
     }
+    //Get the code editor.
+    KNCodeEditor *editor=item->codeEditor();
+    //Remove the editor from the stacked widget.
+    m_content->removeWidget(editor);
+    //Give the parent of the code editor back to item.
+    editor->setParent(item);
+    //Remove the item from the item list.
+    //Although use remove one is not the perfect choice, but there can't be two
+    //same item in the list, so use removeOne is not wrong.
+    m_itemList.removeOne(item);
+    //Resize the container.
+    m_container->setFixedHeight(KNTabManagerItem::itemHeight()*m_itemList.size());
+    //Delete the item.
+    item->deleteLater();
 }
 
 void KNTabManager::initialActions()
@@ -397,8 +463,14 @@ void KNTabManager::initialActions()
             this, SLOT(onActionSave()));
     connect(m_actions[SaveAs], SIGNAL(triggered()),
             this, SLOT(onActionSaveAs()));
+    connect(m_actions[SaveAll], SIGNAL(triggered()),
+            this, SLOT(onActionSaveAll()));
     connect(m_actions[Close], SIGNAL(triggered()),
-            this, SLOT(onActionCloseCurrent()));
+            this, SLOT(onActionClose()));
+    connect(m_actions[CloseAll], SIGNAL(triggered()),
+            this, SLOT(onActionCloseAll()));
+    connect(m_actions[CloseAllOthers], SIGNAL(triggered()),
+            this, SLOT(onActionCloseAllOthers()));
 }
 
 KNCodeEditorUnibar *KNTabManager::unibar() const

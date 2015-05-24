@@ -35,10 +35,17 @@ KNLanguageMode *KNLanguageManager::getLanguageMode(QString suffix)
     //Get the lower case of the suffix.
     suffix=suffix.toLower();
     KNLanguageMode *mode=new KNLanguageMode;
-    if(suffix=="cpp")
+    if(suffix=="cpp" || suffix=="h")
     {
         mode->setHighlighter(new KNCppHighlighter(mode));
-        mode->setLanguageName("C++");
+        if(suffix=="cpp")
+        {
+            mode->setLanguageName("C++");
+        }
+        else if(suffix=="h")
+        {
+            mode->setLanguageName("C/C++ Header");
+        }
     }
     else
     {

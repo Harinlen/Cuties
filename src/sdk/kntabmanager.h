@@ -62,9 +62,15 @@ private slots:
     void onActionOpen();
     void onActionSave();
     void onActionSaveAs();
-    void onActionCloseCurrent();
+    void onActionSaveAll();
+    void onActionClose();
+    void onActionCloseAll();
+    void onActionCloseAllOthers();
 
 private:
+    inline void saveItem(KNTabManagerItem *item);
+    inline void saveAsItem(KNTabManagerItem *item);
+    inline void removeItem(KNTabManagerItem *item);
     enum TabManagerActions
     {
         New,
