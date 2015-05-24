@@ -16,32 +16,32 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KNLANGUAGEMODE_H
-#define KNLANGUAGEMODE_H
+#ifndef KNGCCCOMPILER_H
+#define KNGCCCOMPILER_H
 
-#include <QObject>
+#include "kncompiler.h"
 
-class KNHighlighter;
-class KNCompiler;
-class KNLanguageMode : public QObject
+class KNGccCompiler : public KNCompiler
 {
     Q_OBJECT
 public:
-    explicit KNLanguageMode(QObject *parent = 0);
+    explicit KNGccCompiler(QObject *parent = 0);
+    QString compilerPath();
 
-    KNHighlighter *highlighter();
-    void setHighlighter(KNHighlighter *highlighter);
+signals:
 
-    QString languageName() const;
-    void setLanguageName(const QString &languageName);
+public slots:
 
-    KNCompiler *compiler() const;
-    void setCompiler(KNCompiler *compiler);
+protected:
+    QStringList getVersionArgs();
+    QString environmentsArgs();
+    QStringList getCompileArgs(const QString &filePath);
+    virtual QStringList compileSwitchArgs();
+    virtual QStringList defaultSwitchArgs();
 
 private:
-    KNHighlighter *m_highlighter;
-    KNCompiler *m_compiler;
-    QString m_languageName;
+    QString m_gccPath;
+    QStringList m_compileSwitchArgs, m_defaultSwitchArgs;
 };
 
-#endif // KNLANGUAGEMODE_H
+#endif // KNGCCCOMPILER_H

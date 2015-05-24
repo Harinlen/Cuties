@@ -70,7 +70,11 @@ SOURCES += \
     sdk/knsaosubmenu.cpp \
     sdk/knsidebarcontent.cpp \
     sdk/knsidetabcontentcontainer.cpp \
-    sdk/kntabmanagercontent.cpp
+    sdk/kntabmanagercontent.cpp \
+    sdk/kncompiler.cpp \
+    sdk/kngcccompiler.cpp \
+    sdk/kngppcompiler.cpp \
+    sdk/kncompileoutputreceiver.cpp
 
 HEADERS += \
     sdk/knglobal.h \
@@ -110,7 +114,11 @@ HEADERS += \
     sdk/knsaosubmenu.h \
     sdk/knsidebarcontent.h \
     sdk/knsidetabcontentcontainer.h \
-    sdk/kntabmanagercontent.h
+    sdk/kntabmanagercontent.h \
+    sdk/kncompiler.h \
+    sdk/kngcccompiler.h \
+    sdk/kngppcompiler.h \
+    sdk/kncompileoutputreceiver.h
 
 RESOURCES += \
     res.qrc

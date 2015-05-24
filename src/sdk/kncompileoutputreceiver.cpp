@@ -16,32 +16,26 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KNLANGUAGEMODE_H
-#define KNLANGUAGEMODE_H
+#include "kncompileoutputreceiver.h"
 
-#include <QObject>
-
-class KNHighlighter;
-class KNCompiler;
-class KNLanguageMode : public QObject
+KNCompileOutputReceiver::KNCompileOutputReceiver(QObject *parent) :
+    QObject(parent),
+    m_outputText(QString())
 {
-    Q_OBJECT
-public:
-    explicit KNLanguageMode(QObject *parent = 0);
+}
 
-    KNHighlighter *highlighter();
-    void setHighlighter(KNHighlighter *highlighter);
+QString KNCompileOutputReceiver::outputText() const
+{
+    return m_outputText;
+}
 
-    QString languageName() const;
-    void setLanguageName(const QString &languageName);
+void KNCompileOutputReceiver::setOutputText(const QString &outputText)
+{
+    m_outputText = outputText;
+}
 
-    KNCompiler *compiler() const;
-    void setCompiler(KNCompiler *compiler);
+void KNCompileOutputReceiver::clearOutputText()
+{
+    m_outputText.clear();
+}
 
-private:
-    KNHighlighter *m_highlighter;
-    KNCompiler *m_compiler;
-    QString m_languageName;
-};
-
-#endif // KNLANGUAGEMODE_H

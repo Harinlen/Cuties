@@ -36,5 +36,6 @@
         <file>resource/icons/actions/redo.png</file>
         <file>resource/icons/actions/select_all.png</file>
         <file>resource/icons/actions/undo.png</file>
+        <file>resource/icons/actions/compile.png</file>
     </qresource>
 </RCC>

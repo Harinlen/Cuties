@@ -67,6 +67,8 @@ private slots:
     void onActionCloseAll();
     void onActionCloseAllOthers();
 
+    void onActionCompile();
+
 private:
     inline void saveItem(KNTabManagerItem *item);
     inline void saveAsItem(KNTabManagerItem *item);
@@ -81,6 +83,7 @@ private:
         Close,
         CloseAll,
         CloseAllOthers,
+        Compile,
         TabManagerActionCount
     };
     inline void initialActions();

@@ -19,6 +19,9 @@
 //Highlighters
 #include "kncpphighlighter.h"
 
+//Compilers
+#include "kngppcompiler.h"
+
 #include "knlanguagemode.h"
 
 #include "knlanguagemanager.h"
@@ -38,6 +41,7 @@ KNLanguageMode *KNLanguageManager::getLanguageMode(QString suffix)
     if(suffix=="cpp" || suffix=="h")
     {
         mode->setHighlighter(new KNCppHighlighter(mode));
+        mode->setCompiler(new KNGppCompiler(mode));
         if(suffix=="cpp")
         {
             mode->setLanguageName("C++");
@@ -50,6 +54,7 @@ KNLanguageMode *KNLanguageManager::getLanguageMode(QString suffix)
     else
     {
         mode->setHighlighter(new KNHighlighter(mode));
+        mode->setCompiler(nullptr);
     }
     return mode;
 }

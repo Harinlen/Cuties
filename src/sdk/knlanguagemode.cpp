@@ -19,7 +19,8 @@
 
 KNLanguageMode::KNLanguageMode(QObject *parent) :
     QObject(parent),
-    m_highlighter(nullptr)
+    m_highlighter(nullptr),
+    m_compiler(nullptr)
 {
 }
 
@@ -43,3 +44,12 @@ void KNLanguageMode::setLanguageName(const QString &languageName)
     m_languageName = languageName;
 }
 
+KNCompiler *KNLanguageMode::compiler() const
+{
+    return m_compiler;
+}
+
+void KNLanguageMode::setCompiler(KNCompiler *compiler)
+{
+    m_compiler = compiler;
+}

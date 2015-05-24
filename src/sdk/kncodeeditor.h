@@ -23,6 +23,7 @@
 
 class KNTextEdit;
 class KNLanguageMode;
+class KNCompileOutputReceiver;
 class KNCodeEditor : public QWidget
 {
     Q_OBJECT
@@ -41,6 +42,10 @@ public:
     QString encoded() const;
     void setEncoded(const QString &encoded);
 
+    KNCompileOutputReceiver *compileOutput();
+
+    void compile();
+
 signals:
     void fileNameChange(const QString &fileName);
     void modificationChanged(bool c);
@@ -56,6 +61,7 @@ private:
     KNLanguageMode *m_languageMode;
 
     QString m_filePath, m_codec;
+    KNCompileOutputReceiver *m_compileOutput;
 };
 
 #endif // KNCODEEDITOR_H

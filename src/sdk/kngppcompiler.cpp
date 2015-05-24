@@ -16,32 +16,15 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KNLANGUAGEMODE_H
-#define KNLANGUAGEMODE_H
+#include "kngppcompiler.h"
 
-#include <QObject>
-
-class KNHighlighter;
-class KNCompiler;
-class KNLanguageMode : public QObject
+KNGppCompiler::KNGppCompiler(QObject *parent) :
+    KNGccCompiler(parent),
+    m_gppPath(QString())
 {
-    Q_OBJECT
-public:
-    explicit KNLanguageMode(QObject *parent = 0);
+}
 
-    KNHighlighter *highlighter();
-    void setHighlighter(KNHighlighter *highlighter);
-
-    QString languageName() const;
-    void setLanguageName(const QString &languageName);
-
-    KNCompiler *compiler() const;
-    void setCompiler(KNCompiler *compiler);
-
-private:
-    KNHighlighter *m_highlighter;
-    KNCompiler *m_compiler;
-    QString m_languageName;
-};
-
-#endif // KNLANGUAGEMODE_H
+QString KNGppCompiler::compilerPath()
+{
+    return m_gppPath.isEmpty()?QString("/usr/bin/g++"):m_gppPath;
+}

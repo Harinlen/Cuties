@@ -23,6 +23,8 @@
 #include "knglobal.h"
 #include "kntextedit.h"
 #include "knlanguagemode.h"
+#include "kncompiler.h"
+#include "kncompileoutputreceiver.h"
 #include "knhighlighter.h"
 
 #include "kncodeeditor.h"
@@ -32,7 +34,8 @@ KNCodeEditor::KNCodeEditor(QWidget *parent) :
     m_editor(new KNTextEdit(this)),
     m_languageMode(nullptr),
     m_filePath(QString()),
-    m_codec(QString("UTF-8"))
+    m_codec(QString("UTF-8")),
+    m_compileOutput(new KNCompileOutputReceiver(this))
 {
     setObjectName("CodeEditor");
     //Set properties.
@@ -128,8 +131,9 @@ inline void KNCodeEditor::clearLanguageMode()
 {
     if(m_languageMode)
     {
-        //Delete the language mode.
+        //Delete the original language mode.
         delete m_languageMode;
+        //Reset the language mode.
         m_languageMode=nullptr;
     }
 }
@@ -143,6 +147,28 @@ void KNCodeEditor::setEncoded(const QString &encoded)
 {
     //Save the encoded.
     m_codec = encoded;
+}
+
+KNCompileOutputReceiver *KNCodeEditor::compileOutput()
+{
+    return m_compileOutput;
+}
+
+void KNCodeEditor::compile()
+{
+    //Check if compiler is nullptr.
+    if(m_languageMode->compiler()==nullptr ||
+            m_filePath.isEmpty()) //When the file path is empty, ignore it.
+    {
+        //Ignore the compile command.
+        return;
+    }
+    //Check the compile output.
+    ;
+    //Reset the output data.
+//    m_compileOutput;
+    //Compile file.
+    m_languageMode->compiler()->compile(m_filePath);
 }
 
 QString KNCodeEditor::filePath() const

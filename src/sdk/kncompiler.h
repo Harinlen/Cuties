@@ -16,32 +16,41 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KNLANGUAGEMODE_H
-#define KNLANGUAGEMODE_H
+#ifndef KNCOMPILER_H
+#define KNCOMPILER_H
+
+#include <QScopedPointer>
+#include <QProcess>
+#include <QStringList>
 
 #include <QObject>
 
-class KNHighlighter;
-class KNCompiler;
-class KNLanguageMode : public QObject
+class KNConnectionHandler;
+class KNCompiler : public QObject
 {
     Q_OBJECT
 public:
-    explicit KNLanguageMode(QObject *parent = 0);
+    explicit KNCompiler(QObject *parent = 0);
+    void compile(const QString &filePath);
+    virtual QString compilerPath()=0;
 
-    KNHighlighter *highlighter();
-    void setHighlighter(KNHighlighter *highlighter);
+signals:
 
-    QString languageName() const;
-    void setLanguageName(const QString &languageName);
+public slots:
 
-    KNCompiler *compiler() const;
-    void setCompiler(KNCompiler *compiler);
+protected:
+    virtual QStringList getVersionArgs()=0;
+    virtual QStringList getCompileArgs(const QString &filePath)=0;
+    virtual QString environmentsArgs()=0;
+
+private slots:
+    void onActionReadyForOutput();
+    void onActionFinished(const int &exitCode,
+                          QProcess::ExitStatus exitStatus);
 
 private:
-    KNHighlighter *m_highlighter;
-    KNCompiler *m_compiler;
-    QString m_languageName;
+    QScopedPointer<QProcess> m_compilerProcess;
+    KNConnectionHandler *m_compilerHandle;
 };
 
-#endif // KNLANGUAGEMODE_H
+#endif // KNCOMPILER_H

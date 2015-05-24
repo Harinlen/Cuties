@@ -101,6 +101,9 @@ void KNTabManager::setSidebar(KNSidebar *sidebar)
     sidebar->addCategoryAction(File, m_actions[Close]);
     sidebar->addCategoryAction(File, m_actions[CloseAll]);
     sidebar->addCategoryAction(File, m_actions[CloseAllOthers]);
+
+    //Add actions to build menu.
+    sidebar->addCategoryAction(Build, m_actions[Compile]);
 }
 
 QWidget *KNTabManager::contentWidget()
@@ -244,6 +247,7 @@ void KNTabManager::retranslate()
     m_actions[Close]->setText(tr("Close"));
     m_actions[CloseAll]->setText(tr("Close All"));
     m_actions[CloseAllOthers]->setText(tr("Close All Other Files"));
+    m_actions[Compile]->setText(tr("Compile"));
 
     //Translate title.
     m_untitledPrefix=tr("Untitled");
@@ -366,6 +370,17 @@ void KNTabManager::onActionCloseAllOthers()
     m_container->setFixedHeight(KNTabManagerItem::itemHeight());
 }
 
+void KNTabManager::onActionCompile()
+{
+    //Check current item, ignore the null item.
+    if(m_currentItem==nullptr)
+    {
+        return;
+    }
+    //Compile the current item.
+    m_currentItem->codeEditor()->compile();
+}
+
 inline void KNTabManager::saveItem(KNTabManagerItem *item)
 {
     //Check the current item.
@@ -436,6 +451,7 @@ void KNTabManager::initialActions()
     actionIcon[Close]=":/icon/resource/icons/actions/close.png";
     actionIcon[CloseAll]=":/icon/resource/icons/actions/close.png";
     actionIcon[CloseAllOthers]=":/icon/resource/icons/actions/close.png";
+    actionIcon[Compile]=":/icon/resource/icons/actions/compile.png";
 
     for(int i=0; i<TabManagerActionCount; i++)
     {
@@ -471,6 +487,9 @@ void KNTabManager::initialActions()
             this, SLOT(onActionCloseAll()));
     connect(m_actions[CloseAllOthers], SIGNAL(triggered()),
             this, SLOT(onActionCloseAllOthers()));
+
+    connect(m_actions[Compile], SIGNAL(triggered()),
+            this, SLOT(onActionCompile()));
 }
 
 KNCodeEditorUnibar *KNTabManager::unibar() const
