@@ -29,6 +29,7 @@
 #include "kncodeeditorunibar.h"
 #include "kntabmanageritem.h"
 #include "kntabmanagercontent.h"
+#include "kncompiledockbase.h"
 #include "knglobal.h"
 
 #include "kntabmanager.h"
@@ -44,6 +45,7 @@ KNTabManager::KNTabManager(QWidget *parent) :
     m_bottomShadow(new KNSideShadowWidget(KNSideShadow::BottomShadow, this)),
     m_content(new KNTabManagerContent(this)),
     m_currentItem(nullptr),
+    m_compileDock(nullptr),
     m_untitledCounter(0)
 {
     setObjectName("TabManager");
@@ -81,6 +83,9 @@ KNTabManager::KNTabManager(QWidget *parent) :
     //Link scrollbar signals.
     connect(verticalScrollBar(), &QScrollBar::valueChanged,
             this, &KNTabManager::onActionVerticalValueChanged);
+
+    //Configure content.
+    m_content->setMinimumHeight(81);
 
     //Initial the actions.
     initialActions();
@@ -174,6 +179,11 @@ void KNTabManager::setCurrentIndex(int index)
     {
         m_unibar->setEditor(m_currentItem->codeEditor());
     }
+    //Connect the compile bar to the editor.
+    if(m_compileDock!=nullptr)
+    {
+        m_compileDock->setOutputReceiver(m_currentItem->codeEditor()->outputReceiver());
+    }
 }
 
 void KNTabManager::setCurrentItem(KNTabManagerItem *item)
@@ -186,6 +196,10 @@ void KNTabManager::setCurrentItem(KNTabManagerItem *item)
         if(m_unibar!=nullptr)
         {
             m_unibar->setEditor(nullptr);
+        }
+        if(m_compileDock!=nullptr)
+        {
+            m_compileDock->setOutputReceiver(nullptr);
         }
         return;
     }
@@ -490,6 +504,17 @@ void KNTabManager::initialActions()
 
     connect(m_actions[Compile], SIGNAL(triggered()),
             this, SLOT(onActionCompile()));
+}
+
+KNCompileDockBase *KNTabManager::compileDock() const
+{
+    return m_compileDock;
+}
+
+void KNTabManager::setCompileDock(KNCompileDockBase *compileDock)
+{
+    //Save the compile dock pointer.
+    m_compileDock = compileDock;
 }
 
 KNCodeEditorUnibar *KNTabManager::unibar() const

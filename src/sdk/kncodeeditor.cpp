@@ -149,7 +149,7 @@ void KNCodeEditor::setEncoded(const QString &encoded)
     m_codec = encoded;
 }
 
-KNCompileOutputReceiver *KNCodeEditor::compileOutput()
+KNCompileOutputReceiver *KNCodeEditor::outputReceiver()
 {
     return m_compileOutput;
 }

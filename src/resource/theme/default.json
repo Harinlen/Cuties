@@ -6,6 +6,13 @@
         "Parent" : "Application",
         "Window" : "#1F1F1F"
     },
+    "CompileDockTextOutput" : {
+        "Parent" : "MainWindow",
+        "Base" : "#00000000",
+        "Text" : "#bababa",
+        "Highlight" : "#00000000",
+        "HighlightedText" : "#f7cf3d"
+    },
     "Sidebar" : {
         "Parent" : "MainWindow",
         "Window" : "#5d5d5d"

@@ -20,22 +20,30 @@
 
 KNCompileOutputReceiver::KNCompileOutputReceiver(QObject *parent) :
     QObject(parent),
-    m_outputText(QString())
+    m_compileOutputText(QString())
 {
 }
 
-QString KNCompileOutputReceiver::outputText() const
+QString KNCompileOutputReceiver::compileOutputText() const
 {
-    return m_outputText;
+    return m_compileOutputText;
 }
 
-void KNCompileOutputReceiver::setOutputText(const QString &outputText)
+void KNCompileOutputReceiver::setCompileOutputText(const QString &outputText)
 {
-    m_outputText = outputText;
+    m_compileOutputText = outputText;
+    emit compileOutputTextChange(m_compileOutputText);
+}
+
+void KNCompileOutputReceiver::appendCompileOutputText(const QString &text)
+{
+    m_compileOutputText.append(text);
+    emit compileOutputTextChange(m_compileOutputText);
 }
 
 void KNCompileOutputReceiver::clearOutputText()
 {
-    m_outputText.clear();
+    m_compileOutputText.clear();
+    emit compileOutputTextChange(m_compileOutputText);
 }
 

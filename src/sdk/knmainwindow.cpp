@@ -17,11 +17,13 @@
  */
 #include <QPropertyAnimation>
 #include <QBoxLayout>
+#include <QSplitter>
 
 #include "knwelcomebase.h"
 #include "kntabmanager.h"
 #include "knsidebar.h"
 #include "knsidetabcontentcontainer.h"
+#include "kncompiledockbase.h"
 #include "knlabelanimebutton.h"
 #include "kncodeeditorunibar.h"
 
@@ -38,7 +40,8 @@ KNMainWindow::KNMainWindow(QWidget *parent) :
     m_tabContentContainer(new KNSideTabContentContainer(this)),
     m_headerLayout(new QBoxLayout(QBoxLayout::TopToBottom)),
     m_welcomeIn(generateAnime()),
-    m_welcomeOut(generateAnime())
+    m_welcomeOut(generateAnime()),
+    m_topDockArea(new QSplitter(Qt::Horizontal, this))
 {
     setObjectName("MainWindow");
     //Set properties.
@@ -66,9 +69,16 @@ KNMainWindow::KNMainWindow(QWidget *parent) :
     m_headerLayout->setParent(contentLayout->widget());
     m_headerLayout->setContentsMargins(0,0,0,0);
     m_headerLayout->setSpacing(0);
+
     contentLayout->addLayout(m_headerLayout);
 
-    contentLayout->addWidget(m_tabManager->contentWidget(), 1);
+    QSplitter *dockSplitter=new QSplitter(Qt::Vertical, this);
+    dockSplitter->setContentsMargins(0,0,0,0);
+    dockSplitter->setHandleWidth(0);
+    contentLayout->addWidget(dockSplitter, 1);
+
+    dockSplitter->addWidget(m_topDockArea);
+    dockSplitter->addWidget(m_tabManager->contentWidget());
 
     //Configure sidebar button.
     m_expandSidebar->setPixmap(QPixmap(":/image/resource/images/expand.png"));
@@ -98,6 +108,13 @@ KNWelcomeBase *KNMainWindow::welcome() const
 void KNMainWindow::addSidebarElement()
 {
     ;
+}
+
+void KNMainWindow::addTopDockWidget(QWidget *widget)
+{
+    Q_ASSERT(widget!=nullptr);
+    //Add the widget to dock area
+    m_topDockArea->addWidget(widget);
 }
 
 void KNMainWindow::setWelcome(KNWelcomeBase *welcome)
@@ -130,6 +147,14 @@ void KNMainWindow::setUnibar(KNCodeEditorUnibar *widget)
     m_headerLayout->addWidget(widget);
     //Raise the sidebar container.
     m_tabContentContainer->raise();
+}
+
+void KNMainWindow::setCompileDock(KNCompileDockBase *compileDock)
+{
+    //Add the compile dock to the top area.
+    addTopDockWidget(compileDock);
+    //Give the compile dock to tab manager.
+    m_tabManager->setCompileDock(compileDock);
 }
 
 void KNMainWindow::resizeEvent(QResizeEvent *event)

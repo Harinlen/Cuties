@@ -28,9 +28,11 @@
 
 //Ports
 #include "knwelcomebase.h"
+#include "kncompiledockbase.h"
 
 //Plugins
 #include "plugins/knwelcome/knwelcome.h"
+#include "plugins/kncompiledock/kncompiledock.h"
 
 #include "knpluginmanager.h"
 
@@ -45,6 +47,7 @@ void KNPluginManager::loadPlugins()
 {
     //Set tab manager.
     m_mainWindow->setUnibar(new KNCodeEditorUnibar);
+    m_mainWindow->setCompileDock(new KNCompileDock);
 
     //Load welcome.
 //    m_mainWindow->setWelcome(new KNWelcome);

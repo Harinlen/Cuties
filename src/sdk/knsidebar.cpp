@@ -86,7 +86,7 @@ KNSidebar::KNSidebar(QWidget *parent) :
     categoryIcons[Edit]=":/icon/resource/icons/category/Edit.png";
     categoryIcons[View]=":/icon/resource/icons/category/View.png";
     categoryIcons[Search]=":/icon/resource/icons/category/Search.png";
-    categoryIcons[Build]=":/icon/resource/icons/category/Run.png";
+    categoryIcons[Build]=":/icon/resource/icons/category/Build.png";
     categoryIcons[Debug]=":/icon/resource/icons/category/Debug.png";
     categoryIcons[Tools]=":/icon/resource/icons/category/Tools.png";
     categoryIcons[Tabs]=":/icon/resource/icons/category/Tabs.png";

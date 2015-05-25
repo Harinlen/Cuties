@@ -16,29 +16,22 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KNCOMPILEOUTPUTRECEIVER_H
-#define KNCOMPILEOUTPUTRECEIVER_H
+#ifndef KNCOMPILEDOCKBASE_H
+#define KNCOMPILEDOCKBASE_H
 
-#include <QObject>
+#include <QWidget>
 
-class KNCompileOutputReceiver : public QObject
+class KNCompileOutputReceiver;
+class KNCompileDockBase : public QWidget
 {
     Q_OBJECT
 public:
-    explicit KNCompileOutputReceiver(QObject *parent = 0);
-
-    QString compileOutputText() const;
-    void setCompileOutputText(const QString &compileOutputText);
-    void appendCompileOutputText(const QString &text);
-    void clearOutputText();
+    KNCompileDockBase(QWidget *parent = 0):QWidget(parent){}
 
 signals:
-    void compileOutputTextChange(const QString &data);
 
 public slots:
-
-private:
-    QString m_compileOutputText;
+    virtual void setOutputReceiver(KNCompileOutputReceiver *receiver)=0;
 };
 
-#endif // KNCOMPILEOUTPUTRECEIVER_H
+#endif // KNCOMPILEDOCKBASE_H

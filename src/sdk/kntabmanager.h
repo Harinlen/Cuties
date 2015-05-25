@@ -26,6 +26,7 @@
 class QSignalMapper;
 class QBoxLayout;
 class KNSidebar;
+class KNCompileDockBase;
 class KNTabManagerItem;
 class KNSideShadowWidget;
 class KNTabManagerContent;
@@ -39,6 +40,8 @@ public:
     QWidget *contentWidget();
     KNCodeEditorUnibar *unibar() const;
     void setUnibar(KNCodeEditorUnibar *unibar);
+    KNCompileDockBase *compileDock() const;
+    void setCompileDock(KNCompileDockBase *compileDock);
 
 signals:
 
@@ -98,6 +101,7 @@ private:
 
     KNTabManagerContent *m_content;
     KNTabManagerItem *m_currentItem;
+    KNCompileDockBase *m_compileDock;
 
     int m_untitledCounter;
     QString m_untitledPrefix;

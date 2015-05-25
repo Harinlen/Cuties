@@ -42,7 +42,7 @@ public:
     QString encoded() const;
     void setEncoded(const QString &encoded);
 
-    KNCompileOutputReceiver *compileOutput();
+    KNCompileOutputReceiver *outputReceiver();
 
     void compile();
 
