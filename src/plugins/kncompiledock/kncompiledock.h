@@ -30,11 +30,16 @@ class KNCompileDock : public KNCompileDockBase
     Q_OBJECT
 public:
     explicit KNCompileDock(QWidget *parent = 0);
+    QAction *visibleControlAction();
 
 signals:
 
 public slots:
     void setOutputReceiver(KNOutputReceiver *receiver);
+
+private slots:
+    void retranslate();
+    void onActionChangeVisible();
 
 private:
     inline QToolButton *generateButton(const QString &iconPath);
@@ -42,6 +47,8 @@ private:
     QPlainTextEdit *m_textOutput;
     QTreeView *m_treeViewOutput;
     KNConnectionHandler *m_receiverHandles;
+
+    QAction *m_visible;
 };
 
 #endif // KNCOMPILEDOCK_H

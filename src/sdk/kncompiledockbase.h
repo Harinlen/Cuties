@@ -21,12 +21,14 @@
 
 #include <QWidget>
 
+class QAction;
 class KNOutputReceiver;
 class KNCompileDockBase : public QWidget
 {
     Q_OBJECT
 public:
     KNCompileDockBase(QWidget *parent = 0):QWidget(parent){}
+    virtual QAction *visibleControlAction()=0;
 
 signals:
     void requireGoto(int line, int column);

@@ -20,6 +20,7 @@
 #include <QStandardItemModel>
 #include <QBoxLayout>
 #include <QTreeView>
+#include <QAction>
 #include <QToolButton>
 
 #include "knglobal.h"
@@ -32,7 +33,8 @@ KNCompileDock::KNCompileDock(QWidget *parent) :
     KNCompileDockBase(parent),
     m_textOutput(new QPlainTextEdit(this)),
     m_treeViewOutput(new QTreeView(this)),
-    m_receiverHandles(new KNConnectionHandler(this))
+    m_receiverHandles(new KNConnectionHandler(this)),
+    m_visible(new QAction(this))
 {
     //Set properties.
     setContentsMargins(0,0,0,0);
@@ -100,6 +102,20 @@ KNCompileDock::KNCompileDock(QWidget *parent) :
     m_treeViewOutput->setFont(compileFont);
     //  Palette
     m_treeViewOutput->setPalette(KNGlobal::instance()->getPalette("CompileDockTreeOutput"));
+
+    //Configure the visible actions.
+    m_visible->setIcon(QIcon(":/icon/resource/icons/actions/compile_dock.png"));
+    connect(m_visible, SIGNAL(triggered()), this, SLOT(onActionChangeVisible()));
+
+    //Link retranslate.
+    connect(KNGlobal::instance(), &KNGlobal::languageUpdate,
+            this, &KNCompileDock::retranslate);
+    retranslate();
+}
+
+QAction *KNCompileDock::visibleControlAction()
+{
+    return m_visible;
 }
 
 void KNCompileDock::setOutputReceiver(KNOutputReceiver *receiver)
@@ -112,7 +128,11 @@ void KNCompileDock::setOutputReceiver(KNOutputReceiver *receiver)
         //Reset the treeview output.
         m_treeViewOutput->setModel(nullptr);
     }
-
+    //Ignore the null receiver.
+    if(receiver==nullptr)
+    {
+        return;
+    }
     //Link the data change with the text output.
     m_receiverHandles->append(
                 connect(receiver, &KNOutputReceiver::compileOutputTextChange,
@@ -163,6 +183,19 @@ void KNCompileDock::setOutputReceiver(KNOutputReceiver *receiver)
 
     //Update the data right now.
     m_textOutput->setPlainText(receiver->compileOutputText());
+}
+
+void KNCompileDock::retranslate()
+{
+    m_actionButtons[0]->setToolTip(tr("Text View"));
+    m_actionButtons[1]->setToolTip(tr("List View"));
+
+    m_visible->setText(tr("Compile Dock"));
+}
+
+void KNCompileDock::onActionChangeVisible()
+{
+    setVisible(!isVisible());
 }
 
 QToolButton *KNCompileDock::generateButton(const QString &iconPath)

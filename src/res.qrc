@@ -42,5 +42,6 @@
         <file>resource/icons/actions/undo.png</file>
         <file>resource/icons/actions/run.png</file>
         <file>resource/icons/actions/compile.png</file>
+        <file>resource/icons/actions/compile_dock.png</file>
     </qresource>
 </RCC>

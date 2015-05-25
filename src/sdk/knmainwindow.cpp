@@ -155,6 +155,8 @@ void KNMainWindow::setCompileDock(KNCompileDockBase *compileDock)
     addTopDockWidget(compileDock);
     //Give the compile dock to tab manager.
     m_tabManager->setCompileDock(compileDock);
+    //Add the visible action to sidebar menu.
+    m_sidebar->addCategoryAction(View, compileDock->visibleControlAction());
 }
 
 void KNMainWindow::resizeEvent(QResizeEvent *event)
