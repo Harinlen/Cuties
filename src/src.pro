@@ -75,7 +75,8 @@ SOURCES += \
     sdk/kngcccompiler.cpp \
     sdk/kngppcompiler.cpp \
     sdk/kncompileoutputreceiver.cpp \
-    plugins/kncompiledock/kncompiledock.cpp
+    plugins/kncompiledock/kncompiledock.cpp \
+    sdk/kncompileglobal.cpp
 
 HEADERS += \
     sdk/knglobal.h \
@@ -121,7 +122,8 @@ HEADERS += \
     sdk/kngppcompiler.h \
     sdk/kncompileoutputreceiver.h \
     sdk/kncompiledockbase.h \
-    plugins/kncompiledock/kncompiledock.h
+    plugins/kncompiledock/kncompiledock.h \
+    sdk/kncompileglobal.h
 
 RESOURCES += \
     res.qrc

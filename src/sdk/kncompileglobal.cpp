@@ -16,32 +16,37 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KNCOMPILEDOCK_H
-#define KNCOMPILEDOCK_H
+#include "kncompileglobal.h"
 
-#include "kncompiledockbase.h"
+KNCompileGlobal *KNCompileGlobal::m_instance=nullptr;
 
-class QTreeView;
-class QToolButton;
-class QPlainTextEdit;
-class KNConnectionHandler;
-class KNCompileDock : public KNCompileDockBase
+KNCompileGlobal *KNCompileGlobal::instance()
 {
-    Q_OBJECT
-public:
-    explicit KNCompileDock(QWidget *parent = 0);
+    return m_instance==nullptr?m_instance=new KNCompileGlobal:m_instance;
+}
 
-signals:
+KNCompileGlobal::KNCompileGlobal()
+{
+    m_warningIcon=QPixmap(":/image/resource/icons/compile/warning.png");
+    m_errorIcon=QPixmap(":/image/resource/icons/compile/error.png");
+}
 
-public slots:
-    void setOutputReceiver(KNOutputReceiver *receiver);
+QPixmap KNCompileGlobal::warningIcon() const
+{
+    return m_warningIcon;
+}
 
-private:
-    inline QToolButton *generateButton(const QString &iconPath);
-    QToolButton *m_actionButtons[2];
-    QPlainTextEdit *m_textOutput;
-    QTreeView *m_treeViewOutput;
-    KNConnectionHandler *m_receiverHandles;
-};
+void KNCompileGlobal::setWarningIcon(const QPixmap &warningIcon)
+{
+    m_warningIcon = warningIcon;
+}
 
-#endif // KNCOMPILEDOCK_H
+QPixmap KNCompileGlobal::errorIcon() const
+{
+    return m_errorIcon;
+}
+
+void KNCompileGlobal::setErrorIcon(const QPixmap &errorIcon)
+{
+    m_errorIcon = errorIcon;
+}

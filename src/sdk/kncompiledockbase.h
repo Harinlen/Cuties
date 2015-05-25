@@ -21,7 +21,7 @@
 
 #include <QWidget>
 
-class KNCompileOutputReceiver;
+class KNOutputReceiver;
 class KNCompileDockBase : public QWidget
 {
     Q_OBJECT
@@ -29,9 +29,10 @@ public:
     KNCompileDockBase(QWidget *parent = 0):QWidget(parent){}
 
 signals:
+    void requireGoto(int line, int column);
 
 public slots:
-    virtual void setOutputReceiver(KNCompileOutputReceiver *receiver)=0;
+    virtual void setOutputReceiver(KNOutputReceiver *receiver)=0;
 };
 
 #endif // KNCOMPILEDOCKBASE_H

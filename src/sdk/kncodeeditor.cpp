@@ -24,18 +24,22 @@
 #include "kntextedit.h"
 #include "knlanguagemode.h"
 #include "kncompiler.h"
+#include "knconnectionhandler.h"
 #include "kncompileoutputreceiver.h"
 #include "knhighlighter.h"
 
 #include "kncodeeditor.h"
 
+#include <QDebug>
+
 KNCodeEditor::KNCodeEditor(QWidget *parent) :
     QWidget(parent),
     m_editor(new KNTextEdit(this)),
     m_languageMode(nullptr),
+    m_languageModeHandler(new KNConnectionHandler(this)),
     m_filePath(QString()),
     m_codec(QString("UTF-8")),
-    m_compileOutput(new KNCompileOutputReceiver(this))
+    m_outputReceiver(new KNOutputReceiver(this))
 {
     setObjectName("CodeEditor");
     //Set properties.
@@ -90,12 +94,12 @@ void KNCodeEditor::openFile(const QString &filePath)
     }
 }
 
-void KNCodeEditor::saveFile()
+bool KNCodeEditor::saveFile()
 {
     //Check the file path. Ignore the request when it's empty.
     if(m_filePath.isEmpty())
     {
-        return;
+        return false;
     }
     //Try to open the file in write only mode.
     QFile file(m_filePath);
@@ -112,7 +116,9 @@ void KNCodeEditor::saveFile()
 
         //Set the modification to false.
         m_editor->document()->setModified(false);
+        return true;
     }
+    return false;
 }
 
 void KNCodeEditor::setLanguageMode(KNLanguageMode *languageMode)
@@ -121,16 +127,47 @@ void KNCodeEditor::setLanguageMode(KNLanguageMode *languageMode)
     clearLanguageMode();
     //Set new language mode.
     m_languageMode = languageMode;
+    //If the langauge mode set to be null, return.
+    if(m_languageMode==nullptr)
+    {
+        return;
+    }
     //Link the language mode.
     m_languageMode->highlighter()->setDocument(m_editor->document());
+    //Link the language mode with the output.
+    if(m_languageMode->compiler()!=nullptr)
+    {
+        KNCompiler *compiler=m_languageMode->compiler();
+        m_languageModeHandler->append(
+                    connect(compiler, &KNCompiler::compileMessageAppend,
+                            m_outputReceiver, &KNOutputReceiver::appendCompileOutputText));
+        m_languageModeHandler->append(
+                    connect(compiler, &KNCompiler::compileItemAppend,
+                            m_outputReceiver, &KNOutputReceiver::appendCompileOutputItem));
+    }
     //Emit the language mode changed signal.
     emit languageModeChange();
+}
+
+void KNCodeEditor::setTextCursorPosition(int line, int column)
+{
+    //Move the text cursor.
+    QTextCursor cursor=m_editor->textCursor();
+    cursor.setPosition(m_editor->document()->findBlockByNumber(line-1).position());
+    cursor.movePosition(QTextCursor::NextCharacter,
+                        QTextCursor::MoveAnchor,
+                        column-1);
+    m_editor->setTextCursor(cursor);
+    //Set the focus.
+    m_editor->setFocus();
 }
 
 inline void KNCodeEditor::clearLanguageMode()
 {
     if(m_languageMode)
     {
+        //Remove all the connections.
+        m_languageModeHandler->disconnectAll();
         //Delete the original language mode.
         delete m_languageMode;
         //Reset the language mode.
@@ -149,9 +186,9 @@ void KNCodeEditor::setEncoded(const QString &encoded)
     m_codec = encoded;
 }
 
-KNCompileOutputReceiver *KNCodeEditor::outputReceiver()
+KNOutputReceiver *KNCodeEditor::outputReceiver()
 {
-    return m_compileOutput;
+    return m_outputReceiver;
 }
 
 void KNCodeEditor::compile()
@@ -163,10 +200,9 @@ void KNCodeEditor::compile()
         //Ignore the compile command.
         return;
     }
-    //Check the compile output.
-    ;
     //Reset the output data.
-//    m_compileOutput;
+    m_outputReceiver->clearCompileText();
+    m_outputReceiver->clearCompileModel();
     //Compile file.
     m_languageMode->compiler()->compile(m_filePath);
 }

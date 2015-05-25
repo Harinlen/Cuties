@@ -17,7 +17,10 @@
  */
 #include <QPlainTextEdit>
 #include <QStackedLayout>
+#include <QStandardItemModel>
 #include <QBoxLayout>
+#include <QTreeView>
+#include <QToolButton>
 
 #include "knglobal.h"
 #include "knconnectionhandler.h"
@@ -28,10 +31,11 @@
 KNCompileDock::KNCompileDock(QWidget *parent) :
     KNCompileDockBase(parent),
     m_textOutput(new QPlainTextEdit(this)),
+    m_treeViewOutput(new QTreeView(this)),
     m_receiverHandles(new KNConnectionHandler(this))
 {
     //Set properties.
-    setMinimumHeight(160);
+    setContentsMargins(0,0,0,0);
     //Set the main layout.
     QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::TopToBottom,
                                           this);
@@ -51,29 +55,122 @@ KNCompileDock::KNCompileDock(QWidget *parent) :
     mainLayout->addLayout(contentLayout ,1);
 
     //Add widgets.
+    m_actionButtons[0]=generateButton(":/image/resource/icons/compile/text_mode.png");
+    m_actionButtons[0]->setChecked(true);
+    m_actionButtons[1]=generateButton(":/image/resource/icons/compile/list_mode.png");
+    buttonLayout->addWidget(m_actionButtons[0]);
+    buttonLayout->addWidget(m_actionButtons[1]);
+    buttonLayout->addStretch();
     contentLayout->addWidget(m_textOutput);
+    contentLayout->addWidget(m_treeViewOutput);
+    connect(m_actionButtons[0], &QToolButton::released,
+            [=]
+            {
+                m_actionButtons[1]->setChecked(false);
+                contentLayout->setCurrentWidget(m_textOutput);
+            });
+    connect(m_actionButtons[1], &QToolButton::released,
+            [=]
+            {
+                m_actionButtons[0]->setChecked(false);
+                contentLayout->setCurrentWidget(m_treeViewOutput);
+            });
 
     //Configure text output.
     //  Properties
+    m_textOutput->setMinimumHeight(0);
     m_textOutput->setFrameStyle(QFrame::NoFrame);
     m_textOutput->setReadOnly(true);
+    m_textOutput->setWordWrapMode(QTextOption::NoWrap);
+    //  Font
+    QFont compileFont=m_textOutput->font();
+    compileFont.setFamily("Monaco");
+    m_textOutput->setFont(compileFont);
     //  Palette
     m_textOutput->setPalette(KNGlobal::instance()->getPalette("CompileDockTextOutput"));
+
+    //Configure tree view output.
+    //  Properties
+    m_treeViewOutput->setIndentation(0);
+    m_treeViewOutput->setMinimumHeight(0);
+    m_treeViewOutput->setFrameStyle(QFrame::NoFrame);
+    m_treeViewOutput->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
+    m_treeViewOutput->setHeaderHidden(true);
+    //  Font
+    m_treeViewOutput->setFont(compileFont);
+    //  Palette
+    m_treeViewOutput->setPalette(KNGlobal::instance()->getPalette("CompileDockTreeOutput"));
 }
 
-void KNCompileDock::setOutputReceiver(KNCompileOutputReceiver *receiver)
+void KNCompileDock::setOutputReceiver(KNOutputReceiver *receiver)
 {
-    //If there's previous connections, then clear the previous connection.
+    //If there's previous connections
     if(!m_receiverHandles->isEmpty())
     {
+        //Clear the previous connection.
         m_receiverHandles->disconnectAll();
+        //Reset the treeview output.
+        m_treeViewOutput->setModel(nullptr);
     }
 
     //Link the data change with the text output.
     m_receiverHandles->append(
-                connect(receiver, &KNCompileOutputReceiver::compileOutputTextChange,
+                connect(receiver, &KNOutputReceiver::compileOutputTextChange,
                         m_textOutput, &QPlainTextEdit::setPlainText));
+    QStandardItemModel *outputModel=receiver->compileOutputModel();
+    m_treeViewOutput->setModel(outputModel);
+    m_receiverHandles->append(
+                connect(m_treeViewOutput, &QTreeView::doubleClicked,
+                        [=](const QModelIndex &index)
+                        {
+                            //Ignore the invaild request.
+                            if(index.data(Qt::UserRole+1).toInt()==-1)
+                            {
+                                return;
+                            }
+                            //Emit the goto signal.
+                            emit requireGoto(index.data(Qt::UserRole+1).toString().toInt(),
+                                             index.data(Qt::UserRole+2).toString().toInt());
+                        }));
+    m_receiverHandles->append(
+                connect(m_treeViewOutput->selectionModel(), &QItemSelectionModel::currentChanged,
+                        [=](const QModelIndex & current, const QModelIndex & previous)
+                        {
+                            //If previous is available to use.
+                            if(previous.isValid() &&
+                                    previous.data(Qt::UserRole+1).toInt()!=-1)
+                            {
+                                //Reset the previous display data.
+                                outputModel->setData(previous,
+                                                     previous.data(Qt::UserRole+4),
+                                                     Qt::DisplayRole);
+                            }
+                            //If the Qt::UserRole+1 is -1, means this index
+                            //has no data to expand.
+                            if(current.data(Qt::UserRole+1).toInt()==-1)
+                            {
+                                return;
+                            }
+                            //Change the current display data.
+                            outputModel->setData(current,
+                                                 current.data(Qt::UserRole+4).toString() + "\n"
+                                                 + QString("  Line %1, Column %2\n").arg(
+                                                     current.data(Qt::UserRole+1).toString(),
+                                                     current.data(Qt::UserRole+2).toString())
+                                                 + current.data(Qt::UserRole+5).toString(),
+                                                 Qt::DisplayRole);
+                        }));
 
     //Update the data right now.
     m_textOutput->setPlainText(receiver->compileOutputText());
+}
+
+QToolButton *KNCompileDock::generateButton(const QString &iconPath)
+{
+    QToolButton *button=new QToolButton(this);
+    button->setAutoRaise(true);
+    button->setCheckable(true);
+    button->setIcon(QIcon(iconPath));
+    button->setPalette(KNGlobal::instance()->getPalette("CompileDockButton"));
+    return button;
 }

@@ -22,6 +22,7 @@
 #include <QScopedPointer>
 #include <QProcess>
 #include <QStringList>
+#include <QStandardItem>
 
 #include <QObject>
 
@@ -35,6 +36,8 @@ public:
     virtual QString compilerPath()=0;
 
 signals:
+    void compileMessageAppend(QString message);
+    void compileItemAppend(QStandardItem *item);
 
 public slots:
 
@@ -42,6 +45,9 @@ protected:
     virtual QStringList getVersionArgs()=0;
     virtual QStringList getCompileArgs(const QString &filePath)=0;
     virtual QString environmentsArgs()=0;
+    virtual void onActionMessageAppend(QString message);
+    virtual void onActionCompileFinished();
+    QString filePath();
 
 private slots:
     void onActionReadyForOutput();
@@ -49,6 +55,7 @@ private slots:
                           QProcess::ExitStatus exitStatus);
 
 private:
+    QString m_filePath;
     QScopedPointer<QProcess> m_compilerProcess;
     KNConnectionHandler *m_compilerHandle;
 };

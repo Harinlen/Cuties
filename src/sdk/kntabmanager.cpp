@@ -391,44 +391,47 @@ void KNTabManager::onActionCompile()
     {
         return;
     }
-    //Compile the current item.
-    m_currentItem->codeEditor()->compile();
+    //Save the current item first.
+    if(saveItem(m_currentItem))
+    {
+        //Compile the current item.
+        m_currentItem->codeEditor()->compile();
+    }
 }
 
-inline void KNTabManager::saveItem(KNTabManagerItem *item)
+inline bool KNTabManager::saveItem(KNTabManagerItem *item)
 {
     //Check the current item.
     if(item==nullptr)
     {
-        return;
+        return false;
     }
     //Get the code editor.
     KNCodeEditor *codeEditor=item->codeEditor();
     //Check if the file path can save or not.
     if(codeEditor->filePath().isEmpty())
     {
-        saveAsItem(item);
-        return;
+        return saveAsItem(item);
     }
     //Save the file.
-    codeEditor->saveFile();
+    return codeEditor->saveFile();
 }
 
-inline void KNTabManager::saveAsItem(KNTabManagerItem *item)
+inline bool KNTabManager::saveAsItem(KNTabManagerItem *item)
 {
     //Get the file path.
     QString filePath=QFileDialog::getSaveFileName(this,
                                                   tr("Save"));
     if(filePath.isEmpty())
     {
-        return;
+        return false;
     }
     //Get the code editor.
     KNCodeEditor *codeEditor=item->codeEditor();
     //Set the file path.
     codeEditor->setFilePath(filePath);
     //Save the file.
-    codeEditor->saveFile();
+    return codeEditor->saveFile();
 }
 
 void KNTabManager::removeItem(KNTabManagerItem *item)
@@ -515,6 +518,18 @@ void KNTabManager::setCompileDock(KNCompileDockBase *compileDock)
 {
     //Save the compile dock pointer.
     m_compileDock = compileDock;
+    //Link the compile dock.
+    connect(m_compileDock, &KNCompileDockBase::requireGoto,
+            [=](const int &line, const int &column)
+            {
+                //Check current item first.
+                if(m_currentItem==nullptr)
+                {
+                    return;
+                }
+                //Use the set position function to goto the right position.
+                m_currentItem->codeEditor()->setTextCursorPosition(line, column);
+            });
 }
 
 KNCodeEditorUnibar *KNTabManager::unibar() const

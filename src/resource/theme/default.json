@@ -6,12 +6,25 @@
         "Parent" : "Application",
         "Window" : "#1F1F1F"
     },
+    "CompileDockButton" : {
+        "Parent" : "MainWindow",
+        "Button" : "#222222"
+    },
     "CompileDockTextOutput" : {
         "Parent" : "MainWindow",
         "Base" : "#00000000",
         "Text" : "#bababa",
         "Highlight" : "#00000000",
-        "HighlightedText" : "#f7cf3d"
+        "HighlightedText" : "#f7cf3d",
+        "Button" : "#535353"
+    },
+    "CompileDockTreeOutput" : {
+        "Parent" : "MainWindow",
+        "Base" : "#00000000",
+        "Text" : "#bababa",
+        "Highlight" : "#f7cf3d",
+        "HighlightedText" : "#000000",
+        "Button" : "#535353"
     },
     "Sidebar" : {
         "Parent" : "MainWindow",

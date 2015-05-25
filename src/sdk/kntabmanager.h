@@ -73,8 +73,8 @@ private slots:
     void onActionCompile();
 
 private:
-    inline void saveItem(KNTabManagerItem *item);
-    inline void saveAsItem(KNTabManagerItem *item);
+    inline bool saveItem(KNTabManagerItem *item);
+    inline bool saveAsItem(KNTabManagerItem *item);
     inline void removeItem(KNTabManagerItem *item);
     enum TabManagerActions
     {

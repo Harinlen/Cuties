@@ -22,8 +22,9 @@
 #include <QWidget>
 
 class KNTextEdit;
+class KNConnectionHandler;
 class KNLanguageMode;
-class KNCompileOutputReceiver;
+class KNOutputReceiver;
 class KNCodeEditor : public QWidget
 {
     Q_OBJECT
@@ -32,7 +33,7 @@ public:
     ~KNCodeEditor();
     KNLanguageMode *languageMode() const;
     void openFile(const QString &filePath);
-    void saveFile();
+    bool saveFile();
 
     KNTextEdit *textEditor() const;
 
@@ -42,7 +43,7 @@ public:
     QString encoded() const;
     void setEncoded(const QString &encoded);
 
-    KNCompileOutputReceiver *outputReceiver();
+    KNOutputReceiver *outputReceiver();
 
     void compile();
 
@@ -54,14 +55,16 @@ signals:
 public slots:
     void setLanguageMode(const QString &suffix);
     void setLanguageMode(KNLanguageMode *languageMode);
+    void setTextCursorPosition(int line, int column);
 
 private:
     inline void clearLanguageMode();
     KNTextEdit *m_editor;
     KNLanguageMode *m_languageMode;
+    KNConnectionHandler *m_languageModeHandler;
 
     QString m_filePath, m_codec;
-    KNCompileOutputReceiver *m_compileOutput;
+    KNOutputReceiver *m_outputReceiver;
 };
 
 #endif // KNCODEEDITOR_H

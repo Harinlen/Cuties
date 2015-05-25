@@ -36,12 +36,16 @@ protected:
     QStringList getVersionArgs();
     QString environmentsArgs();
     QStringList getCompileArgs(const QString &filePath);
+    void onActionMessageAppend(QString message);
+    void onActionCompileFinished();
     virtual QStringList compileSwitchArgs();
     virtual QStringList defaultSwitchArgs();
 
 private:
     QString m_gccPath;
     QStringList m_compileSwitchArgs, m_defaultSwitchArgs;
+    QString m_cacheData;
+    QStandardItem *m_cacheItem;
 };
 
 #endif // KNGCCCOMPILER_H

@@ -16,32 +16,25 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KNCOMPILEDOCK_H
-#define KNCOMPILEDOCK_H
+#ifndef KNCOMPILEGLOBAL_H
+#define KNCOMPILEGLOBAL_H
 
-#include "kncompiledockbase.h"
+#include <QPixmap>
 
-class QTreeView;
-class QToolButton;
-class QPlainTextEdit;
-class KNConnectionHandler;
-class KNCompileDock : public KNCompileDockBase
+class KNCompileGlobal
 {
-    Q_OBJECT
 public:
-    explicit KNCompileDock(QWidget *parent = 0);
-
-signals:
-
-public slots:
-    void setOutputReceiver(KNOutputReceiver *receiver);
+    static KNCompileGlobal *instance();
+    QPixmap errorIcon() const;
+    void setErrorIcon(const QPixmap &errorIcon);
+    QPixmap warningIcon() const;
+    void setWarningIcon(const QPixmap &warningIcon);
 
 private:
-    inline QToolButton *generateButton(const QString &iconPath);
-    QToolButton *m_actionButtons[2];
-    QPlainTextEdit *m_textOutput;
-    QTreeView *m_treeViewOutput;
-    KNConnectionHandler *m_receiverHandles;
+    static KNCompileGlobal *m_instance;
+    KNCompileGlobal();
+
+    QPixmap m_errorIcon, m_warningIcon;
 };
 
-#endif // KNCOMPILEDOCK_H
+#endif // KNCOMPILEGLOBAL_H

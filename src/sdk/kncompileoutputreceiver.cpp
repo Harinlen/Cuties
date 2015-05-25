@@ -15,35 +15,56 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include <QStandardItemModel>
 
 #include "kncompileoutputreceiver.h"
 
-KNCompileOutputReceiver::KNCompileOutputReceiver(QObject *parent) :
+#include <QDebug>
+
+KNOutputReceiver::KNOutputReceiver(QObject *parent) :
     QObject(parent),
-    m_compileOutputText(QString())
+    m_compileOutputText(QString()),
+    m_compileOutputModel(new QStandardItemModel(this))
 {
 }
 
-QString KNCompileOutputReceiver::compileOutputText() const
+QString KNOutputReceiver::compileOutputText() const
 {
     return m_compileOutputText;
 }
 
-void KNCompileOutputReceiver::setCompileOutputText(const QString &outputText)
+QStandardItemModel *KNOutputReceiver::compileOutputModel()
+{
+    return m_compileOutputModel;
+}
+
+void KNOutputReceiver::setCompileOutputText(const QString &outputText)
 {
     m_compileOutputText = outputText;
     emit compileOutputTextChange(m_compileOutputText);
 }
 
-void KNCompileOutputReceiver::appendCompileOutputText(const QString &text)
+void KNOutputReceiver::appendCompileOutputText(const QString &text)
 {
     m_compileOutputText.append(text);
     emit compileOutputTextChange(m_compileOutputText);
 }
 
-void KNCompileOutputReceiver::clearOutputText()
+void KNOutputReceiver::appendCompileOutputItem(QStandardItem *item)
+{
+    //Add item to model.
+    m_compileOutputModel->appendRow(item);
+}
+
+void KNOutputReceiver::clearCompileText()
 {
     m_compileOutputText.clear();
     emit compileOutputTextChange(m_compileOutputText);
+}
+
+void KNOutputReceiver::clearCompileModel()
+{
+    //Clear the model.
+    m_compileOutputModel->clear();
 }
 

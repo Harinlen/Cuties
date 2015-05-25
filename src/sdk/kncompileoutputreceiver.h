@@ -16,29 +16,36 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KNCOMPILEOUTPUTRECEIVER_H
-#define KNCOMPILEOUTPUTRECEIVER_H
+#ifndef KNOUTPUTRECEIVER_H
+#define KNOUTPUTRECEIVER_H
 
 #include <QObject>
 
-class KNCompileOutputReceiver : public QObject
+class QStandardItem;
+class QStandardItemModel;
+class KNOutputReceiver : public QObject
 {
     Q_OBJECT
 public:
-    explicit KNCompileOutputReceiver(QObject *parent = 0);
+    explicit KNOutputReceiver(QObject *parent = 0);
 
     QString compileOutputText() const;
-    void setCompileOutputText(const QString &compileOutputText);
-    void appendCompileOutputText(const QString &text);
-    void clearOutputText();
+    QStandardItemModel *compileOutputModel();
 
 signals:
     void compileOutputTextChange(const QString &data);
 
 public slots:
+    void appendCompileOutputText(const QString &text);
+    void appendCompileOutputItem(QStandardItem *item);
+    void clearCompileText();
+    void clearCompileModel();
+    void setCompileOutputText(const QString &compileOutputText);
 
 private:
+    //Output datas.
     QString m_compileOutputText;
+    QStandardItemModel *m_compileOutputModel;
 };
 
-#endif // KNCOMPILEOUTPUTRECEIVER_H
+#endif // KNOUTPUTRECEIVER_H

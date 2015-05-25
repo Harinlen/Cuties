@@ -11,6 +11,10 @@
         <file>resource/images/indicator.png</file>
         <file>resource/images/expand.png</file>
         <file>resource/images/tabs.png</file>
+        <file>resource/icons/compile/error.png</file>
+        <file>resource/icons/compile/warning.png</file>
+        <file>resource/icons/compile/list_mode.png</file>
+        <file>resource/icons/compile/text_mode.png</file>
     </qresource>
     <qresource prefix="/icon">
         <file>resource/icons/file/PlainText/PlainText_64x64.png</file>
