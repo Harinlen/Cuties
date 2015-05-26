@@ -39,8 +39,12 @@ KNCompileDock::KNCompileDock(QWidget *parent) :
     m_compileProgress(new KNCompileProgress(this)),
     m_visible(new QAction(this))
 {
+    setObjectName("CompileDock");
     //Set properties.
+    setAutoFillBackground(true);
     setContentsMargins(0,0,0,0);
+    //Set palette.
+    setPalette(KNGlobal::instance()->getPalette(objectName()));
     //Set the main layout.
     QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::TopToBottom,
                                           this);

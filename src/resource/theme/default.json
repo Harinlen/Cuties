@@ -18,12 +18,16 @@
         "Text" : "#FF0000",
         "AlternateBase" : "#00FF00"
     },
-    "CompileDockButton" : {
+    "CompileDock" : {
         "Parent" : "MainWindow",
+        "Window" : "#343434"
+    },
+    "CompileDockButton" : {
+        "Parent" : "CompileDock",
         "Button" : "#222222"
     },
     "CompileDockTextOutput" : {
-        "Parent" : "MainWindow",
+        "Parent" : "CompileDock",
         "Base" : "#00000000",
         "Text" : "#bababa",
         "Highlight" : "#00000000",
@@ -31,7 +35,7 @@
         "Button" : "#535353"
     },
     "CompileDockTreeOutput" : {
-        "Parent" : "MainWindow",
+        "Parent" : "CompileDock",
         "Base" : "#00000000",
         "Text" : "#bababa",
         "Highlight" : "#f7cf3d",

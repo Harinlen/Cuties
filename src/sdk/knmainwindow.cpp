@@ -18,16 +18,20 @@
 #include <QPropertyAnimation>
 #include <QBoxLayout>
 #include <QSplitter>
+#include <QTimeLine>
 
 #include "knwelcomebase.h"
 #include "kntabmanager.h"
 #include "knsidebar.h"
+#include "kndockarea.h"
 #include "knsidetabcontentcontainer.h"
 #include "kncompiledockbase.h"
 #include "knlabelanimebutton.h"
 #include "kncodeeditorunibar.h"
 
 #include "knmainwindow.h"
+
+#include <QDebug>
 
 KNMainWindow::KNMainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -41,12 +45,14 @@ KNMainWindow::KNMainWindow(QWidget *parent) :
     m_headerLayout(new QBoxLayout(QBoxLayout::TopToBottom)),
     m_welcomeIn(generateAnime()),
     m_welcomeOut(generateAnime()),
-    m_topDockArea(new QSplitter(Qt::Horizontal, this)),
+    m_dockSplitter(new QSplitter(Qt::Vertical, this)),
+    m_topDockArea(new KNDockArea(Qt::Horizontal, this)),
     m_compileProgress(nullptr)
 {
     setObjectName("MainWindow");
     //Set properties.
-    setMinimumSize(950, 600);
+//    setMinimumSize(950, 600);
+    setMinimumSize(470, 300);
 
     //Set central widget and set layout.
     QWidget *container=new QWidget(this);
@@ -73,15 +79,16 @@ KNMainWindow::KNMainWindow(QWidget *parent) :
 
     contentLayout->addLayout(m_headerLayout);
 
-    QSplitter *dockSplitter=new QSplitter(Qt::Vertical, this);
-    dockSplitter->setContentsMargins(0,0,0,0);
-    dockSplitter->setHandleWidth(0);
-    contentLayout->addWidget(dockSplitter, 1);
+    m_dockSplitter->setContentsMargins(0,0,0,0);
+    m_dockSplitter->setHandleWidth(0);
+    contentLayout->addWidget(m_dockSplitter, 1);
 
-    dockSplitter->addWidget(m_topDockArea);
-    dockSplitter->addWidget(m_tabManager->contentWidget());
+    m_dockSplitter->addWidget(m_topDockArea);
+    m_dockSplitter->addWidget(m_tabManager->contentWidget());
 
-    dockSplitter->setCollapsible(1, false);
+    m_dockSplitter->setStretchFactor(0, 0);
+    m_dockSplitter->setStretchFactor(1, 1);
+    m_dockSplitter->setCollapsible(1, false);
 
     //Configure sidebar button.
     m_expandSidebar->setPixmap(QPixmap(":/image/resource/images/expand.png"));
@@ -154,6 +161,8 @@ void KNMainWindow::setUnibar(KNCodeEditorUnibar *widget)
 
 void KNMainWindow::setCompileDock(KNCompileDockBase *compileDock)
 {
+    //Hide the compile dock as default.
+    compileDock->hide();
     //Add the compile dock to the top area.
     addTopDockWidget(compileDock);
     //Give the compile dock to tab manager.
@@ -168,6 +177,21 @@ void KNMainWindow::setCompileDock(KNCompileDockBase *compileDock)
                             -m_compileProgress->height());
     //Hide the progress at default.
     m_compileProgress->hide();
+}
+
+void KNMainWindow::showTopDockArea()
+{
+    const QObjectList &topWidgetList=m_topDockArea->children();
+    for(QObjectList::const_iterator i=topWidgetList.begin();
+        i!=topWidgetList.end();
+        ++i)
+    {
+        QWidget *currentWidget=qobject_cast<QWidget *>(*i);
+        if(currentWidget->isVisible())
+        {
+            qDebug()<<"F";
+        }
+    }
 }
 
 void KNMainWindow::onActionStartUp()

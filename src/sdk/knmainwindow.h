@@ -25,6 +25,7 @@ class QPropertyAnimation;
 class QBoxLayout;
 class QSplitter;
 class QLabel;
+class KNDockArea;
 class KNCompileDockBase;
 class KNSidebar;
 class KNTabManager;
@@ -47,6 +48,7 @@ public slots:
     void setWelcome(KNWelcomeBase *welcome);
     void setUnibar(KNCodeEditorUnibar *widget);
     void setCompileDock(KNCompileDockBase *compileDock);
+    void showTopDockArea();
     void onActionStartUp();
 
 protected:
@@ -67,7 +69,8 @@ private:
     KNSideTabContentContainer *m_tabContentContainer;
     QBoxLayout *m_headerLayout;
     QPropertyAnimation *m_welcomeIn, *m_welcomeOut;
-    QSplitter *m_topDockArea;
+    QSplitter *m_dockSplitter;
+    KNDockArea *m_topDockArea;
     QWidget *m_compileProgress;
 };
 

@@ -16,17 +16,22 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kntabmanagercontent.h"
+#ifndef KNDOCKAREA_H
+#define KNDOCKAREA_H
 
-KNTabManagerContent::KNTabManagerContent(QWidget *parent) :
-    QStackedWidget(parent)
+#include <QSplitter>
+
+class KNDockArea : public QSplitter
 {
-    setSizePolicy(QSizePolicy::MinimumExpanding,
-                  QSizePolicy::MinimumExpanding);
-}
+    Q_OBJECT
+public:
+    explicit KNDockArea(Qt::Orientation orientation, QWidget *parent = 0);
+    void addDockWidget(QWidget *widget);
 
-KNTabManagerContent::~KNTabManagerContent()
-{
+signals:
 
-}
+public slots:
 
+};
+
+#endif // KNDOCKAREA_H
