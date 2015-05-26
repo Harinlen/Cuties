@@ -47,6 +47,7 @@ public slots:
     void setWelcome(KNWelcomeBase *welcome);
     void setUnibar(KNCodeEditorUnibar *widget);
     void setCompileDock(KNCompileDockBase *compileDock);
+    void onActionStartUp();
 
 protected:
     void resizeEvent(QResizeEvent *event);
@@ -67,6 +68,7 @@ private:
     QBoxLayout *m_headerLayout;
     QPropertyAnimation *m_welcomeIn, *m_welcomeOut;
     QSplitter *m_topDockArea;
+    QWidget *m_compileProgress;
 };
 
 #endif // KNMAINWINDOW_H

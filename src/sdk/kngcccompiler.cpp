@@ -155,7 +155,7 @@ void KNGccCompiler::onActionMessageAppend(QString message)
     }
 }
 
-void KNGccCompiler::onActionCompileFinished()
+void KNGccCompiler::onActionCompileFinished(const int &exitCode)
 {
     //Check if there's previous of cache, emit the item.
     if(m_cacheItem!=nullptr)
@@ -189,6 +189,17 @@ void KNGccCompiler::onActionCompileFinished()
         m_cacheItem=nullptr;
         m_cacheData.clear();
     }
+
+    //For GCC, if exit code is 0, means compiled success.
+    if(exitCode==0)
+    {
+        emit compileProgressChange(tr("Compile Success"),
+                                   CompileSuccess);
+        return;
+    }
+    //Or else, means there's error occur.
+    emit compileProgressChange(tr("Compile Failed"),
+                               CompileFailed);
 }
 
 QStringList KNGccCompiler::compileSwitchArgs()

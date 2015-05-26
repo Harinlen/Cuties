@@ -24,6 +24,8 @@
 #include <QToolButton>
 
 #include "knglobal.h"
+#include "kncodeeditor.h"
+#include "kncompileprogress.h"
 #include "knconnectionhandler.h"
 #include "kncompileoutputreceiver.h"
 
@@ -33,7 +35,8 @@ KNCompileDock::KNCompileDock(QWidget *parent) :
     KNCompileDockBase(parent),
     m_textOutput(new QPlainTextEdit(this)),
     m_treeViewOutput(new QTreeView(this)),
-    m_receiverHandles(new KNConnectionHandler(this)),
+    m_editorHandles(new KNConnectionHandler(this)),
+    m_compileProgress(new KNCompileProgress(this)),
     m_visible(new QAction(this))
 {
     //Set properties.
@@ -118,28 +121,45 @@ QAction *KNCompileDock::visibleControlAction()
     return m_visible;
 }
 
-void KNCompileDock::setOutputReceiver(KNOutputReceiver *receiver)
+QWidget *KNCompileDock::compileProgress()
+{
+    return m_compileProgress;
+}
+
+void KNCompileDock::setCodeEditor(KNCodeEditor *editor)
 {
     //If there's previous connections
-    if(!m_receiverHandles->isEmpty())
+    if(!m_editorHandles->isEmpty())
     {
         //Clear the previous connection.
-        m_receiverHandles->disconnectAll();
+        m_editorHandles->disconnectAll();
         //Reset the treeview output.
         m_treeViewOutput->setModel(nullptr);
     }
-    //Ignore the null receiver.
-    if(receiver==nullptr)
+    //Ignore the null editor.
+    if(editor==nullptr)
     {
         return;
     }
+    //Link the editor with compile progress.
+    m_editorHandles->append(
+                connect(editor, &KNCodeEditor::compileProgressChange,
+                        m_compileProgress, &KNCompileProgress::onActionCompileProgressChange));
+    m_editorHandles->append(
+                connect(editor, &KNCodeEditor::requireShowCompileProgress,
+                        m_compileProgress, &KNCompileProgress::showCompileProgress));
+    m_editorHandles->append(
+                connect(editor, &KNCodeEditor::requireHideCompileProgress,
+                        m_compileProgress, &KNCompileProgress::hideCompileProgress));
+    //Get the receiver of the editor.
+    KNOutputReceiver *receiver=editor->outputReceiver();
     //Link the data change with the text output.
-    m_receiverHandles->append(
+    m_editorHandles->append(
                 connect(receiver, &KNOutputReceiver::compileOutputTextChange,
                         m_textOutput, &QPlainTextEdit::setPlainText));
     QStandardItemModel *outputModel=receiver->compileOutputModel();
     m_treeViewOutput->setModel(outputModel);
-    m_receiverHandles->append(
+    m_editorHandles->append(
                 connect(m_treeViewOutput, &QTreeView::doubleClicked,
                         [=](const QModelIndex &index)
                         {
@@ -152,7 +172,7 @@ void KNCompileDock::setOutputReceiver(KNOutputReceiver *receiver)
                             emit requireGoto(index.data(Qt::UserRole+1).toString().toInt(),
                                              index.data(Qt::UserRole+2).toString().toInt());
                         }));
-    m_receiverHandles->append(
+    m_editorHandles->append(
                 connect(m_treeViewOutput->selectionModel(), &QItemSelectionModel::currentChanged,
                         [=](const QModelIndex & current, const QModelIndex & previous)
                         {
@@ -181,7 +201,7 @@ void KNCompileDock::setOutputReceiver(KNOutputReceiver *receiver)
                                                  Qt::DisplayRole);
                         }));
 
-    //Update the data right now.
+    //Update the output data right now.
     m_textOutput->setPlainText(receiver->compileOutputText());
 }
 

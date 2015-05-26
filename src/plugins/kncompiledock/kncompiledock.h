@@ -25,17 +25,19 @@ class QTreeView;
 class QToolButton;
 class QPlainTextEdit;
 class KNConnectionHandler;
+class KNCompileProgress;
 class KNCompileDock : public KNCompileDockBase
 {
     Q_OBJECT
 public:
     explicit KNCompileDock(QWidget *parent = 0);
     QAction *visibleControlAction();
+    QWidget *compileProgress();
 
 signals:
 
 public slots:
-    void setOutputReceiver(KNOutputReceiver *receiver);
+    void setCodeEditor(KNCodeEditor *editor);
 
 private slots:
     void retranslate();
@@ -46,7 +48,8 @@ private:
     QToolButton *m_actionButtons[2];
     QPlainTextEdit *m_textOutput;
     QTreeView *m_treeViewOutput;
-    KNConnectionHandler *m_receiverHandles;
+    KNConnectionHandler *m_editorHandles;
+    KNCompileProgress *m_compileProgress;
 
     QAction *m_visible;
 };

@@ -19,6 +19,7 @@
 #include <QFileInfo>
 #include <QTextStream>
 #include <QTextCodec>
+#include <QTimer>
 
 #include "knglobal.h"
 #include "kntextedit.h"
@@ -144,6 +145,12 @@ void KNCodeEditor::setLanguageMode(KNLanguageMode *languageMode)
         m_languageModeHandler->append(
                     connect(compiler, &KNCompiler::compileItemAppend,
                             m_outputReceiver, &KNOutputReceiver::appendCompileOutputItem));
+        m_languageModeHandler->append(
+                    connect(compiler, &KNCompiler::compileProgressChange,
+                            this, &KNCodeEditor::compileProgressChange));
+        m_languageModeHandler->append(
+                    connect(compiler, &KNCompiler::compileFinished,
+                            [=]{QTimer::singleShot(1300, this, SIGNAL(requireHideCompileProgress()));}));
     }
     //Emit the language mode changed signal.
     emit languageModeChange();
@@ -200,6 +207,8 @@ void KNCodeEditor::compile()
         //Ignore the compile command.
         return;
     }
+    //Ask to show the progress.
+    emit requireShowCompileProgress();
     //Reset the output data.
     m_outputReceiver->clearCompileText();
     m_outputReceiver->clearCompileModel();

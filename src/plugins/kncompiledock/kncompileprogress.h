@@ -16,27 +16,39 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KNCOMPILEDOCKBASE_H
-#define KNCOMPILEDOCKBASE_H
+#ifndef KNCOMPILEPROGRESS_H
+#define KNCOMPILEPROGRESS_H
 
 #include <QWidget>
 
-class QAction;
-class KNCodeEditor;
-class KNOutputReceiver;
-class KNCompileDockBase : public QWidget
+class QLabel;
+class QProgressBar;
+class QTimeLine;
+class KNCompileProgress : public QWidget
 {
     Q_OBJECT
 public:
-    KNCompileDockBase(QWidget *parent = 0):QWidget(parent){}
-    virtual QAction *visibleControlAction()=0;
-    virtual QWidget *compileProgress()=0;
+    explicit KNCompileProgress(QWidget *parent = 0);
+    void setTitle(const QString &caption);
+    void setProgress(const int &progress);
 
 signals:
-    void requireGoto(int line, int column);
 
 public slots:
-    virtual void setCodeEditor(KNCodeEditor *editor)=0;
+    void onActionCompileProgressChange(const QString &caption,
+                                       int progress);
+    void showCompileProgress();
+    void hideCompileProgress();
+
+private slots:
+    void changeYPosition(const int &positionY);
+
+private:
+    inline QTimeLine *generateAnime();
+    QLabel *m_title;
+    QProgressBar *m_progress;
+    QTimeLine *m_showAnime, *m_hideAnime;
+    QPalette m_progressPalette;
 };
 
-#endif // KNCOMPILEDOCKBASE_H
+#endif // KNCOMPILEPROGRESS_H

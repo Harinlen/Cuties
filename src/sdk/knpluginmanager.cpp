@@ -78,6 +78,8 @@ void KNPluginManager::start()
     {
         return;
     }
+    //Call launch function of main window to do more initial.
+    m_mainWindow->onActionStartUp();
     //Show the main window.
     m_mainWindow->show();
 }

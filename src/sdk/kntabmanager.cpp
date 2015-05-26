@@ -182,7 +182,7 @@ void KNTabManager::setCurrentIndex(int index)
     //Connect the compile bar to the editor.
     if(m_compileDock!=nullptr)
     {
-        m_compileDock->setOutputReceiver(m_currentItem->codeEditor()->outputReceiver());
+        m_compileDock->setCodeEditor(m_currentItem->codeEditor());
     }
 }
 
@@ -199,7 +199,7 @@ void KNTabManager::setCurrentItem(KNTabManagerItem *item)
         }
         if(m_compileDock!=nullptr)
         {
-            m_compileDock->setOutputReceiver(nullptr);
+            m_compileDock->setCodeEditor(nullptr);
         }
         return;
     }

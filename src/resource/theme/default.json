@@ -6,6 +6,18 @@
         "Parent" : "Application",
         "Window" : "#1F1F1F"
     },
+    "CompileProgress" : {
+        "Parent" : "MainWindow",
+        "Window" : "#4F4F4F",
+        "WindowText" : "#bababa",
+        "Base" : "#262626",
+        "Highlight" : "#f7cf3d"
+    },
+    "CompileProgressBar" : {
+        "Parent" : "CompileProgress",
+        "Text" : "#FF0000",
+        "AlternateBase" : "#00FF00"
+    },
     "CompileDockButton" : {
         "Parent" : "MainWindow",
         "Button" : "#222222"

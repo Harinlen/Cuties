@@ -37,7 +37,7 @@ protected:
     QString environmentsArgs();
     QStringList getCompileArgs(const QString &filePath);
     void onActionMessageAppend(QString message);
-    void onActionCompileFinished();
+    void onActionCompileFinished(const int &exitCode);
     virtual QStringList compileSwitchArgs();
     virtual QStringList defaultSwitchArgs();
 

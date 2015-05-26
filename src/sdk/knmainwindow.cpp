@@ -41,7 +41,8 @@ KNMainWindow::KNMainWindow(QWidget *parent) :
     m_headerLayout(new QBoxLayout(QBoxLayout::TopToBottom)),
     m_welcomeIn(generateAnime()),
     m_welcomeOut(generateAnime()),
-    m_topDockArea(new QSplitter(Qt::Horizontal, this))
+    m_topDockArea(new QSplitter(Qt::Horizontal, this)),
+    m_compileProgress(nullptr)
 {
     setObjectName("MainWindow");
     //Set properties.
@@ -79,6 +80,8 @@ KNMainWindow::KNMainWindow(QWidget *parent) :
 
     dockSplitter->addWidget(m_topDockArea);
     dockSplitter->addWidget(m_tabManager->contentWidget());
+
+    dockSplitter->setCollapsible(1, false);
 
     //Configure sidebar button.
     m_expandSidebar->setPixmap(QPixmap(":/image/resource/images/expand.png"));
@@ -157,6 +160,19 @@ void KNMainWindow::setCompileDock(KNCompileDockBase *compileDock)
     m_tabManager->setCompileDock(compileDock);
     //Add the visible action to sidebar menu.
     m_sidebar->addCategoryAction(View, compileDock->visibleControlAction());
+    //Save the progress widget.
+    m_compileProgress=compileDock->compileProgress();
+    //Configure the compile progress.
+    m_compileProgress->setParent(this);
+    m_compileProgress->move(m_compileProgress->x(),
+                            -m_compileProgress->height());
+    //Hide the progress at default.
+    m_compileProgress->hide();
+}
+
+void KNMainWindow::onActionStartUp()
+{
+    ;
 }
 
 void KNMainWindow::resizeEvent(QResizeEvent *event)
@@ -173,6 +189,9 @@ void KNMainWindow::resizeEvent(QResizeEvent *event)
     //Keep the height sync to main window.
     m_tabContentContainer->resize(m_tabContentContainer->width(),
                                   height());
+    //Set the position of the compile progress widget.
+    m_compileProgress->move((width()-m_compileProgress->width())>>1,
+                            m_compileProgress->y());
 }
 
 void KNMainWindow::retranslate()

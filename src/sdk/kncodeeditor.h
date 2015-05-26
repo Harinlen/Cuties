@@ -51,6 +51,10 @@ signals:
     void fileNameChange(const QString &fileName);
     void modificationChanged(bool c);
     void languageModeChange();
+    void compileProgressChange(const QString &caption,
+                               int progress);
+    void requireShowCompileProgress();
+    void requireHideCompileProgress();
 
 public slots:
     void setLanguageMode(const QString &suffix);

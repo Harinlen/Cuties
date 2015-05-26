@@ -31,6 +31,14 @@ class KNCompiler : public QObject
 {
     Q_OBJECT
 public:
+    enum CompilerStatus
+    {
+        CompileFailed=-1,
+        PrepareCompiler=0,
+        ConfiguringCompiler=25,
+        Compiling=50,
+        CompileSuccess=100
+    };
     explicit KNCompiler(QObject *parent = 0);
     void compile(const QString &filePath);
     virtual QString compilerPath()=0;
@@ -39,6 +47,10 @@ signals:
     void compileMessageAppend(QString message);
     void compileItemAppend(QStandardItem *item);
 
+    void compileProgressChange(const QString &caption,
+                               int progress);
+    void compileFinished();
+
 public slots:
 
 protected:
@@ -46,7 +58,7 @@ protected:
     virtual QStringList getCompileArgs(const QString &filePath)=0;
     virtual QString environmentsArgs()=0;
     virtual void onActionMessageAppend(QString message);
-    virtual void onActionCompileFinished();
+    virtual void onActionCompileFinished(const int &exitCode);
     QString filePath();
 
 private slots:
@@ -58,6 +70,7 @@ private:
     QString m_filePath;
     QScopedPointer<QProcess> m_compilerProcess;
     KNConnectionHandler *m_compilerHandle;
+    int m_messageCount;
 };
 
 #endif // KNCOMPILER_H

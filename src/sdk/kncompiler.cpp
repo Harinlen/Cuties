@@ -33,6 +33,8 @@ KNCompiler::KNCompiler(QObject *parent) :
 
 void KNCompiler::compile(const QString &filePath)
 {
+    //-----Prepareing Compiler-----
+    emit compileProgressChange(tr("Preparing Compiler"), PrepareCompiler);
     //Check the compiler handle first.
     if(!m_compilerHandle->isEmpty())
     {
@@ -54,6 +56,8 @@ void KNCompiler::compile(const QString &filePath)
                 connect(m_compilerProcess.data(), SIGNAL(finished(int,QProcess::ExitStatus)),
                         this, SLOT(onActionFinished(int,QProcess::ExitStatus))));
 
+    //-----Configuring the Compiler-----
+    emit compileProgressChange(tr("Configuring the Compiler"), ConfiguringCompiler);
     //Get the environment variables, add to system environment variables.
     QString pathVariable=environmentsArgs();
     if(!pathVariable.isEmpty())
@@ -66,6 +70,8 @@ void KNCompiler::compile(const QString &filePath)
         m_compilerProcess->setEnvironment(compilerEnvironment);
     }
 
+    //----Compiling----
+    emit compileProgressChange(tr("Compiling"), Compiling);
     //Start compile process.
     m_compilerProcess->start(compilerPath(),
                              getCompileArgs(filePath));
@@ -76,9 +82,9 @@ void KNCompiler::onActionMessageAppend(QString message)
     Q_UNUSED(message);
 }
 
-void KNCompiler::onActionCompileFinished()
+void KNCompiler::onActionCompileFinished(const int &exitCode)
 {
-    ;
+    Q_UNUSED(exitCode);
 }
 
 QString KNCompiler::filePath()
@@ -127,8 +133,17 @@ void KNCompiler::onActionFinished(const int &exitCode,
 {
     //Disconnect all links.
     m_compilerHandle->disconnectAll();
-    //Do compile finish action.
-    onActionCompileFinished();
-    //Emit finished data.
-    ;
+    //Get the exit status of the compiler progress, if normally exit, then call
+    //the finished function.
+    if(QProcess::NormalExit==exitStatus)
+    {
+        //Do compile finish action.
+        onActionCompileFinished(exitCode);
+        //Emit finished signal.
+        emit compileFinished();
+        return;
+    }
+    //Or else, emit compiler error.
+    emit compileProgressChange(tr("Compiler Process Crash"), CompileFailed);
+    emit compileFinished();
 }
