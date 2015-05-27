@@ -486,7 +486,7 @@ bool KNTabManager::removeItem(KNTabManagerItem *item)
         {
             //We need to ask whether we need to save the file.
             int result=QMessageBox::question(this,
-                                             tr(""),
+                                             tr("Save modified document"),
                                              tr("Do you want to save the changes you made in the document \"%1\"?").arg(item->text()),
                                              tr("Save"),
                                              tr("Cancel"),

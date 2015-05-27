@@ -39,7 +39,7 @@ KNCodeEditorUnibar::KNCodeEditorUnibar(QWidget *parent) :
     m_cursorPosition(new QLabel(this)),
     m_encoded(new QLabel(this)),
     m_language(new QLabel(this)),
-    m_overwrite(new QLabel(this)),
+    m_overwrite(new KNLabelAnimeButton(this)),
     m_close(new KNLabelAnimeButton(this)),
     m_borderColor(QColor(255,255,255,52))
 {
@@ -79,6 +79,14 @@ KNCodeEditorUnibar::KNCodeEditorUnibar(QWidget *parent) :
     m_language->setContentsMargins(9,0,9,0);
     //Configure overwrite widget.
     m_overwrite->setContentsMargins(9,0,9,0);
+    connect(m_overwrite, &KNLabelAnimeButton::clicked,
+            [=]
+            {
+                if(m_textEditor!=nullptr)
+                {
+                    m_textEditor->setOverwriteMode(!m_textEditor->overwriteMode());
+                }
+            });
     //Configure close widget.
     m_close->setContentsMargins(0,0,0,0);
     m_close->setScaledContents(true);
@@ -159,6 +167,9 @@ void KNCodeEditorUnibar::setEditor(KNCodeEditor *editor)
     m_editorConections->append(
                 connect(m_textEditor, &KNTextEdit::cursorPositionChanged,
                         this, &KNCodeEditorUnibar::onActionCursorPositionChange));
+    m_editorConections->append(
+                connect(m_textEditor, &KNTextEdit::overwriteModeChanged,
+                        this, &KNCodeEditorUnibar::onActionUpdateOverwrite));
     //Link the action with the new editor.
     m_editorConections->append(
                 connect(m_unibarActions[Undo], SIGNAL(triggered()),

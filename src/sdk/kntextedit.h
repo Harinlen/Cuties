@@ -28,8 +28,12 @@ class KNTextEdit : public QPlainTextEdit
     Q_OBJECT
 public:
     explicit KNTextEdit(QWidget *parent = 0);
+    void setFont(const QFont &font);
+    void setTabWidth(const int &spaceNum);
+    void setOverwriteMode(bool overwrite);
 
 signals:
+    void overwriteModeChanged(bool state);
 
 public slots:
 
@@ -47,6 +51,7 @@ private:
     friend class KNTextEditPanel;
 
     QColor m_lineColor;
+    int m_tabWidth;
 };
 
 #endif // KNTEXTEDIT_H

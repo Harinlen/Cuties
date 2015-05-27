@@ -68,9 +68,8 @@ private:
     KNConnectionHandler *m_editorConections;
     KNCodeEditor *m_codeEditor;
     KNTextEdit *m_textEditor;
-    QLabel *m_fileName, *m_cursorPosition, *m_encoded, *m_language,
-           *m_overwrite;
-    KNLabelAnimeButton *m_close;
+    QLabel *m_fileName, *m_cursorPosition, *m_encoded, *m_language;
+    KNLabelAnimeButton *m_overwrite, *m_close;
     QColor m_borderColor;
 
     QString m_positionText, m_overwriteStatus[2];

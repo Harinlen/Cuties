@@ -30,7 +30,8 @@ KNTextEdit::KNTextEdit(QWidget *parent) :
     QPlainTextEdit(parent),
     m_panelContainer(new KNTextEditPanelContainer(this)),
     m_topShadow(new KNSideShadowWidget(KNSideShadow::TopShadow, this)),
-    m_lineColor(QColor(0x30,0x30,0x30))
+    m_lineColor(QColor(0x30,0x30,0x30)),
+    m_tabWidth(4)
 {
     setObjectName("TextEditor");
     //Set palette.
@@ -66,6 +67,31 @@ KNTextEdit::KNTextEdit(QWidget *parent) :
     updateHighlights();
     //Emit all changed signal for initialize.
     ;
+}
+
+void KNTextEdit::setFont(const QFont &font)
+{
+    //Set the font.
+    QPlainTextEdit::setFont(font);
+    //Get the fontmetrics of the font.
+    QFontMetrics metrics=QFontMetrics(font);
+    setTabStopWidth(m_tabWidth*metrics.width(' '));
+}
+
+void KNTextEdit::setTabWidth(const int &spaceNum)
+{
+    //Save the tab width.
+    m_tabWidth=spaceNum;
+    //Update the tab stop.
+    setTabStopWidth(fontMetrics().width(" ")*m_tabWidth);
+}
+
+void KNTextEdit::setOverwriteMode(bool overwrite)
+{
+    //Set the overwrite mode.
+    QPlainTextEdit::setOverwriteMode(overwrite);
+    //Emit the overwrite change signal.
+    emit overwriteModeChanged(overwrite);
 }
 
 void KNTextEdit::resizeEvent(QResizeEvent *event)
