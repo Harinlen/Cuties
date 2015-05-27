@@ -1,6 +1,5 @@
 {
     "Application" : {
-        "Window": "#FF0000"
     },
     "MainWindow" : {
         "Parent" : "Application",
@@ -60,7 +59,7 @@
     },
     "MainMenuButton" : {
         "Parent" : "Sidebar",
-        "Window" : "#464748"
+        "Button" : "#464748"
     },
     "TabManager" : {
         "Parent" : "MainWindow",

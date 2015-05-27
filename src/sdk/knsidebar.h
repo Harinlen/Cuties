@@ -25,11 +25,12 @@
 
 class QTimeLine;
 class QLabel;
+class QPushButton;
 class QScrollArea;
+class KNLabelAnimeButton;
 class KNSidebarContent;
 class KNSAOSubMenu;
 class KNMainMenu;
-class KNLabelAnimeButton;
 class KNSideTabContentContainer;
 class KNSidebar : public QWidget
 {
@@ -58,7 +59,7 @@ private slots:
 
 private:
     inline void startResizeAnime(const int &targetWidth);
-    KNLabelAnimeButton *m_mainMenuButton;
+    QPushButton *m_mainMenuButton;
     KNMainMenu *m_mainMenu;
     QAction *m_exitAction;
     QScrollArea *m_sidebarArea;

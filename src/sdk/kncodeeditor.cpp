@@ -122,6 +122,16 @@ bool KNCodeEditor::saveFile()
     return false;
 }
 
+bool KNCodeEditor::isModified()
+{
+    return m_editor->document()->isModified();
+}
+
+bool KNCodeEditor::isEmpty()
+{
+    return m_editor->document()->isEmpty();
+}
+
 void KNCodeEditor::setLanguageMode(KNLanguageMode *languageMode)
 {
     //Clear the old language mode.

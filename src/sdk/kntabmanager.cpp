@@ -21,6 +21,7 @@
 #include <QScrollBar>
 #include <QFileInfo>
 #include <QFileDialog>
+#include <QMessageBox>
 
 #include "knsidebar.h"
 #include "knsideshadowwidget.h"
@@ -97,6 +98,12 @@ KNTabManager::KNTabManager(QWidget *parent) :
 
 void KNTabManager::setSidebar(KNSidebar *sidebar)
 {
+    //Get the main window widget.
+    QWidget *window=sidebar->parentWidget();
+    for(int i=0; i<TabManagerActionCount; i++)
+    {
+        window->addAction(m_actions[i]);
+    }
     //Add actions to main menu.
     sidebar->addCategoryAction(File, m_actions[New]);
     sidebar->addCategoryAction(File, m_actions[Open]);
@@ -160,6 +167,11 @@ KNTabManagerItem *KNTabManager::createTab(const QString &caption,
 void KNTabManager::setCurrentIndex(int index)
 {
     Q_ASSERT(index>-1 && index<m_itemList.size());
+    //Check we need to set the item or not.
+    if(m_itemList.at(index)==m_currentItem)
+    {
+        return;
+    }
     //Clear the original item.
     if(m_currentItem!=nullptr)
     {
@@ -188,6 +200,11 @@ void KNTabManager::setCurrentIndex(int index)
 
 void KNTabManager::setCurrentItem(KNTabManagerItem *item)
 {
+    //Check we need to set the item at the beginning.
+    if(item==m_currentItem)
+    {
+        return;
+    }
     //If the item is nullptr, then clear the current item and reset the unibar.
     if(item==nullptr)
     {
@@ -207,13 +224,14 @@ void KNTabManager::setCurrentItem(KNTabManagerItem *item)
     setCurrentIndex(m_itemList.indexOf(item));
 }
 
-void KNTabManager::closeTab(KNTabManagerItem *item)
+bool KNTabManager::closeTab(KNTabManagerItem *item)
 {
     //Check item is null or not.
     if(item==nullptr)
     {
-        return;
+        return false;
     }
+    KNTabManagerItem *nextCurrentItem=m_currentItem;
     if(item==m_currentItem)
     {
         //Get the current item index.
@@ -221,23 +239,26 @@ void KNTabManager::closeTab(KNTabManagerItem *item)
         //Check the current index and the item size.
         if((itemIndex+1)<m_itemList.size())
         {
-            setCurrentIndex(itemIndex+1);
+            nextCurrentItem=m_itemList.at(itemIndex+1);
         }
         else
         {
             //There's still previous item of the current index
             if((itemIndex-1)>-1)
             {
-                setCurrentIndex(itemIndex-1);
+                nextCurrentItem=m_itemList.at(itemIndex-1);
             }
             else
             {
-                setCurrentItem(nullptr);
+                nextCurrentItem=nullptr;
             }
         }
     }
-    //Remove the item.
-    removeItem(item);
+    //Remove the item, if success, set current item to the nextCurrentItem.
+    if(removeItem(item))
+    {
+        setCurrentItem(nextCurrentItem);
+    }
 }
 
 void KNTabManager::resizeEvent(QResizeEvent *event)
@@ -362,8 +383,13 @@ void KNTabManager::onActionCloseAll()
     //Remove all the item.
     while(!m_itemList.isEmpty())
     {
-        removeItem(m_itemList.takeLast());
+        if(!removeItem(m_itemList.takeLast()))
+        {
+            break;
+        }
     }
+    //Resize the container.
+    m_container->setFixedHeight(KNTabManagerItem::itemHeight() * m_itemList.size());
 }
 
 void KNTabManager::onActionCloseAllOthers()
@@ -375,13 +401,20 @@ void KNTabManager::onActionCloseAllOthers()
         KNTabManagerItem *item=m_itemList.takeLast();
         if(item!=m_currentItem)
         {
-            removeItem(item);
+            if(!removeItem(item))
+            {
+                break;
+            }
         }
     }
-    //Insert the current item.
-    m_itemList.append(m_currentItem);
+    //Restore the current item to the item list.
+    if(!m_itemList.contains(m_currentItem))
+    {
+        //Insert the missing current item.
+        m_itemList.append(m_currentItem);
+    }
     //Resize the container.
-    m_container->setFixedHeight(KNTabManagerItem::itemHeight());
+    m_container->setFixedHeight(KNTabManagerItem::itemHeight() * m_itemList.size());
 }
 
 void KNTabManager::onActionCompile()
@@ -434,15 +467,56 @@ inline bool KNTabManager::saveAsItem(KNTabManagerItem *item)
     return codeEditor->saveFile();
 }
 
-void KNTabManager::removeItem(KNTabManagerItem *item)
+bool KNTabManager::removeItem(KNTabManagerItem *item)
 {
     //Ignore the illegal request.
     if(item==nullptr)
     {
-        return;
+        return false;
     }
     //Get the code editor.
     KNCodeEditor *editor=item->codeEditor();
+    //We need to check the editor is need to be save.
+    if(editor->isModified())
+    {
+        //There are two states:
+        //1. This file is a new created file.
+        if((editor->filePath().isEmpty() && (!editor->isEmpty())) ||
+                !editor->filePath().isEmpty())
+        {
+            //We need to ask whether we need to save the file.
+            int result=QMessageBox::question(this,
+                                             tr(""),
+                                             tr("Do you want to save the changes you made in the document \"%1\"?").arg(item->text()),
+                                             tr("Save"),
+                                             tr("Cancel"),
+                                             tr("Don't Save"),
+                                             0,
+                                             1);
+            switch(result)
+            {
+            case 0: //Save
+            {
+                //We need to save the document.
+                if(!saveItem(item))
+                {
+                    return false;
+                }
+                break;
+            }
+            case 1: //Cancel
+            {
+                //Just return false.
+                return false;
+            }
+            case 2:  //Don't save.
+            {
+                //Go on to destory the item.
+                break;
+            }
+            }
+        }
+    }
     //Remove the editor from the stacked widget.
     m_content->removeWidget(editor);
     //Give the parent of the code editor back to item.
@@ -455,6 +529,7 @@ void KNTabManager::removeItem(KNTabManagerItem *item)
     m_container->setFixedHeight(KNTabManagerItem::itemHeight()*m_itemList.size());
     //Delete the item.
     item->deleteLater();
+    return true;
 }
 
 void KNTabManager::initialActions()

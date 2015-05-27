@@ -34,6 +34,8 @@ public:
     KNLanguageMode *languageMode() const;
     void openFile(const QString &filePath);
     bool saveFile();
+    bool isModified();
+    bool isEmpty();
 
     KNTextEdit *textEditor() const;
 

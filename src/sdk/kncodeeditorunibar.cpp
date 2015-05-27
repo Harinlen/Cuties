@@ -110,6 +110,13 @@ KNCodeEditorUnibar::KNCodeEditorUnibar(QWidget *parent) :
 
 void KNCodeEditorUnibar::setSidebar(KNSidebar *sidebar)
 {
+    //Get the main window, add all action.
+    QWidget *mainWindow=sidebar->parentWidget();
+    for(int i=0; i<UnibarActionCount; i++)
+    {
+        mainWindow->addAction(m_unibarActions[i]);
+    }
+    //Add to main menu.
     sidebar->addCategoryAction(Edit, m_unibarActions[Undo]);
     sidebar->addCategoryAction(Edit, m_unibarActions[Redo]);
     sidebar->addCategoryAction(Edit, m_unibarActions[Cut]);

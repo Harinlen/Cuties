@@ -17,6 +17,7 @@
  */
 #include <QScrollArea>
 #include <QTimeLine>
+#include <QPushButton>
 
 #include "knsidebarcontent.h"
 #include "knsidetabcontentcontainer.h"
@@ -28,7 +29,7 @@
 
 KNSidebar::KNSidebar(QWidget *parent) :
     QWidget(parent),
-    m_mainMenuButton(new KNLabelAnimeButton(this)),
+    m_mainMenuButton(new QPushButton(this)),
     m_mainMenu(new KNMainMenu(this)),
     m_exitAction(nullptr),
     m_sidebarArea(new QScrollArea(this)),
@@ -50,18 +51,32 @@ KNSidebar::KNSidebar(QWidget *parent) :
 
     //Initial the main menu button.
     m_mainMenuButton->setObjectName("MainMenuButton");
-    m_mainMenuButton->setPixmap(
-                QPixmap(":/image/resource/images/icon.png").scaled(QSize(contentWidth,
-                                                                         contentWidth),
-                                                                   Qt::KeepAspectRatio,
-                                                                   Qt::SmoothTransformation));
-    m_mainMenuButton->setContentsMargins(sideMargin,
-                                         sideMargin,
-                                         sideMargin,
-                                         sideMargin);
-    QPalette mainMenuPalette=
-            KNGlobal::instance()->getPalette(m_mainMenuButton->objectName());
-    m_mainMenuButton->setPalette(mainMenuPalette);
+    m_mainMenuButton->setContentsMargins(0,0,0,0);
+    m_mainMenuButton->move(1,1);
+    m_mainMenuButton->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_1));
+    m_mainMenuButton->setFixedSize(m_foldWidth-2, m_foldWidth-2);
+    m_mainMenuButton->setPalette(KNGlobal::instance()->getPalette(m_mainMenuButton->objectName()));
+    m_mainMenuButton->setStyleSheet("QPushButton {"
+                                    "    image: url(:/image/resource/images/icon.png);"
+                                    "    border: 0px solid #000000;"
+                                    "    padding: 0px;"
+                                    "    margin-left: 0px;"
+                                    "    margin-right: 0px;"
+                                    "    margin-top: 0px;"
+                                    "    margin-bottom: 0px;"
+                                    "}"
+                                    "QPushButton:hover {"
+                                    "    border: 0px solid #000000;"
+                                    "}"
+                                    "QPushButton:pressed {"
+                                    "    border: 0px solid #000000;"
+                                    "    background-color: #111111;"
+                                    "}"
+                                    "QPushButton::menu-indicator"
+                                    "{"
+                                    "    image:None;"
+                                    "}"
+                                    );
 
     //Configure the animation.
     m_expandFoldAnime->setEasingCurve(QEasingCurve::OutCubic);
@@ -98,9 +113,8 @@ KNSidebar::KNSidebar(QWidget *parent) :
         m_categories[i]->menuAction()->setIcon(QIcon(categoryIcons[i]));
         m_mainMenu->addMenu(m_categories[i]);
     }
-    //Link main menu button.
-    connect(m_mainMenuButton, &KNLabelAnimeButton::clicked,
-            this, &KNSidebar::onActionShowMainMenu);
+    //Link main menu button to main menu.
+    m_mainMenuButton->setMenu(m_mainMenu);
 
     //Add exit command action to file menu.
     m_exitAction=new QAction(m_categories[File]);

@@ -50,7 +50,7 @@ public slots:
                                 const QString &filePath="");
     void setCurrentIndex(int index);
     void setCurrentItem(KNTabManagerItem *item);
-    void closeTab(KNTabManagerItem *item);
+    bool closeTab(KNTabManagerItem *item);
 
 protected:
     void resizeEvent(QResizeEvent *event);
@@ -75,7 +75,7 @@ private slots:
 private:
     inline bool saveItem(KNTabManagerItem *item);
     inline bool saveAsItem(KNTabManagerItem *item);
-    inline void removeItem(KNTabManagerItem *item);
+    inline bool removeItem(KNTabManagerItem *item);
     enum TabManagerActions
     {
         New,
